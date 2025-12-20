@@ -1,0 +1,129 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { getSupabaseClient } from "../lib/supabase";
+
+type Board = {
+  id: string;
+  title: string;
+  slug: string;
+};
+
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
+}
+
+export default function HomePage() {
+  const supabase = getSupabaseClient();
+  const router = useRouter();
+
+  const [boards, setBoards] = useState<Board[]>([]);
+  const [newTitle, setNewTitle] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function loadBoards() {
+    setErrorMsg("");
+
+    const { data, error } = await supabase
+      .from("boards")
+      .select("id,title,slug")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      setErrorMsg("Failed to load boards");
+      console.error("Error loading boards", error);
+      return;
+    }
+
+    setBoards((data ?? []) as Board[]);
+  }
+
+  useEffect(() => {
+    loadBoards();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function createBoard() {
+    setLoading(true);
+    setErrorMsg("");
+
+    const cleanTitle = newTitle.trim();
+    if (!cleanTitle) {
+      setLoading(false);
+      return;
+    }
+
+    const slug = slugify(cleanTitle);
+
+    const { error } = await supabase.from("boards").insert({
+      title: cleanTitle,
+      description: null,
+      board_type: "notes",
+      is_public: true,
+      slug,
+      org_slug: null,
+    });
+
+    setLoading(false);
+
+    if (error) {
+      setErrorMsg(error.message);
+      return;
+    }
+
+    setNewTitle("");
+    await loadBoards();
+
+    // Optional: jump to /boards after creating
+    router.push("/boards");
+  }
+
+  return (
+    <main className="min-h-screen bg-green-950 text-white px-8 py-16">
+      <h1 className="text-5xl font-semibold">Pinboardly</h1>
+      <p className="mt-4 max-w-xl text-white/80">
+        Quickly spin up simple noticeboard-style pages for events, projects and ideas.
+        Create a board, then add notes on the next screen.
+      </p>
+
+      <div className="mt-10 flex gap-3 items-center">
+        <input
+          className="w-72 rounded px-3 py-2 text-black"
+          placeholder="New board name..."
+          value={newTitle}
+          onChange={(e) => setNewTitle(e.target.value)}
+        />
+        <button
+          className="rounded bg-white text-black px-4 py-2 disabled:opacity-50"
+          onClick={createBoard}
+          disabled={loading || !newTitle.trim()}
+        >
+          {loading ? "Creating..." : "Create Board"}
+        </button>
+      </div>
+
+      {errorMsg ? <p className="mt-8 text-red-300">{errorMsg}</p> : null}
+
+      <div className="mt-10">
+        <h2 className="text-xl font-semibold">Your Boards</h2>
+        {boards.length === 0 ? (
+          <p className="mt-3 text-white/70">No boards yet. Create your first one above.</p>
+        ) : (
+          <ul className="mt-3 space-y-2">
+            {boards.map((b) => (
+              <li key={b.id} className="text-white/80">
+                {b.title}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </main>
+  );
+}

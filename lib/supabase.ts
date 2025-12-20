@@ -1,17 +1,21 @@
-import { createClient } from "@supabase/supabase-js";
+// lib/supabase.ts
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
-const supabaseUrl =
-  process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+let supabase: SupabaseClient | null = null;
 
-const supabaseKey =
-  process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+export function getSupabaseClient() {
+  if (supabase) return supabase;
 
-// DEBUG: check what Next can see
-console.log("Supabase URL from env:", supabaseUrl);
-console.log("Supabase key present:", !!supabaseKey);
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error("Missing Supabase environment variables");
+  supabase = createClient(url, anon, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+    },
+  });
+
+  return supabase;
 }
-
-export const supabase = createClient(supabaseUrl, supabaseKey);

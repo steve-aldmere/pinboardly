@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { getSupabaseClient } from "@/lib/supabase";
+
+const supabase = getSupabaseClient();
 
 // GET /api/notes  → list notes
 export async function GET() {
