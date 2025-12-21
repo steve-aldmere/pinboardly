@@ -8,5 +8,13 @@ export default async function LoginPage({
   searchParams?: Record<string, string | string[] | undefined>;
 }) {
   await requireNoUser();
-  return <LoginClient searchParams={searchParams} />;
+
+  const error =
+    typeof searchParams?.error === "string"
+      ? searchParams.error
+      : Array.isArray(searchParams?.error)
+      ? searchParams?.error[0]
+      : undefined;
+
+  return <LoginClient error={error} />;
 }

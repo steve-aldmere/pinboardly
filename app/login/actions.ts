@@ -1,11 +1,12 @@
+// app/login/actions.ts
 "use server";
 
 import { redirect } from "next/navigation";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 
 export async function signInAction(formData: FormData) {
-  const email = String(formData.get("email") || "");
-  const password = String(formData.get("password") || "");
+  const email = String(formData.get("email") ?? "").trim();
+  const password = String(formData.get("password") ?? "");
 
   if (!email || !password) {
     redirect("/login?error=" + encodeURIComponent("Enter email and password."));
@@ -23,4 +24,10 @@ export async function signInAction(formData: FormData) {
   }
 
   redirect("/");
+}
+
+export async function signOutAction() {
+  const supabase = await createServerSupabaseClient();
+  await supabase.auth.signOut();
+  redirect("/login");
 }

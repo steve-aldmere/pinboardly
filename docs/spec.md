@@ -1,8 +1,50 @@
 # Pinboardly v1 – Product Specification
 
-> **Status:** Locked for v1
->
-> This document defines the complete and authoritative specification for **Pinboardly v1**. Any change outside this document is out of scope unless explicitly agreed.
+## Pinboardly v1: Functional and Non-Functional Requirements Checklist
+
+### 1. Data Model
+1. Each **Group** has:
+   - A unique identifier (**slug**)
+   - Ownership of one or more boards
+   - Control over board visibility
+2. **Boards** exist in three types:
+   - **Notes** (for lists and written info)
+   - **Calendar** (for upcoming events)
+   - **Links** (for important URLs)
+3. Users may belong to multiple groups.
+
+### 2. Auth
+4. A **User** must be able to sign in to Pinboardly.
+
+### 3. Permissions
+5. There are only two roles in v1: **Group Admin** and **Member**.
+6. **Group Admins** can:
+   - Create boards
+   - Edit boards
+   - Delete boards
+   - Edit board content
+
+### 4. Boards (Notes/Calendar/Links)
+7. Each group has separate, dedicated spaces for:
+   - Notes
+   - Calendar
+   - Links
+
+### 5. Routing/URLs
+8. Each group is accessible at a dedicated URL:
+   - Format: `https://pinboardly.com/{group}`
+
+### 6. UI/UX
+9. Product must prioritize:
+   - Clarity
+   - Predictability
+   - Calm use
+   - Minimal feature breadth (simplicity is favored)
+10. There is no global feed.
+
+### 7. Non-goals (Explicit Non-Functional Requirements)
+11. No features or changes outside this specification are in scope, unless explicitly agreed.
+12. Any change outside the specification is considered out of scope for v1.
 
 ---
 
@@ -20,6 +62,18 @@ The product prioritises clarity, predictability, and calm use over feature bread
 ---
 
 ## 2. Core Concepts
+| Requirement ID | Requirement Summary | Implemented? | Evidence (file paths) | Notes / Risks |
+|----------------|--------------------|--------------|-----------------------|---------------|
+| 2.4            | User must be able to sign in | No | | No explicit sign-in functionality or logic present in code or evidence supplied. |
+| 3.5            | Only two roles in v1: Group Admin and Member | No | | There is no code or schema for roles, permissions, or mention of Group Admin/Member in code. |
+| 3.6            | Group Admins can create, edit, delete boards & edit board content | Partial | app/boards/[id]/BoardPageClient.tsx | Only board deletion is implemented; creation/editing and board content editing are not present in supplied code. No explicit admin role checks. |
+| 4.7            | Each group has separate spaces: Notes, Calendar, Links | No | | The UI and logic to support separate spaces for Notes, Calendar, and Links are missing; placeholder in BoardPageClient.tsx. |
+| 5.8            | Each group accessible at URL format /{group} | Partial | app/boards/[id]/BoardPageClient.tsx | Board data fetch uses org_slug, and computed backHref; group-level routing and enforcement not directly evidenced. |
+| 6.9            | Product prioritizes clarity, predictability, calm use, simplicity | Partial | app/boards/[id]/BoardPageClient.tsx | UI is simple and clear but this is a subjective measure and can't be strictly validated at code level. |
+| 6.10           | No global feed | Yes | | Absence of feed functionality in UI/code. |
+| 7.11           | No features/changes outside specification scope | Partial | | No violations found, but cannot assert definitively without seeing full codebase. |
+| 7.12           | Changes outside spec are out of scope | Partial | | See above; full compliance cannot be established from data provided. |
+
 
 ### 2.1 Group
 
