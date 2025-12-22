@@ -1,20 +1,10 @@
-// app/login/page.tsx
-import { requireNoUser } from "@/lib/supabase-server";
-import LoginClient from "./LoginClient";
+import { redirect } from "next/navigation";
+import { requireUser } from "@/lib/supabase-server";
+import HomePageClient from "./HomePageClient";
 
-export default async function LoginPage({
-  searchParams,
-}: {
-  searchParams?: Record<string, string | string[] | undefined>;
-}) {
-  await requireNoUser();
+export default async function Page() {
+  const user = await requireUser();
+  if (!user) redirect("/login");
 
-  const error =
-    typeof searchParams?.error === "string"
-      ? searchParams.error
-      : Array.isArray(searchParams?.error)
-      ? searchParams?.error[0]
-      : undefined;
-
-  return <LoginClient error={error} />;
+  return <HomePageClient />;
 }
