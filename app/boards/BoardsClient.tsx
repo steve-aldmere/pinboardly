@@ -36,14 +36,14 @@ export default function BoardsClient({
   initialBoards,
   initialError,
 }: {
-  initialBoards: Board[];
-  initialError: string;
+  initialBoards?: Board[];
+  initialError?: string;
 }) {
   const supabase = useMemo(() => getSupabaseClient(), []);
   const router = useRouter();
 
-  const [boards, setBoards] = useState<Board[]>(initialBoards);
-  const [errorMsg, setErrorMsg] = useState(initialError);
+  const [boards, setBoards] = useState<Board[]>(initialBoards ?? []);
+  const [errorMsg, setErrorMsg] = useState(initialError ?? "");
 
   const [title, setTitle] = useState("");
   const [boardType, setBoardType] = useState<"notes" | "links" | "calendar">("notes");
@@ -88,8 +88,6 @@ export default function BoardsClient({
       return;
     }
 
-    // IMPORTANT: your DB has unique constraint on slug
-    // so we generate a slug with a random suffix to avoid collisions
     const base = slugify(cleanTitle);
     const slug = `${base}-${randomSuffix(6)}`;
 
@@ -101,9 +99,7 @@ export default function BoardsClient({
         board_type: boardType,
         is_public: isPublic,
         slug,
-        // If you have orgs, set org_slug here. If not, leave null.
         org_slug: null,
-        // If your table requires created_by NOT NULL, you must include it:
         created_by: userData.user.id,
       } as any)
       .select("id,title,description,board_type,is_public,slug,created_at,org_slug")

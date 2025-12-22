@@ -1,8 +1,12 @@
 import { notFound } from "next/navigation";
 import BoardPageClient from "./BoardPageClient";
 
-export default function BoardPage({ params }: { params: { id: string } }) {
-  const id = params.id;
+export default async function BoardPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
 
   if (!id || id === "undefined") notFound();
 
