@@ -1,4 +1,3 @@
-// app/components/TopNav.tsx
 import Link from "next/link";
 import Image from "next/image";
 
@@ -19,11 +18,8 @@ export default function TopNav() {
 
         {/* Navigation */}
         <nav className="flex items-center gap-4 text-sm">
-          <Link href="/boards" className="hover:underline">
-            Boards
-          </Link>
           <Link href="/orgs" className="hover:underline">
-            Orgs
+            Organisations
           </Link>
           <Link href="/login" className="hover:underline">
             Sign in
