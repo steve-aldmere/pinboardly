@@ -55,9 +55,9 @@ export default function OrgPageClient({
           <div className="flex items-center gap-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/pinboardly-logo.svg"
+              src="/pinboardly-icon.svg"
               alt="Pinboardly"
-              className="h-8 w-auto"
+              className="h-8 w-8"
             />
             <h1 className="text-3xl font-semibold">
               {toStringSafe(org.name) || slug}
