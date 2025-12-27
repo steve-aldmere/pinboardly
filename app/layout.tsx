@@ -4,8 +4,15 @@ import "./globals.css";
 import TopNav from "./components/TopNav";
 
 export const metadata: Metadata = {
-  title: "Pinboardly",
-  description: "Boards for groups",
+  title: {
+    default: "Pinboardly",
+    template: "%s · Pinboardly",
+  },
+  description: "Simple boards for groups, teams, and organisations.",
+  icons: {
+    icon: "/icon.png",
+    apple: "/apple-icon.png",
+  },
 };
 
 export default function RootLayout({
@@ -15,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className="min-h-screen bg-gray-50 text-gray-900">
         <TopNav />
         <main className="mx-auto max-w-5xl px-6 py-8">{children}</main>
       </body>
