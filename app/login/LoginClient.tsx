@@ -16,11 +16,12 @@ export default function LoginClient({
       <div className="w-full max-w-md bg-white rounded-xl shadow-sm p-8">
         <div className="flex flex-col items-center mb-6">
           <Image
-            src="/pinboardly-logo.svg"
+            src="/pinboardly-icon.svg"
             alt="Pinboardly"
-            width={220}
-            height={60}
+            width={72}
+            height={72}
             priority
+            className="mb-3"
           />
           <p className="mt-3 text-sm text-gray-600 text-center">
             Sign in to manage your organisation and boards
