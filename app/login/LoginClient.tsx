@@ -14,19 +14,19 @@ export default function LoginClient({
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-md bg-white rounded-xl shadow-sm p-8">
-        <div className="flex flex-col items-center mb-6">
-          <Image
-            src="/pinboardly-icon.svg"
-            alt="Pinboardly"
-            width={72}
-            height={72}
-            priority
-            className="mb-3"
-          />
-          <p className="mt-3 text-sm text-gray-600 text-center">
-            Sign in to manage your organisation and boards
-          </p>
-        </div>
+      <div className="flex flex-col items-center mb-6">
+        <img
+          src="/pinboardly-icon.svg"
+          alt="Pinboardly"
+          width={216}
+          height={216}
+          className="mb-3 h-[216px] w-[216px]"
+        />
+
+        <p className="mt-3 text-sm text-gray-600 text-center">
+          Sign in to manage your organisation and boards
+        </p>
+      </div>
 
         {error ? (
           <p className="mb-4 text-sm text-red-600 text-center">{error}</p>
