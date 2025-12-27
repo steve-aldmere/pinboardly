@@ -36,7 +36,21 @@ export async function POST(req: Request) {
     );
   }
 
-  // Generate a unique-ish slug (and avoid duplicate constraint issues)
+  // Explicit admin check (still enforced by RLS too)
+  const { data: memberRow } = await supabase
+  .from("org_members")
+  .select("role")
+  .eq("org_slug", org_slug)
+  .eq("user_id", userData.user.id)
+  .maybeSingle();
+
+  if (memberRow?.role !== "admin") {
+    return NextResponse.json(
+      { error: "Only org admins can create boards" },
+      { status: 403 }
+    );
+  }
+
   const base = slugify(title) || "board";
   const suffix = Math.random().toString(36).slice(2, 7);
   const slug = `${base}-${suffix}`;
@@ -52,9 +66,9 @@ export async function POST(req: Request) {
   });
 
   if (insertErr) {
+    // RLS failures typically land here too
     return NextResponse.json({ error: insertErr.message }, { status: 400 });
   }
 
-  // Send them back to the org page
   return NextResponse.redirect(new URL(`/${org_slug}`, req.url), 303);
 }

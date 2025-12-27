@@ -1,8 +1,12 @@
 // app/page.tsx
-import { requireUser } from "@/lib/supabase-server";
-import HomePageClient from "./HomePageClient.tsx";
+import { redirect } from "next/navigation";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
 
 export default async function Page() {
-  await requireUser();
-  return <HomePageClient />;
+  const supabase = await createServerSupabaseClient();
+  const { data } = await supabase.auth.getUser();
+
+  if (!data?.user) redirect("/login");
+
+  redirect("/orgs");
 }
