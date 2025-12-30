@@ -34,6 +34,9 @@ export default async function NotesPage({
 
   const supabase = await createServerSupabaseClient();
 
+  const { data: userData } = await supabase.auth.getUser();
+  const isLoggedIn = !!userData?.user;
+
   // Find the notes board for this org
   const { data: board, error: boardError } = await supabase
     .from("boards")
@@ -55,14 +58,12 @@ export default async function NotesPage({
     return (
       <main className="p-6">
         <h1 className="text-xl font-semibold">Notes</h1>
-        <p className="text-gray-600 mt-2">
-          No notes board found for this organisation yet.
-        </p>
+        <p className="text-gray-600 mt-2">No notes board found.</p>
       </main>
     );
   }
 
-  // Fetch pins for that board (notes are content-only)
+  // Fetch pins for that board
   const { data: pins, error: pinsError } = await supabase
     .from("pins")
     .select("id,content,created_at")
@@ -81,7 +82,7 @@ export default async function NotesPage({
   const rows = (pins ?? []) as Pin[];
 
   return (
-    <main className="p-6">
+    <main className="p-6 max-w-3xl mx-auto">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold">Notes</h1>
         <Link className="underline text-sm" href={`/orgs/${slug}`}>
@@ -91,6 +92,43 @@ export default async function NotesPage({
 
       <p className="text-gray-600 mt-2">Organisation: {org.name}</p>
 
+      {/* Add note form (logged-in only) */}
+      {isLoggedIn ? (
+        <form
+          className="mt-6 border rounded-lg p-4 space-y-3"
+          method="post"
+          action="/api/pins"
+        >
+          <input type="hidden" name="boardId" value={board.id} />
+
+          <div>
+            <label className="block text-sm font-medium">New note</label>
+            <textarea
+              name="content"
+              className="mt-1 w-full border rounded px-3 py-2 text-sm"
+              rows={4}
+              placeholder="Type your note..."
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="inline-block bg-black text-white text-sm px-4 py-2 rounded"
+          >
+            Add note
+          </button>
+        </form>
+      ) : (
+        <p className="mt-6 text-sm text-gray-600">
+          <Link className="underline" href={`/login?next=/orgs/${slug}/notes`}>
+            Sign in
+          </Link>{" "}
+          to add notes.
+        </p>
+      )}
+
+      {/* Notes list */}
       {rows.length === 0 ? (
         <p className="text-gray-600 mt-6">No notes yet.</p>
       ) : (
