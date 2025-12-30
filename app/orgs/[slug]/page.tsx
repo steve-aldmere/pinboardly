@@ -6,33 +6,39 @@ import { getOrgBySlug } from "./org";
 export default async function OrgHomePage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const { org, isActive } = await getOrgBySlug(params.slug);
+  const { slug } = await params;
 
+  if (!slug) notFound();
+
+  const { org, isActive } = await getOrgBySlug(slug);
   if (!org) notFound();
 
+  // If you later want to hide content when not active, use isActive here.
+  // For now we just render the simple board index.
+
   return (
-    <main className="max-w-3xl mx-auto p-6">
-      <h1 className="text-2xl font-semibold">{org.name}</h1>
+    <div className="max-w-3xl mx-auto py-10 px-6">
+      <h1 className="text-3xl font-semibold">{org.name ?? slug}</h1>
 
-      {!isActive && (
-        <p className="mt-2 text-sm text-gray-600">
-          This board is currently locked.
-        </p>
-      )}
-
-      <div className="mt-6 flex flex-col gap-2 text-sm">
-        <Link href={`/orgs/${org.slug}/links`} className="underline">
-          Links
-        </Link>
-        <Link href={`/orgs/${org.slug}/notes`} className="underline">
-          Notes
-        </Link>
-        <Link href={`/orgs/${org.slug}/calendar`} className="underline">
-          Calendar
-        </Link>
+      <div className="mt-6 space-y-2 text-lg">
+        <div>
+          <Link className="underline" href={`/orgs/${slug}/links`}>
+            Links
+          </Link>
+        </div>
+        <div>
+          <Link className="underline" href={`/orgs/${slug}/notes`}>
+            Notes
+          </Link>
+        </div>
+        <div>
+          <Link className="underline" href={`/orgs/${slug}/calendar`}>
+            Calendar
+          </Link>
+        </div>
       </div>
-    </main>
+    </div>
   );
 }
