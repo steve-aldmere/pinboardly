@@ -63,7 +63,7 @@ export default async function NotesPage({
     );
   }
 
-  // Fetch pins for that board
+  // Fetch notes pins
   const { data: pins, error: pinsError } = await supabase
     .from("pins")
     .select("id,content,created_at")
@@ -92,7 +92,7 @@ export default async function NotesPage({
 
       <p className="text-gray-600 mt-2">Organisation: {org.name}</p>
 
-      {/* Add note form (logged-in only) */}
+      {/* Add note (logged-in only) */}
       {isLoggedIn ? (
         <form
           className="mt-6 border rounded-lg p-4 space-y-3"
@@ -124,7 +124,7 @@ export default async function NotesPage({
           <Link className="underline" href={`/login?next=/orgs/${slug}/notes`}>
             Sign in
           </Link>{" "}
-          to add notes.
+          to add or delete notes.
         </p>
       )}
 
@@ -135,9 +135,24 @@ export default async function NotesPage({
         <div className="mt-6 space-y-3">
           {rows.map((p) => (
             <div key={p.id} className="border rounded-lg p-4">
-              <div className="whitespace-pre-wrap text-sm">
-                {p.content || "(empty note)"}
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0 whitespace-pre-wrap text-sm">
+                  {p.content || "(empty note)"}
+                </div>
+
+                {isLoggedIn ? (
+                  <form method="post" action="/api/pins/delete">
+                    <input type="hidden" name="id" value={p.id} />
+                    <button
+                      type="submit"
+                      className="text-sm underline text-gray-600"
+                    >
+                      Delete
+                    </button>
+                  </form>
+                ) : null}
               </div>
+
               {p.created_at ? (
                 <div className="mt-2 text-xs text-gray-500">
                   Added: {new Date(p.created_at).toLocaleString()}
