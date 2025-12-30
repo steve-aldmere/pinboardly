@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { getOrgBySlug } from "../org";
+import CalendarAddForm from "./CalendarAddForm";
 
 type Pin = {
   id: string;
@@ -35,7 +36,9 @@ export default async function CalendarPage({
 
   const supabase = await createServerSupabaseClient();
 
-  // Find the calendar board for this org
+  const { data: userData } = await supabase.auth.getUser();
+  const isLoggedIn = !!userData?.user;
+
   const { data: board, error: boardError } = await supabase
     .from("boards")
     .select("id")
@@ -56,14 +59,11 @@ export default async function CalendarPage({
     return (
       <main className="p-6">
         <h1 className="text-xl font-semibold">Calendar</h1>
-        <p className="text-gray-600 mt-2">
-          No calendar board found for this organisation yet.
-        </p>
+        <p className="text-gray-600 mt-2">No calendar board found.</p>
       </main>
     );
   }
 
-  // Fetch calendar pins (events)
   const { data: pins, error: pinsError } = await supabase
     .from("pins")
     .select("id,content,event_date,created_at")
@@ -82,7 +82,7 @@ export default async function CalendarPage({
   const rows = (pins ?? []) as Pin[];
 
   return (
-    <main className="p-6">
+    <main className="p-6 max-w-3xl mx-auto">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold">Calendar</h1>
         <Link className="underline text-sm" href={`/orgs/${slug}`}>
@@ -91,6 +91,17 @@ export default async function CalendarPage({
       </div>
 
       <p className="text-gray-600 mt-2">Organisation: {org.name}</p>
+
+      {isLoggedIn ? (
+        <CalendarAddForm boardId={board.id} />
+      ) : (
+        <p className="mt-6 text-sm text-gray-600">
+          <Link className="underline" href={`/login?next=/orgs/${slug}/calendar`}>
+            Sign in
+          </Link>{" "}
+          to add events.
+        </p>
+      )}
 
       {rows.length === 0 ? (
         <p className="text-gray-600 mt-6">No upcoming events.</p>
@@ -106,13 +117,19 @@ export default async function CalendarPage({
                 })
               : "No date";
 
+            const raw = (p.content || "").trim();
+            const parts = raw.split(/\n\s*\n/);
+            const title = (parts[0] || "").trim();
+            const details = parts.slice(1).join("\n\n").trim();
+
             return (
               <div key={p.id} className="border rounded-lg p-4">
-                <div className="font-medium">{dateLabel}</div>
-                {p.content ? (
-                  <div className="mt-1 text-sm whitespace-pre-wrap">
-                    {p.content}
-                  </div>
+                <div className="font-medium">
+                  {dateLabel}
+                  {title ? ` · ${title}` : ""}
+                </div>
+                {details ? (
+                  <div className="mt-1 text-sm whitespace-pre-wrap">{details}</div>
                 ) : null}
               </div>
             );
