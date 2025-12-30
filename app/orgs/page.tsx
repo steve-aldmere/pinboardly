@@ -1,3 +1,4 @@
+// app/orgs/page.tsx
 import Link from "next/link";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 
@@ -14,37 +15,30 @@ export default async function OrgsIndexPage() {
 
   return (
     <div className="max-w-4xl mx-auto mt-10 px-6 pb-20">
-      <h1 className="text-3xl font-semibold mb-6">Organisations</h1>
+      <h1 className="text-3xl font-semibold mb-6">Boards</h1>
 
       {error ? <p className="text-sm text-red-600">{error.message}</p> : null}
 
       <div className="flex gap-3 text-sm mb-6">
-  {isLoggedIn ? (
-    <p className="text-gray-600">
-      Joining an organisation is invite-only.
-    </p>
-  ) : (
-    <Link className="underline" href="/login">
-      Sign in
-    </Link>
-  )}
-</div>
+        {isLoggedIn ? (
+          <p className="text-gray-600">Joining a board is invite-only.</p>
+        ) : (
+          <Link className="underline" href="/login">
+            Sign in
+          </Link>
+        )}
+      </div>
 
       {!orgs || orgs.length === 0 ? (
-        <p className="text-gray-600">No organisations yet.</p>
+        <p className="text-gray-600">No boards yet.</p>
       ) : (
         <div className="space-y-3">
           {orgs.map((o: any) => (
             <div key={o.slug} className="border rounded-lg p-4">
               <div className="font-medium">{o.name ?? o.slug}</div>
-              <div className="text-sm text-gray-600">
-                {o.is_public ? "Public" : "Private"}
-              </div>
-              {o.description ? (
-                <div className="text-sm text-gray-700 mt-1">{o.description}</div>
-              ) : null}
+
               <div className="mt-2 text-sm">
-                <Link className="underline" href={`/orgs/${o.slug}`}>
+                <Link className="underline" href={`/${o.slug}`}>
                   View
                 </Link>
               </div>
