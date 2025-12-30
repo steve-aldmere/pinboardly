@@ -9,7 +9,7 @@ export default async function OrgsIndexPage() {
 
   const { data: orgs, error } = await supabase
     .from("orgs")
-    .select("slug,name,description,is_public")
+    .select("slug,name,description,is_public,subscription_status,trial_ends_at")
     .order("name", { ascending: true });
 
   return (
