@@ -2,12 +2,18 @@
 import { NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 
-export async function GET(req: Request) {
+async function doSignOut(req: Request) {
   const supabase = await createServerSupabaseClient();
-
-  // Clear Supabase session cookies
   await supabase.auth.signOut();
 
-  // Go back to homepage (or /orgs if you prefer)
-  return NextResponse.redirect(new URL("/", req.url), { status: 302 });
+  // Send them somewhere that definitely exists
+  return NextResponse.redirect(new URL("/orgs", req.url), { status: 302 });
+}
+
+export async function GET(req: Request) {
+  return doSignOut(req);
+}
+
+export async function POST(req: Request) {
+  return doSignOut(req);
 }
