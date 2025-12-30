@@ -99,7 +99,7 @@ export default async function CalendarPage({
           <Link className="underline" href={`/login?next=/orgs/${slug}/calendar`}>
             Sign in
           </Link>{" "}
-          to add events.
+          to add or delete events.
         </p>
       )}
 
@@ -124,13 +124,29 @@ export default async function CalendarPage({
 
             return (
               <div key={p.id} className="border rounded-lg p-4">
-                <div className="font-medium">
-                  {dateLabel}
-                  {title ? ` · ${title}` : ""}
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0">
+                    <div className="font-medium">
+                      {dateLabel}
+                      {title ? ` · ${title}` : ""}
+                    </div>
+                    {details ? (
+                      <div className="mt-1 text-sm whitespace-pre-wrap">{details}</div>
+                    ) : null}
+                  </div>
+
+                  {isLoggedIn ? (
+                    <form method="post" action="/api/pins/delete">
+                      <input type="hidden" name="id" value={p.id} />
+                      <button
+                        type="submit"
+                        className="text-sm underline text-gray-600"
+                      >
+                        Delete
+                      </button>
+                    </form>
+                  ) : null}
                 </div>
-                {details ? (
-                  <div className="mt-1 text-sm whitespace-pre-wrap">{details}</div>
-                ) : null}
               </div>
             );
           })}
