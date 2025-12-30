@@ -44,7 +44,7 @@ export default async function OrgsIndexPage() {
                 <div className="text-sm text-gray-700 mt-1">{o.description}</div>
               ) : null}
               <div className="mt-2 text-sm">
-                <Link className="underline" href={`/${o.slug}`}>
+                <Link className="underline" href={`/orgs/${o.slug}`}>
                   View
                 </Link>
               </div>

@@ -16,9 +16,12 @@ function Locked() {
 export default async function LinksPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const { org, isActive } = await getOrgBySlug(params.slug);
+  // IMPORTANT: params must be awaited
+  const { slug } = await params;
+
+  const { org, isActive } = await getOrgBySlug(slug);
 
   if (!org) notFound();
   if (!isActive) return <Locked />;

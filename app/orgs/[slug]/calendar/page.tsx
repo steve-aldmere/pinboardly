@@ -16,9 +16,11 @@ function Locked() {
 export default async function CalendarPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const { org, isActive } = await getOrgBySlug(params.slug);
+  const { slug } = await params;
+
+  const { org, isActive } = await getOrgBySlug(slug);
 
   if (!org) notFound();
   if (!isActive) return <Locked />;
