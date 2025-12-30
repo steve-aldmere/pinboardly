@@ -1,6 +1,14 @@
 // app/orgs/[slug]/notes/page.tsx
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { getOrgBySlug } from "../org";
+
+type Pin = {
+  id: string;
+  content: string | null;
+  created_at: string | null;
+};
 
 function Locked() {
   return (
@@ -21,17 +29,86 @@ export default async function NotesPage({
   const { slug } = await params;
 
   const { org, isActive } = await getOrgBySlug(slug);
-
   if (!org) notFound();
   if (!isActive) return <Locked />;
 
+  const supabase = await createServerSupabaseClient();
+
+  // Find the notes board for this org
+  const { data: board, error: boardError } = await supabase
+    .from("boards")
+    .select("id")
+    .eq("org_slug", slug)
+    .eq("board_type", "notes")
+    .maybeSingle();
+
+  if (boardError) {
+    return (
+      <main className="p-6">
+        <h1 className="text-xl font-semibold">Notes</h1>
+        <p className="text-red-600 text-sm mt-2">{boardError.message}</p>
+      </main>
+    );
+  }
+
+  if (!board?.id) {
+    return (
+      <main className="p-6">
+        <h1 className="text-xl font-semibold">Notes</h1>
+        <p className="text-gray-600 mt-2">
+          No notes board found for this organisation yet.
+        </p>
+      </main>
+    );
+  }
+
+  // Fetch pins for that board (notes are content-only)
+  const { data: pins, error: pinsError } = await supabase
+    .from("pins")
+    .select("id,content,created_at")
+    .eq("board_id", board.id)
+    .order("created_at", { ascending: false });
+
+  if (pinsError) {
+    return (
+      <main className="p-6">
+        <h1 className="text-xl font-semibold">Notes</h1>
+        <p className="text-red-600 text-sm mt-2">{pinsError.message}</p>
+      </main>
+    );
+  }
+
+  const rows = (pins ?? []) as Pin[];
+
   return (
     <main className="p-6">
-      <h1 className="text-xl font-semibold">Notes</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-xl font-semibold">Notes</h1>
+        <Link className="underline text-sm" href={`/orgs/${slug}`}>
+          Back
+        </Link>
+      </div>
+
       <p className="text-gray-600 mt-2">Organisation: {org.name}</p>
-      <p className="text-gray-600 mt-2">
-        Public view enabled. Login required only to edit.
-      </p>
+
+      {rows.length === 0 ? (
+        <p className="text-gray-600 mt-6">No notes yet.</p>
+      ) : (
+        <div className="mt-6 space-y-3">
+          {rows.map((p) => (
+            <div key={p.id} className="border rounded-lg p-4">
+              <div className="whitespace-pre-wrap text-sm">
+                {p.content || "(empty note)"}
+              </div>
+              {p.created_at ? (
+                <div className="mt-2 text-xs text-gray-500">
+                  Added: {new Date(p.created_at).toLocaleString()}
+                </div>
+              ) : null}
+            </div>
+          ))}
+        </div>
+      )}
     </main>
   );
 }
