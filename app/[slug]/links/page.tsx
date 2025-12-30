@@ -1,11 +1,9 @@
-// app/[slug]/links/page.tsx
 import { redirect } from "next/navigation";
 
-export default async function PublicLinksRedirect({
+export default function SlugLinksRedirect({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: { slug: string };
 }) {
-  const { slug } = await params;
-  redirect(`/orgs/${slug}/links`);
+  redirect(`/orgs/${params.slug}/links`);
 }

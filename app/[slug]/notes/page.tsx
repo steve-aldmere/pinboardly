@@ -1,11 +1,9 @@
-// app/[slug]/notes/page.tsx
 import { redirect } from "next/navigation";
 
-export default async function PublicNotesRedirect({
+export default function SlugNotesRedirect({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: { slug: string };
 }) {
-  const { slug } = await params;
-  redirect(`/orgs/${slug}/notes`);
+  redirect(`/orgs/${params.slug}/notes`);
 }
