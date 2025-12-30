@@ -1,36 +1,38 @@
 // app/orgs/[slug]/page.tsx
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getOrgBySlug } from "./org";
-import OrgPageClient from "./OrgPageClient";
-
-function Locked() {
-  return (
-    <main className="p-6">
-      <h1 className="text-xl font-semibold">Subscription required</h1>
-      <p className="text-gray-600 mt-2">
-        This organisation’s boards are locked until a trial or paid subscription is active.
-      </p>
-    </main>
-  );
-}
 
 export default async function OrgHomePage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: { slug: string };
 }) {
-  const { slug } = await params;
-
-  const { org, isActive } = await getOrgBySlug(slug);
+  const { org, isActive } = await getOrgBySlug(params.slug);
 
   if (!org) notFound();
-  if (!isActive) return <Locked />;
 
   return (
-    <OrgPageClient
-      slug={org.slug}
-      name={org.name ?? org.slug}
-      description={org.description ?? null}
-    />
+    <main className="max-w-3xl mx-auto p-6">
+      <h1 className="text-2xl font-semibold">{org.name}</h1>
+
+      {!isActive && (
+        <p className="mt-2 text-sm text-gray-600">
+          This board is currently locked.
+        </p>
+      )}
+
+      <div className="mt-6 flex flex-col gap-2 text-sm">
+        <Link href={`/orgs/${org.slug}/links`} className="underline">
+          Links
+        </Link>
+        <Link href={`/orgs/${org.slug}/notes`} className="underline">
+          Notes
+        </Link>
+        <Link href={`/orgs/${org.slug}/calendar`} className="underline">
+          Calendar
+        </Link>
+      </div>
+    </main>
   );
 }
