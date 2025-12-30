@@ -1,7 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
 
-export default function TopNav() {
+export default async function TopNav() {
+  const supabase = await createServerSupabaseClient();
+  const { data } = await supabase.auth.getUser();
+  const isLoggedIn = !!data?.user;
+
   return (
     <header className="border-b bg-white">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
@@ -21,9 +26,18 @@ export default function TopNav() {
           <Link href="/orgs" className="hover:underline">
             Organisations
           </Link>
-          <Link href="/login" className="hover:underline">
-            Sign in
-          </Link>
+
+          {isLoggedIn ? (
+            <form action="/auth/signout" method="post">
+              <button type="submit" className="hover:underline">
+                Sign out
+              </button>
+            </form>
+          ) : (
+            <Link href="/login" className="hover:underline">
+              Sign in
+            </Link>
+          )}
         </nav>
       </div>
     </header>

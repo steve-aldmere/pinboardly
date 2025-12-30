@@ -67,7 +67,7 @@ export default function OrgClient({ slug }: { slug: string }) {
       <div className="p-6">
         <p className="text-sm text-red-600">{err}</p>
         <div className="mt-4">
-          <Link href="/boards" className="underline text-sm">
+          <Link href="/orgs/${slug}" className="underline text-sm">
             Back to boards
           </Link>
         </div>
@@ -78,7 +78,7 @@ export default function OrgClient({ slug }: { slug: string }) {
   return (
     <div className="max-w-3xl mx-auto py-10 px-6">
       <div className="flex items-center justify-between">
-        <Link href="/boards" className="underline text-sm">
+        <Link href="/orgs/${slug}" className="underline text-sm">
           Back to boards
         </Link>
         <span className="text-sm text-gray-600">Org</span>

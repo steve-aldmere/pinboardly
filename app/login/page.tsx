@@ -12,7 +12,7 @@ export default async function Page({
   const next =
     typeof sp.next === "string" && sp.next.startsWith("/")
       ? sp.next
-      : "/boards";
+      : "/orgs";
 
   const supabase = await createServerSupabaseClient();
   const { data } = await supabase.auth.getUser();

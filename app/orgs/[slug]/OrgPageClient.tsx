@@ -104,13 +104,33 @@ export default function OrgPageClient({
           <h2 className="text-xl font-semibold">Boards</h2>
 
           {isOrgAdmin ? (
-            <Link
-              href={orgHref}
-              className="px-3 py-2 text-sm bg-blue-500 text-white rounded-lg"
-            >
-              Create board
-            </Link>
-          ) : null}
+          <button
+            type="button"
+            onClick={async () => {
+              try {
+                const res = await fetch("/api/setup-boards", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ org_slug: slug }),
+                });
+
+                if (!res.ok) {
+                  const j = await res.json().catch(() => ({}));
+                  alert(j.error || "Failed to set up boards");
+                  return;
+                }
+
+                // Refresh to show newly created boards
+                window.location.reload();
+              } catch {
+                alert("Failed to set up boards");
+              }
+            }}
+            className="px-3 py-2 text-sm bg-blue-500 text-white rounded-lg"
+          >
+            Set up boards
+          </button>
+        ) : null}
         </div>
 
         {boards.length === 0 ? (
@@ -121,7 +141,7 @@ export default function OrgPageClient({
               <div key={b.id} className="border rounded-lg p-4">
                 <div className="font-medium">{b.title}</div>
                 <div className="text-sm text-gray-600">
-                  {b.board_type} · {b.is_public ? "Public" : "Private"}
+                  {b.is_public ? "Public" : "Private"}
                 </div>
 
                 {b.description ? (

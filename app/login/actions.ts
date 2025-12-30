@@ -5,7 +5,7 @@ import { createServerSupabaseClient } from "@/lib/supabase-server";
 
 function getSafeNext(formData: FormData) {
   const next = String(formData.get("next") ?? "").trim();
-  if (!next || !next.startsWith("/")) return "/boards";
+  if (!next || !next.startsWith("/")) return "/orgs";
   return next;
 }
 
