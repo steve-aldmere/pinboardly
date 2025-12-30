@@ -1,7 +1,7 @@
 // app/[slug]/page.tsx
 import { redirect } from "next/navigation";
 
-export default async function PublicOrgSlugRedirect({
+export default async function SlugRedirect({
   params,
 }: {
   params: Promise<{ slug: string }>;

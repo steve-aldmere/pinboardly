@@ -1,9 +1,11 @@
+// app/[slug]/calendar/page.tsx
 import { redirect } from "next/navigation";
 
-export default function SlugCalendarRedirect({
+export default async function SlugCalendarRedirect({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  redirect(`/orgs/${params.slug}/calendar`);
+  const { slug } = await params;
+  redirect(`/orgs/${slug}/calendar`);
 }
