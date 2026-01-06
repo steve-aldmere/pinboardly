@@ -14,6 +14,38 @@ function normalizeUrl(input: string) {
   return s;
 }
 
+function firstLineTitle(content: string) {
+  const cleaned = (content || "").replace(/\r\n/g, "\n").trim();
+  if (!cleaned) return "";
+  const line =
+    cleaned.split("\n").map((x) => x.trim()).filter(Boolean)[0] || "";
+  return line.length > 80 ? `${line.slice(0, 80)}…` : line;
+}
+
+function titleFromUrl(url: string) {
+  try {
+    const u = new URL(url);
+    const host = u.host.replace(/^www\./, "");
+    const path = u.pathname === "/" ? "" : u.pathname;
+    const suffix = `${path}${u.search ? u.search : ""}`;
+    return `${host}${suffix}`;
+  } catch {
+    return url.trim();
+  }
+}
+
+function titleFromEventDate(eventDate: string) {
+  const d = new Date(eventDate);
+  if (Number.isNaN(d.getTime())) return "";
+  return d.toLocaleString(undefined, {
+    weekday: "short",
+    day: "2-digit",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 // GET /api/pins?boardId=... (or board_id=...) -> list pins for a board
 export async function GET(req: Request) {
   const url = new URL(req.url);
@@ -28,8 +60,11 @@ export async function GET(req: Request) {
 
   const { data, error } = await supabase
     .from("pins")
-    .select("id, board_id, content, url, event_date, created_at, created_by")
+    .select(
+      "id, board_id, title, content, url, event_date, position, created_at, created_by"
+    )
     .eq("board_id", boardId)
+    .order("position", { ascending: true, nullsFirst: false })
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -40,8 +75,8 @@ export async function GET(req: Request) {
 }
 
 // POST /api/pins
-// Accepts either JSON { boardId, content, url?, event_date? }
-// OR form fields: boardId, content, url, event_date
+// Accepts either JSON { boardId, title?, content?, url?, event_date? }
+// OR form fields: boardId, title, content, url, event_date
 export async function POST(req: Request) {
   const supabase = await createServerSupabaseClient();
 
@@ -53,20 +88,22 @@ export async function POST(req: Request) {
   const contentType = req.headers.get("content-type") || "";
 
   let boardId = "";
+  let title = "";
   let content = "";
   let urlVal = "";
   let eventDateVal = "";
 
   if (contentType.includes("application/json")) {
     const body = await req.json().catch(() => ({}));
-    boardId = asString(body.boardId);
+    boardId = asString(body.boardId).trim();
+    title = asString(body.title).trim();
     content = asString(body.content).trim();
     urlVal = asString(body.url).trim();
     eventDateVal = asString(body.event_date).trim();
   } else {
-    // Handle normal HTML form posts
     const form = await req.formData();
     boardId = asString(form.get("boardId")).trim();
+    title = asString(form.get("title")).trim();
     content = asString(form.get("content")).trim();
     urlVal = asString(form.get("url")).trim();
     eventDateVal = asString(form.get("event_date")).trim();
@@ -78,11 +115,18 @@ export async function POST(req: Request) {
 
   urlVal = normalizeUrl(urlVal);
 
-  if (!content && !urlVal && !eventDateVal) {
+  if (!title && !content && !urlVal && !eventDateVal) {
     return NextResponse.json(
-      { error: "Provide at least one of: content, url, event_date" },
+      { error: "Provide at least one of: title, content, url, event_date" },
       { status: 400 }
     );
+  }
+
+  // Default title rules if user didn't supply one
+  if (!title) {
+    if (content) title = firstLineTitle(content);
+    else if (urlVal) title = titleFromUrl(urlVal);
+    else if (eventDateVal) title = titleFromEventDate(eventDateVal);
   }
 
   const insertData: any = {
@@ -90,6 +134,7 @@ export async function POST(req: Request) {
     created_by: userData.user.id,
   };
 
+  if (title) insertData.title = title;
   if (content) insertData.content = content;
   if (urlVal) insertData.url = urlVal;
   if (eventDateVal) insertData.event_date = eventDateVal;
@@ -97,7 +142,9 @@ export async function POST(req: Request) {
   const { data, error } = await supabase
     .from("pins")
     .insert(insertData)
-    .select("id, board_id, content, url, event_date, created_at, created_by")
+    .select(
+      "id, board_id, title, content, url, event_date, position, created_at, created_by"
+    )
     .single();
 
   if (error) {

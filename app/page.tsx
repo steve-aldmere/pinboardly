@@ -6,14 +6,14 @@ export default async function Page() {
   const supabase = await createServerSupabaseClient();
   const { data } = await supabase.auth.getUser();
 
-  // If already signed in, skip the landing page
+  // If already signed in, go to dashboard
   if (data?.user) {
-    redirect("/orgs");
+    redirect("/app/dashboard");
   }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-6">
-      <Link href="/login" aria-label="Go to sign in">
+      <Link href="/app/login" aria-label="Go to sign in">
         <img
           src="/pinboardly-icon2.svg"
           alt="Pinboardly"
@@ -22,7 +22,7 @@ export default async function Page() {
       </Link>
 
       <Link
-        href="/login"
+        href="/app/login"
         className="text-sm underline text-gray-600"
       >
         Sign in

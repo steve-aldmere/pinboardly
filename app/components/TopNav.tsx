@@ -1,31 +1,34 @@
-// app/components/TopNav.tsx
 import Link from "next/link";
-import { createServerSupabaseClient } from "@/lib/supabase-server";
+import Image from "next/image";
 
-export default async function TopNav() {
-  const supabase = await createServerSupabaseClient();
-  const { data } = await supabase.auth.getUser();
-  const isLoggedIn = !!data?.user;
+export default function TopNav() {
+  // Auth lookup temporarily disabled to prevent refresh_token_already_used errors
+  const user = null;
 
   return (
-    <header className="border-b">
-      <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 font-semibold">
-          <span className="inline-block border px-1 text-sm">B</span>
-          Pinboardly
+    <header className="border-b border-black/10 bg-white">
+      <div className="mx-auto max-w-5xl px-4 py-3 flex items-center justify-between">
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/pinboardly-wordmark.svg"
+            alt="Pinboardly"
+            width={180}
+            height={32}
+            priority
+          />
         </Link>
-
         <nav className="flex items-center gap-6 text-sm">
-          <Link href="/orgs" className="hover:underline">
-            Boards
-          </Link>
-
-          {isLoggedIn ? (
-            <Link href="/auth/signout" className="hover:underline">
-              Sign out
-            </Link>
+          {user ? (
+            <>
+              <Link href="/app/dashboard" className="hover:underline">
+                Dashboard
+              </Link>
+              <Link href="/app/account" className="hover:underline">
+                Account
+              </Link>
+            </>
           ) : (
-            <Link href="/login" className="hover:underline">
+            <Link href="/app/login" className="hover:underline">
               Sign in
             </Link>
           )}
