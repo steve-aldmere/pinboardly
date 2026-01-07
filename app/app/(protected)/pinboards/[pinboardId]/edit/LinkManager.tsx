@@ -11,7 +11,16 @@ type Link = {
   sort_order: number;
 };
 
-type FieldErrors = { title?: string; url?: string; description?: string };
+type FieldErrors = {
+  title?: string;
+  url?: string;
+  description?: string;
+};
+
+type ZodIssueLike = {
+  path?: Array<string | number>;
+  message?: string;
+};
 
 export default function LinkManager({
   pinboardId,
@@ -24,9 +33,7 @@ export default function LinkManager({
     const s = (input || "").trim();
     if (!s) return "";
     if (/^https?:\/\//i.test(s)) return s;
-    // If it starts with www. or has no scheme, prefix https://
-    if (s.startsWith("www.") || !/^[a-z]+:\/\//i.test(s)) return `https://${s}`;
-    return s;
+    return `https://${s}`;
   };
 
   const [links, setLinks] = useState<Link[]>(initialLinks);
@@ -125,23 +132,27 @@ export default function LinkManager({
 
     if (!res.ok) {
       let message = "Something went wrong. Please try again.";
-      try {
-        const json = await res.json();
 
-        // Supabase/schema errors etc.
+      try {
+        const json: any = await res.json();
+
         if (typeof json?.error === "string") {
           message = json.error;
         }
 
-        // Zod validation errors
         if (json?.error === "Validation error" && Array.isArray(json?.details)) {
           const fe: FieldErrors = {};
-          for (const issue of json.details) {
+          const issues = json.details as ZodIssueLike[];
+
+          for (const issue of issues) {
             const key = Array.isArray(issue?.path) ? issue.path[0] : undefined;
+
             if (key === "title" || key === "url" || key === "description") {
-              fe[key] = issue?.message || "Invalid value";
+              const k = key as keyof FieldErrors;
+              fe[k] = issue?.message || "Invalid value";
             }
           }
+
           setFieldErrors(fe);
           message = "Please fix the highlighted fields.";
         }
@@ -207,7 +218,9 @@ export default function LinkManager({
                 placeholder="e.g., Scout Association Website"
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              {fieldErrors.title && <p className="text-xs text-red-600 mt-1">{fieldErrors.title}</p>}
+              {fieldErrors.title && (
+                <p className="text-xs text-red-600 mt-1">{fieldErrors.title}</p>
+              )}
             </div>
 
             <div>
@@ -354,6 +367,7 @@ export default function LinkManager({
                       Edit
                     </button>
 
+                    {/* IMPORTANT: deleteLinkAction expects linkId + pinboardId */}
                     <form action={deleteLinkAction}>
                       <input type="hidden" name="linkId" value={link.id} />
                       <input type="hidden" name="pinboardId" value={pinboardId} />
@@ -386,10 +400,10 @@ export default function LinkManager({
                       if (ok) window.location.reload();
                     }}
                   >
-                    {/* Hidden fields to keep API routing stable */}
+                    {/* IMPORTANT: update endpoint expects id + pinboard_id + type */}
                     <input type="hidden" name="type" value="link" />
                     <input type="hidden" name="pinboard_id" value={pinboardId} />
-                    <input type="hidden" name="linkId" value={link.id} />
+                    <input type="hidden" name="id" value={link.id} />
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
