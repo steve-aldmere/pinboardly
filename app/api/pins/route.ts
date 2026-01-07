@@ -10,7 +10,10 @@ const linkPinSchema = z.object({
   type: z.literal("link"),
   pinboard_id: uuidSchema,
   title: z.string().min(1).max(120),
-  url: z.string().url().min(1).max(2048),
+  url: z.preprocess(
+    (v) => (typeof v === "string" ? normalizeUrl(v) : v),
+    z.string().url().min(1).max(2048)
+  ),
   description: z.string().max(500).optional(),
 });
 

@@ -17,6 +17,13 @@ export default function LinkManager({
   pinboardId: string;
   initialLinks: Link[];
 }) {
+  const normalizeUrlClient = (input: string) => {
+    const s = (input || "").trim();
+    if (!s) return "";
+    if (/^https?:\/\//i.test(s)) return s;
+    if (s.startsWith("www.") || !/^[a-z]+:\/\//i.test(s)) return `https://${s}`;
+    return s;
+  };
   const [links, setLinks] = useState<Link[]>(initialLinks);
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -152,10 +159,13 @@ export default function LinkManager({
                 URL *
               </label>
               <input
-                type="url"
+                type="text"
                 name="url"
                 required
                 placeholder="https://example.com"
+                onBlur={(e) => {
+                  e.currentTarget.value = normalizeUrlClient(e.currentTarget.value);
+                }}
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -320,10 +330,13 @@ export default function LinkManager({
                         URL *
                       </label>
                       <input
-                        type="url"
+                        type="text"
                         name="url"
                         required
                         defaultValue={link.url}
+                        onBlur={(e) => {
+                          e.currentTarget.value = normalizeUrlClient(e.currentTarget.value);
+                        }}
                         className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
