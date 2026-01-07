@@ -28,6 +28,11 @@ export default function TopNavClient({
               <Link href="/app/account" className="hover:underline">
                 Account
               </Link>
+              <form action="/auth/signout" method="post">
+                <button type="submit" className="hover:underline">
+                  Sign out
+                </button>
+              </form>
             </>
           ) : (
             <Link href="/app/login" className="hover:underline">
