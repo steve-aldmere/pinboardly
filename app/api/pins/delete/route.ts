@@ -1,6 +1,7 @@
 // app/api/pins/delete/route.ts
 import { NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
+import { badRequest } from "@/lib/api/respond";
 
 export async function POST(req: Request) {
   const supabase = await createServerSupabaseClient();
@@ -14,13 +15,13 @@ export async function POST(req: Request) {
   const id = (form?.get("id") ?? "").toString();
 
   if (!id) {
-    return NextResponse.json({ error: "Missing id" }, { status: 400 });
+    return badRequest("Missing id");
   }
 
   const { error } = await supabase.from("pins").delete().eq("id", id);
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    return badRequest(error.message);
   }
 
   const referer = req.headers.get("referer") || "/";
