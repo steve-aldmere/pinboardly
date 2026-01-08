@@ -2,6 +2,12 @@
 import { NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { z } from "zod";
+import {
+  ok,
+  badRequest,
+  unauthorized,
+  serverError,
+} from "@/lib/api/respond";
 
 /**
  * NOTE:
@@ -128,10 +134,7 @@ export async function GET(req: Request) {
     | "";
 
   if (!pinboardId) {
-    return NextResponse.json(
-      { error: "Missing pinboard_id (or pinboardId/boardId)" },
-      { status: 400 }
-    );
+    return badRequest("Missing pinboard_id (or pinboardId/boardId)");
   }
 
   const supabase = await createServerSupabaseClient();
@@ -144,8 +147,8 @@ export async function GET(req: Request) {
       .eq("pinboard_id", pinboardId)
       .order("sort_order", { ascending: true });
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 400 });
-    return NextResponse.json({ pins: data ?? [] }, { status: 200 });
+    if (error) return badRequest(error.message);
+    return ok({ pins: data ?? [] });
   }
 
   if (typeParam === "note") {
@@ -155,8 +158,8 @@ export async function GET(req: Request) {
       .eq("pinboard_id", pinboardId)
       .order("sort_order", { ascending: true });
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 400 });
-    return NextResponse.json({ pins: data ?? [] }, { status: 200 });
+    if (error) return badRequest(error.message);
+    return ok({ pins: data ?? [] });
   }
 
   if (typeParam === "event") {
@@ -166,8 +169,8 @@ export async function GET(req: Request) {
       .eq("pinboard_id", pinboardId)
       .order("sort_order", { ascending: true });
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 400 });
-    return NextResponse.json({ pins: data ?? [] }, { status: 200 });
+    if (error) return badRequest(error.message);
+    return ok({ pins: data ?? [] });
   }
 
   // Otherwise return combined (useful for debugging / generic clients)
@@ -186,9 +189,9 @@ export async function GET(req: Request) {
       .eq("pinboard_id", pinboardId),
   ]);
 
-  if (linksRes.error) return NextResponse.json({ error: linksRes.error.message }, { status: 400 });
-  if (notesRes.error) return NextResponse.json({ error: notesRes.error.message }, { status: 400 });
-  if (eventsRes.error) return NextResponse.json({ error: eventsRes.error.message }, { status: 400 });
+  if (linksRes.error) return badRequest(linksRes.error.message);
+  if (notesRes.error) return badRequest(notesRes.error.message);
+  if (eventsRes.error) return badRequest(eventsRes.error.message);
 
   const combined = [
     ...(linksRes.data ?? []).map((x) => ({ ...x, type: "link" as const })),
@@ -196,7 +199,7 @@ export async function GET(req: Request) {
     ...(eventsRes.data ?? []).map((x) => ({ ...x, type: "event" as const })),
   ].sort((a: any, b: any) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
 
-  return NextResponse.json({ pins: combined }, { status: 200 });
+  return ok({ pins: combined });
 }
 
 // ----------------------
@@ -211,7 +214,7 @@ export async function POST(req: Request) {
 
     const { data: userData } = await supabase.auth.getUser();
     if (!userData?.user) {
-      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+      return unauthorized("Not authenticated");
     }
 
     const contentType = req.headers.get("content-type") || "";
@@ -246,10 +249,7 @@ export async function POST(req: Request) {
     // Validate
     const validation = createPinSchema.safeParse(body);
     if (!validation.success) {
-      return NextResponse.json(
-        { error: "Validation error", details: validation.error.issues },
-        { status: 400 }
-      );
+      return badRequest("Validation error", validation.error.issues);
     }
 
     const validatedData = validation.data;
@@ -273,7 +273,7 @@ export async function POST(req: Request) {
         .limit(1);
 
       if (lastErr) {
-        return NextResponse.json({ error: lastErr.message }, { status: 400 });
+        return badRequest(lastErr.message);
       }
 
       const nextSortOrder = (last?.[0]?.sort_order ?? 0) + 1;
@@ -310,7 +310,7 @@ export async function POST(req: Request) {
       .single();
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 400 });
+      return badRequest(error.message);
     }
 
     // Form posts redirect back
@@ -319,10 +319,10 @@ export async function POST(req: Request) {
       return NextResponse.redirect(back, { status: 303 });
     }
 
-    return NextResponse.json({ pin: data }, { status: 201 });
+    return ok({ pin: data }, 201);
   } catch (error) {
     console.error("Unexpected error in POST /api/pins:", error);
-    return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 });
+    return serverError("An unexpected error occurred");
   }
 }
 
@@ -358,17 +358,14 @@ export async function DELETE(req: Request) {
 
     const validation = deletePinSchema.safeParse({ id, pinboard_id: pinboardId, type });
     if (!validation.success) {
-      return NextResponse.json(
-        { error: "Validation error", details: validation.error.issues },
-        { status: 400 }
-      );
+      return badRequest("Validation error", validation.error.issues);
     }
 
     const supabase = await createServerSupabaseClient();
 
     const { data: userData } = await supabase.auth.getUser();
     if (!userData?.user) {
-      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+      return unauthorized("Not authenticated");
     }
 
     const t = (validation.data.type || "link") as "link" | "note" | "event";
@@ -381,12 +378,12 @@ export async function DELETE(req: Request) {
       .eq("pinboard_id", pinboardId);
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 400 });
+      return badRequest(error.message);
     }
 
-    return NextResponse.json({ success: true }, { status: 200 });
+    return ok({ success: true });
   } catch (error) {
     console.error("Unexpected error in DELETE /api/pins:", error);
-    return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 });
+    return serverError("An unexpected error occurred");
   }
 }
