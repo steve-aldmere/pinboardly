@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
+import { ok, badRequest, unauthorized, notFound } from "@/lib/api/respond";
 
 function asString(v: unknown) {
   return typeof v === "string" ? v : "";
@@ -43,7 +44,7 @@ export async function POST(req: Request) {
 
   const { data: userData } = await supabase.auth.getUser();
   if (!userData?.user) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    return unauthorized("Not authenticated");
   }
 
   const contentType = req.headers.get("content-type") || "";
@@ -62,10 +63,10 @@ export async function POST(req: Request) {
   }
 
   if (!id) {
-    return NextResponse.json({ error: "Missing id" }, { status: 400 });
+    return badRequest("Missing id");
   }
   if (direction !== "up" && direction !== "down") {
-    return NextResponse.json({ error: "direction must be 'up' or 'down'" }, { status: 400 });
+    return badRequest("direction must be 'up' or 'down'");
   }
 
   // 1) Load the pin
@@ -76,10 +77,10 @@ export async function POST(req: Request) {
     .maybeSingle<PinRow>();
 
   if (pinErr) {
-    return NextResponse.json({ error: pinErr.message }, { status: 400 });
+    return badRequest(pinErr.message);
   }
   if (!pin) {
-    return NextResponse.json({ error: "Pin not found" }, { status: 404 });
+    return notFound("Pin not found");
   }
 
   // 2) If positions are missing/null, normalise for the whole board once
@@ -87,7 +88,7 @@ export async function POST(req: Request) {
     try {
       await normalizePositions(supabase, pin.board_id);
     } catch (e: any) {
-      return NextResponse.json({ error: e?.message || "Failed to normalize positions" }, { status: 400 });
+      return badRequest(e?.message || "Failed to normalize positions");
     }
 
     // reload pin after normalization
@@ -98,7 +99,7 @@ export async function POST(req: Request) {
       .maybeSingle<PinRow>();
 
     if (reload.error || !reload.data) {
-      return NextResponse.json({ error: reload.error?.message || "Pin reload failed" }, { status: 400 });
+      return badRequest(reload.error?.message || "Pin reload failed");
     }
 
     pin.position = reload.data.position;
@@ -135,7 +136,7 @@ export async function POST(req: Request) {
       const back = req.headers.get("referer") || "/orgs";
       return NextResponse.redirect(back, { status: 303 });
     }
-    return NextResponse.json({ ok: true, moved: false }, { status: 200 });
+    return ok({ ok: true, moved: false });
   }
 
   // 4) Swap positions
@@ -143,15 +144,15 @@ export async function POST(req: Request) {
   const bPos = neighbour.position;
 
   const { error: aErr } = await supabase.from("pins").update({ position: bPos }).eq("id", pin.id);
-  if (aErr) return NextResponse.json({ error: aErr.message }, { status: 400 });
+  if (aErr) return badRequest(aErr.message);
 
   const { error: bErr } = await supabase.from("pins").update({ position: aPos }).eq("id", neighbour.id);
-  if (bErr) return NextResponse.json({ error: bErr.message }, { status: 400 });
+  if (bErr) return badRequest(bErr.message);
 
   if (!contentType.includes("application/json")) {
     const back = req.headers.get("referer") || "/orgs";
     return NextResponse.redirect(back, { status: 303 });
   }
 
-  return NextResponse.json({ ok: true, moved: true }, { status: 200 });
+  return ok({ ok: true, moved: true });
 }
