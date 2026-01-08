@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { z } from "zod";
+import { ok, badRequest, unauthorized, serverError } from "@/lib/api/respond";
 
 const uuidSchema = z.string().uuid();
 
@@ -74,7 +75,7 @@ export async function POST(req: Request) {
 
     const { data: userData } = await supabase.auth.getUser();
     if (!userData?.user) {
-      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+      return unauthorized("Not authenticated");
     }
 
     const contentType = req.headers.get("content-type") || "";
@@ -87,10 +88,7 @@ export async function POST(req: Request) {
 
     const parsed = updatePinSchema.safeParse(body);
     if (!parsed.success) {
-      return NextResponse.json(
-        { error: "Validation error", details: parsed.error.issues },
-        { status: 400 }
-      );
+      return badRequest("Validation error", parsed.error.issues);
     }
 
     const v = parsed.data;
@@ -129,10 +127,10 @@ export async function POST(req: Request) {
         patch.description = v.description === null ? null : String(v.description).trim() || null;
     }
 
-    // Don’t allow empty updates
-    // (prevents “Save” nuking fields when nothing changed)
+    // Don't allow empty updates
+    // (prevents "Save" nuking fields when nothing changed)
     if (Object.keys(patch).length === 0) {
-      return NextResponse.json({ error: "No fields to update" }, { status: 400 });
+      return badRequest("No fields to update");
     }
 
     const { error } = await supabase
@@ -142,7 +140,7 @@ export async function POST(req: Request) {
       .eq("pinboard_id", v.pinboard_id);
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 400 });
+      return badRequest(error.message);
     }
 
     // Form post: bounce back to editor
@@ -151,9 +149,9 @@ export async function POST(req: Request) {
       return NextResponse.redirect(back, { status: 303 });
     }
 
-    return NextResponse.json({ ok: true }, { status: 200 });
+    return ok({ ok: true });
   } catch (err) {
     console.error("Unexpected error in POST /api/pins/update:", err);
-    return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 });
+    return serverError("An unexpected error occurred");
   }
 }
