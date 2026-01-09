@@ -73,7 +73,7 @@ export default async function EventsPage({
         minute: "2-digit",
         hour12: true,
       });
-      formatted += ` at ${timeFormatted}`;
+      formatted += ` at ${teFormatted}`;
     }
 
     return formatted;
@@ -130,7 +130,7 @@ export default async function EventsPage({
           </div>
         ) : (
           <div className="space-y-4">
-            {sortedEvents.map((eve: EventPin) => {
+            {sortedEvents.map((event: EventPin) => {
               const eventDate = new Date(event.date);
               eventDate.setHours(0, 0, 0, 0);
               const now = new Date();
