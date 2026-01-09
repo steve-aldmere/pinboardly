@@ -1,4 +1,3 @@
-cat > "app/[slug]/links/page.tsx" <<'EOF'
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getPublicPinboard } from "@/lib/pinboard-public";
@@ -90,4 +89,3 @@ export default async function LinksPage({
     </div>
   );
 }
-EOF
