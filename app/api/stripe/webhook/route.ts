@@ -75,7 +75,7 @@ export async function POST(req: Request) {
         null;
 
       if (!pinboardSlug) {
-        console.warn("Missing pinboardSlug in checkout session", {
+        console.debug("Ignored checkout.session.completed without pinboardSlug", {
           sessionId: session.id,
         });
         return NextResponse.json({ received: true });
@@ -85,20 +85,26 @@ export async function POST(req: Request) {
       const subscriptionId = session.subscription as string;
 
       if (!customerId || !subscriptionId) {
-        console.warn("Missing customerId or subscriptionId in checkout session", {
-          sessionId: session.id,
-          customerId,
-          subscriptionId,
-        });
+        console.debug(
+          "Ignored checkout.session.completed missing customerId/subscriptionId",
+          {
+            sessionId: session.id,
+            customerId,
+            subscriptionId,
+          }
+        );
         return NextResponse.json({ received: true });
       }
 
       // Retrieve subscription from Stripe
       const subRes = await stripe.subscriptions.retrieve(subscriptionId);
-      const subscription = ("data" in subRes ? subRes.data : subRes) as Stripe.Subscription;
+      const subscription = (
+        "data" in subRes ? subRes.data : subRes
+      ) as Stripe.Subscription;
 
       const currentPeriodEndIso =
-        typeof (subscription as any).current_period_end === "number" && Number.isFinite((subscription as any).current_period_end)
+        typeof (subscription as any).current_period_end === "number" &&
+        Number.isFinite((subscription as any).current_period_end)
           ? new Date((subscription as any).current_period_end * 1000).toISOString()
           : null;
 
@@ -146,18 +152,20 @@ export async function POST(req: Request) {
 
       // Retrieve full subscription from Stripe
       const fullSubRes = await stripe.subscriptions.retrieve(subscriptionId);
-      const fullSub = ("data" in fullSubRes ? fullSubRes.data : fullSubRes) as Stripe.Subscription;
+      const fullSub = (
+        "data" in fullSubRes ? fullSubRes.data : fullSubRes
+      ) as Stripe.Subscription;
 
       const customerId =
-        typeof fullSub.customer === "string"
-          ? fullSub.customer
-          : fullSub.customer.id;
+        typeof fullSub.customer === "string" ? fullSub.customer : fullSub.customer.id;
 
       // Compute currentPeriodEndIso: prefer current_period_end, fallback to billing_cycle_anchor
       const periodEndUnix =
-        typeof (fullSub as any).current_period_end === "number" && Number.isFinite((fullSub as any).current_period_end)
+        typeof (fullSub as any).current_period_end === "number" &&
+        Number.isFinite((fullSub as any).current_period_end)
           ? (fullSub as any).current_period_end
-          : typeof (fullSub as any).billing_cycle_anchor === "number" && Number.isFinite((fullSub as any).billing_cycle_anchor)
+          : typeof (fullSub as any).billing_cycle_anchor === "number" &&
+            Number.isFinite((fullSub as any).billing_cycle_anchor)
           ? (fullSub as any).billing_cycle_anchor
           : null;
 
@@ -166,7 +174,7 @@ export async function POST(req: Request) {
         : null;
 
       // Update pinboard with subscription info
-      const { data: updateData, error: updateError } = await supabase
+      const { error: updateError } = await supabase
         .from("pinboards")
         .update({
           stripe_customer_id: customerId,
@@ -175,8 +183,7 @@ export async function POST(req: Request) {
           current_period_end: currentPeriodEndIso,
           paid_until: currentPeriodEndIso,
         })
-        .eq("slug", pinboardSlug)
-        .select("slug");
+        .eq("slug", pinboardSlug);
 
       if (updateError) {
         console.error("Error updating pinboard:", updateError);
@@ -196,4 +203,3 @@ export async function POST(req: Request) {
     );
   }
 }
-
