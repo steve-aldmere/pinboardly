@@ -1,13 +1,7 @@
 import { notFound } from "next/navigation";
-import { createServerSupabaseClient } from "@/lib/supabase-server";
 import Link from "next/link";
-
-type Pinboard = {
-  id: string;
-  slug: string;
-  title: string;
-  status: string;
-};
+import { getPublicPinboard } from "@/lib/pinboard-public";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
 
 type EventPin = {
   id: string;
@@ -18,26 +12,26 @@ type EventPin = {
   description: string | null;
 };
 
-export default async function EventsPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function EventsPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
-  const supabase = await createServerSupabaseClient();
 
-  const { data: pinboard } = await supabase
-    .from("pinboards")
-    .select("id, slug, title, status")
-    .eq("slug", slug)
-    .single();
+  const result = await getPublicPinboard(slug);
 
-  if (!pinboard) {
-    notFound();
-  }
+  if (!result.ok) {
+    if (result.reason === "not_found") notFound();
 
-  if (pinboard.status === "expired") {
+    // inactive
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
         <div className="max-w-md text-center">
-          <h1 className="text-3xl font-bold mb-4">{pinboard.title}</h1>
-          <p className="text-gray-600 mb-6">This pinboard needs an active subscription to stay live.</p>
+          <h1 className="text-3xl font-bold mb-4">Pinboard Unavailable</h1>
+          <p className="text-gray-600 mb-6">
+            This pinboard needs an active subscription to stay live.
+          </p>
           <Link href={`/${slug}`} className="text-blue-600 hover:text-blue-700">
             ← Back to overview
           </Link>
@@ -46,27 +40,9 @@ export default async function EventsPage({ params }: { params: Promise<{ slug: s
     );
   }
 
-  if (pinboard.status === "removed") {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
-        <div className="max-w-md text-center">
-          <h1 className="text-3xl font-bold mb-4">Pinboard Removed</h1>
-          <p className="text-gray-600">This pinboard has been removed by its owner.</p>
-        </div>
-      </div>
-    );
-  }
+  const pinboard = result.pinboard;
 
-  if (pinboard.status === "suspended") {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
-        <div className="max-w-md text-center">
-          <h1 className="text-3xl font-bold mb-4">Pinboard Suspended</h1>
-          <p className="text-gray-600">This pinboard is currently unavailable.</p>
-        </div>
-      </div>
-    );
-  }
+  const supabase = await createServerSupabaseClient();
 
   // Fetch events (max 100)
   const { data: events } = await supabase
@@ -92,7 +68,7 @@ export default async function EventsPage({ params }: { params: Promise<{ slug: s
       const [hours, minutes] = timeString.split(":");
       const timeDate = new Date();
       timeDate.setHours(parseInt(hours, 10), parseInt(minutes, 10));
-      const timeFormatted = timeDate.toLocaleTimeString(undefined, {
+      const teFormatted = timeDate.toLocaleTimeString(undefined, {
         hour: "numeric",
         minute: "2-digit",
         hour12: true,
@@ -107,23 +83,23 @@ export default async function EventsPage({ params }: { params: Promise<{ slug: s
   const sortedEvents = (events || []).sort((a, b) => {
     const now = new Date();
     now.setHours(0, 0, 0, 0);
-    
+
     const dateA = new Date(a.date);
     dateA.setHours(0, 0, 0, 0);
     const dateB = new Date(b.date);
     dateB.setHours(0, 0, 0, 0);
-    
+
     const aIsFuture = dateA >= now;
     const bIsFuture = dateB >= now;
-    
+
     // Future events come first
     if (aIsFuture && !bIsFuture) return -1;
     if (!aIsFuture && bIsFuture) return 1;
-    
+
     // If both future or both past, sort by date
     const dateAWithTime = new Date(a.date + (a.time ? `T${a.time}` : ""));
     const dateBWithTime = new Date(b.date + (b.time ? `T${b.time}` : ""));
-    
+
     if (aIsFuture) {
       // Future: ascending (soonest first)
       return dateAWithTime.getTime() - dateBWithTime.getTime();
@@ -154,7 +130,7 @@ export default async function EventsPage({ params }: { params: Promise<{ slug: s
           </div>
         ) : (
           <div className="space-y-4">
-            {sortedEvents.map((event) => {
+            {sortedEvents.map((eve: EventPin) => {
               const eventDate = new Date(event.date);
               eventDate.setHours(0, 0, 0, 0);
               const now = new Date();
@@ -178,7 +154,7 @@ export default async function EventsPage({ params }: { params: Promise<{ slug: s
                     </p>
                   )}
                   {event.description && (
-                    <p className="text-sm text-gray-600 mt-2 whitespace-pre-wrap break-words">
+                  <p className="text-sm text-gray-600 mt-2 whitespace-pre-wrap break-words">
                       {event.description}
                     </p>
                   )}
@@ -191,6 +167,3 @@ export default async function EventsPage({ params }: { params: Promise<{ slug: s
     </div>
   );
 }
-
-
-
