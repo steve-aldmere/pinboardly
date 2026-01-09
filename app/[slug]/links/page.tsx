@@ -1,41 +1,29 @@
+cat > "app/[slug]/links/page.tsx" <<'EOF'
 import { notFound } from "next/navigation";
-import { createServerSupabaseClient } from "@/lib/supabase-server";
 import Link from "next/link";
+import { getPublicPinboard } from "@/lib/pinboard-public";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
 
-type Pinboard = {
-  id: string;
-  slug: string;
-  title: string;
-  status: string;
-};
-
-type LinkPin = {
-  id: string;
-  title: string;
-  url: string;
-  description: string | null;
-};
-
-export default async function LinksPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function LinksPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
-  const supabase = await createServerSupabaseClient();
 
-  const { data: pinboard } = await supabase
-    .from("pinboards")
-    .select("id, slug, title, status")
-    .eq("slug", slug)
-    .single();
+  const result = await getPublicPinboard(slug);
 
-  if (!pinboard) {
-    notFound();
-  }
+  if (!result.ok) {
+    if (result.reason === "not_found") notFound();
 
-  if (pinboard.status === "expired") {
+    // inactive
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
         <div className="max-w-md text-center">
-          <h1 className="text-3xl font-bold mb-4">{pinboard.title}</h1>
-          <p className="text-gray-600 mb-6">This pinboard needs an active subscription to stay live.</p>
+          <h1 className="text-3xl font-bold mb-4">Pinboard Unavailable</h1>
+          <p className="text-gray-600 mb-6">
+            This pinboard needs an active subscription to stay live.
+          </p>
           <Link href={`/${slug}`} className="text-blue-600 hover:text-blue-700">
             ← Back to overview
           </Link>
@@ -44,27 +32,9 @@ export default async function LinksPage({ params }: { params: Promise<{ slug: st
     );
   }
 
-  if (pinboard.status === "removed") {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
-        <div className="max-w-md text-center">
-          <h1 className="text-3xl font-bold mb-4">Pinboard Removed</h1>
-          <p className="text-gray-600">This pinboard has been removed by its owner.</p>
-        </div>
-      </div>
-    );
-  }
+  const pinboard = result.pinboard;
 
-  if (pinboard.status === "suspended") {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
-        <div className="max-w-md text-center">
-          <h1 className="text-3xl font-bold mb-4">Pinboard Suspended</h1>
-          <p className="text-gray-600">This pinboard is currently unavailable.</p>
-        </div>
-      </div>
-    );
-  }
+  const supabase = await createServerSupabaseClient();
 
   // Fetch links (max 50)
   const { data: links } = await supabase
@@ -120,6 +90,4 @@ export default async function LinksPage({ params }: { params: Promise<{ slug: st
     </div>
   );
 }
-
-
-
+EOF
