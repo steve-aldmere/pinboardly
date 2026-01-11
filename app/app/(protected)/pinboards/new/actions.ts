@@ -21,7 +21,7 @@ export async function createPinboardAction(formData: FormData) {
   let title = "";
   let slug = "";
   let plan = "";
-  let userData: { user: { id: string } | null } | null = null;
+  let userData: { user: { id: string; email?: string | null } | null } | null = null;
 
   try {
     const supabase = await createServerSupabaseClient();
@@ -69,7 +69,7 @@ export async function createPinboardAction(formData: FormData) {
     }
 
     // Check if admin
-    const admin = isAdminEmail(userData.user.email);
+    const admin = isAdminEmail(userData.user.email ?? "");
 
     // Guardrail: Payment required for non-admins
     if (!admin) {
