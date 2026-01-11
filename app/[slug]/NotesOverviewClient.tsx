@@ -1,7 +1,6 @@
 "use client";
-import { useState } from "react";
+
 import Link from "next/link";
-import NoteModal from "@/app/components/NoteModal";
 
 type NotePin = {
   id: string;
@@ -16,9 +15,6 @@ export default function NotesOverviewClient({
   notes: NotePin[];
   slug: string;
 }) {
-  const [selectedNote, setSelectedNote] = useState<NotePin | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   const getFirstWords = (text: string, count: number = 5): string => {
     // Remove markdown formatting for preview (basic cleanup)
     const plainText = text
@@ -34,66 +30,41 @@ export default function NotesOverviewClient({
     return words.slice(0, count).join(" ");
   };
 
-  const handleNoteClick = (note: NotePin) => {
-    setSelectedNote(note);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedNote(null);
-  };
-
-  if (notes.length === 0) {
-    return null;
-  }
+  if (notes.length === 0) return null;
 
   return (
-    <>
-      <section>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-semibold">Notes</h2>
-          <Link
-            href={`/${slug}/notes`}
-            className="text-sm text-blue-600 hover:text-blue-700"
-          >
-            View all →
-          </Link>
-        </div>
-        <div className="space-y-4">
-          {notes.map((note) => {
-            const preview = getFirstWords(note.body_markdown, 5);
-            const hasMore = note.body_markdown.trim().split(/\s+/).length > 5;
+    <section>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-2xl font-semibold">Notes</h2>
+        <Link
+          href={`/${slug}/notes`}
+          className="text-sm text-blue-600 hover:text-blue-700"
+        >
+          View all →
+        </Link>
+      </div>
 
-            return (
-              <div
-                key={note.id}
-                onClick={() => handleNoteClick(note)}
-                className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
-              >
-                {note.title && (
-                  <h3 className="font-medium mb-1">{note.title}</h3>
-                )}
-                <p className="text-sm text-gray-700">
-                  {preview}
-                  {hasMore && "..."}
-                </p>
-              </div>
-            );
-          })}
-        </div>
-      </section>
+      <div className="space-y-4">
+        {notes.map((note) => {
+          const preview = getFirstWords(note.body_markdown, 5);
+          const hasMore = note.body_markdown.trim().split(/\s+/).length > 5;
 
-      <NoteModal
-        note={selectedNote}
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-      />
-    </>
+          return (
+            <Link
+              key={note.id}
+              href={`/${slug}/notes?note=${encodeURIComponent(note.id)}`}
+              className="block bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+            >
+              {note.title && <h3 className="font-medium mb-1">{note.title}</h3>}
+              <p className="text-sm text-gray-700">
+                {preview}
+                {hasMore && "..."}
+              </p>
+              <p className="text-xs text-blue-600 mt-2">Click to view full note</p>
+            </Link>
+          );
+        })}
+      </div>
+    </section>
   );
 }
-
-
-
-
-

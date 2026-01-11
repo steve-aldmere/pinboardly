@@ -1,6 +1,9 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
 import { getPublicPinboard } from "@/lib/pinboard-public";
 import { getPublicPinboardContent } from "@/lib/pinboard-public-content";
 import MarkdownRenderer from "@/app/components/MarkdownRenderer";
+import NotesOverviewClient from "./NotesOverviewClient";
 
 export default async function PinboardPage({
   params,
@@ -8,16 +11,24 @@ export default async function PinboardPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+
   const result = await getPublicPinboard(slug);
 
   if (!result.ok) {
-    const message = result.reason === "not_found" 
-      ? "Pinboard not found"
-      : "This pinboard is not active";
-    
+    if (result.reason === "not_found") notFound();
+
+    // inactive
     return (
-      <div style={{ padding: "2rem", fontFamily: "system-ui, sans-serif" }}>
-        <p>{message}</p>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
+        <div className="max-w-md text-center">
+          <h1 className="text-3xl font-bold mb-4">Pinboard Unavailable</h1>
+          <p className="text-gray-600 mb-6">
+            This pinboard needs an active subscription to stay live.
+          </p>
+          <Link href="/" className="text-blue-600 hover:text-blue-700">
+            ← Back to home
+          </Link>
+        </div>
       </div>
     );
   }
@@ -26,11 +37,11 @@ export default async function PinboardPage({
 
   if (!contentResult.ok) {
     return (
-      <div style={{ padding: "2rem", fontFamily: "system-ui, sans-serif" }}>
-        <h1 style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "1rem" }}>
-          {result.pinboard.title}
-        </h1>
-        <p>Could not load pinboard content</p>
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-4xl mx-auto px-6 py-10">
+          <h1 className="text-4xl font-bold mb-2">{result.pinboard.title}</h1>
+          <p className="text-gray-600">Could not load pinboard content.</p>
+        </div>
       </div>
     );
   }
@@ -45,7 +56,7 @@ export default async function PinboardPage({
       month: "long",
       day: "numeric",
     });
-    
+
     if (timeString) {
       const [hours, minutes] = timeString.split(":");
       const timeDate = new Date();
@@ -57,90 +68,78 @@ export default async function PinboardPage({
       });
       return `${formatted} at ${timeFormatted}`;
     }
-    
+
     return formatted;
   };
 
   return (
-    <div style={{ padding: "2.5rem 2rem", fontFamily: "system-ui, sans-serif", maxWidth: "880px", margin: "0 auto", lineHeight: "1.6" }}>
-      <h1 style={{ fontSize: "2rem", fontWeight: "bold", marginBottom: "2.5rem", lineHeight: "1.2" }}>
-        {result.pinboard.title}
-      </h1>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-4xl mx-auto px-6 py-10">
+        <h1 className="text-4xl font-bold mb-8">{result.pinboard.title}</h1>
 
-      <section style={{ marginBottom: "2.5rem" }}>
-        <h2 style={{ fontSize: "1.5rem", fontWeight: "600", marginBottom: "1.25rem" }}>Links</h2>
-        {links.length > 0 ? (
-          <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-            {links.map((link) => (
-              <div key={link.id}>
-                <a
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: "#0066cc", textDecoration: "underline", display: "block", marginBottom: "0.5rem", fontSize: "1rem", fontWeight: "500" }}
-                >
-                  {link.title}
-                </a>
-                {link.description && (
-                  <p style={{ color: "#555", fontSize: "0.9375rem", marginTop: "0.375rem", lineHeight: "1.5" }}>
-                    {link.description}
-                  </p>
-                )}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p style={{ color: "#666", fontSize: "0.9375rem" }}>No links yet.</p>
-        )}
-      </section>
+        {/* LINKS */}
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">Links</h2>
 
-      <section style={{ marginBottom: "2.5rem" }}>
-        <h2 style={{ fontSize: "1.5rem", fontWeight: "600", marginBottom: "1.25rem" }}>Notes</h2>
-        {notes.length > 0 ? (
-          <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-            {notes.map((note) => (
-              <div key={note.id}>
-                <h3 style={{ fontSize: "1.125rem", fontWeight: "600", marginBottom: "0.75rem", lineHeight: "1.3" }}>
-                  {note.title || "Untitled"}
-                </h3>
-                <MarkdownRenderer content={note.body_markdown} />
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p style={{ color: "#666", fontSize: "0.9375rem" }}>No notes yet.</p>
-        )}
-      </section>
-
-      <section style={{ marginBottom: "2.5rem" }}>
-        <h2 style={{ fontSize: "1.5rem", fontWeight: "600", marginBottom: "1.25rem" }}>Events</h2>
-        {events.length > 0 ? (
-          <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-            {events.map((event) => (
-              <div key={event.id}>
-                <div style={{ fontSize: "0.9375rem", color: "#0066cc", marginBottom: "0.5rem", fontWeight: "500" }}>
-                  {formatEventDate(event.date, event.time)}
+          {links.length > 0 ? (
+            <div className="space-y-5">
+              {links.map((link) => (
+                <div key={link.id}>
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-700 underline font-medium"
+                  >
+                    {link.title}
+                  </a>
+                  {link.description ? (
+                    <p className="text-gray-600 text-sm mt-1">{link.description}</p>
+                  ) : null}
                 </div>
-                <h3 style={{ fontSize: "1.125rem", fontWeight: "600", marginBottom: "0.5rem", lineHeight: "1.3" }}>
-                  {event.title}
-                </h3>
-                {event.location && (
-                  <p style={{ color: "#555", fontSize: "0.9375rem", marginBottom: "0.5rem", lineHeight: "1.5" }}>
-                    📍 {event.location}
-                  </p>
-                )}
-                {event.description && (
-                  <div style={{ marginTop: "0.75rem" }}>
-                    <MarkdownRenderer content={event.description} />
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-600 text-sm">No links yet.</p>
+          )}
+        </section>
+
+        {/* NOTES (client component = modal + click) */}
+        <div className="mb-10">
+          <NotesOverviewClient notes={notes} slug={slug} />
+        </div>
+
+        {/* EVENTS */}
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-4">Events</h2>
+
+          {events.length > 0 ? (
+            <div className="space-y-8">
+              {events.map((event) => (
+                <div key={event.id} className="bg-white border border-gray-200 rounded-lg p-4">
+                  <div className="text-sm text-blue-600 font-medium mb-2">
+                    {formatEventDate(event.date, event.time)}
                   </div>
-                )}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p style={{ color: "#666", fontSize: "0.9375rem" }}>No events yet.</p>
-        )}
-      </section>
+
+                  <h3 className="text-lg font-semibold mb-2">{event.title}</h3>
+
+                  {event.location ? (
+                    <p className="text-sm text-gray-600 mb-2">📍 {event.location}</p>
+                  ) : null}
+
+                  {event.description ? (
+                    <div className="prose max-w-none">
+                      <MarkdownRenderer content={event.description} />
+                    </div>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-600 text-sm">No events yet.</p>
+          )}
+        </section>
+      </div>
     </div>
   );
 }
