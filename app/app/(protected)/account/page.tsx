@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import Link from "next/link";
 import AccountClient from "./AccountClient";
+import ManageSubscriptionButton from "./ManageSubscriptionButton";
 
 export default async function AccountPage({
   searchParams,
@@ -30,7 +31,11 @@ export default async function AccountPage({
 
         <h1 className="text-3xl font-semibold mb-8">Account Settings</h1>
 
-        <AccountClient 
+        <div className="space-y-4 mb-6">
+          <ManageSubscriptionButton />
+        </div>
+
+        <AccountClient
           email={email}
           isEmailVerified={isEmailVerified}
           error={params.error}
@@ -40,6 +45,3 @@ export default async function AccountPage({
     </div>
   );
 }
-
-
-
