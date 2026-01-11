@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { restorePinboardAction } from "../pinboards/[pinboardId]/edit/actions";
+import UpgradeButton from "./UpgradeButton";
 
 type Pinboard = {
   id: string;
@@ -13,6 +14,7 @@ type Pinboard = {
   created_at: string;
   removed_at: string | null;
   restore_until: string | null;
+  stripe_subscription_id: string | null;
 };
 
 export default async function DashboardPage() {
@@ -27,7 +29,7 @@ export default async function DashboardPage() {
   // Get user's pinboards
   const { data: pinboards, error } = await supabase
     .from("pinboards")
-    .select("id, slug, title, status, trial_ends_at, paid_until, created_at, removed_at, restore_until")
+    .select("id, slug, title, status, trial_ends_at, paid_until, created_at, removed_at, restore_until, stripe_subscription_id")
     .eq("owner_user_id", userData.user.id)
     .order("created_at", { ascending: false })
     .returns<Pinboard[]>();
@@ -145,6 +147,13 @@ export default async function DashboardPage() {
                     </div>
 
                     <div className="flex gap-2">
+                      {!board.stripe_subscription_id && !isRemoved && (
+                        <UpgradeButton
+                          slug={board.slug}
+                          title={board.title}
+                          ownerUserId={userData.user.id}
+                        />
+                      )}
                       {isActive && !isRemoved && (
                         <Link
                           href={`/${board.slug}`}

@@ -11,6 +11,7 @@ export default function NewPinboardForm({
 }) {
   const [slug, setSlug] = useState("");
   const [title, setTitle] = useState("");
+  const [plan, setPlan] = useState<"monthly" | "yearly">("yearly");
   const [error, setError] = useState(errorProp || "");
   
   // Update error when prop changes (from URL params)
@@ -94,12 +95,50 @@ export default function NewPinboardForm({
         )}
       </div>
 
+      {!isAdmin && (
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Subscription Plan
+          </label>
+          <div className="space-y-2">
+            <label className="flex items-center gap-3 p-3 rounded-lg border border-gray-300 cursor-pointer hover:bg-gray-50">
+              <input
+                type="radio"
+                name="plan"
+                value="yearly"
+                checked={plan === "yearly"}
+                onChange={(e) => setPlan(e.target.value as "yearly")}
+                className="text-blue-600 focus:ring-blue-500"
+              />
+              <div className="flex-1">
+                <div className="font-medium text-sm">Yearly</div>
+                <div className="text-xs text-gray-500">£59.88/year</div>
+              </div>
+            </label>
+            <label className="flex items-center gap-3 p-3 rounded-lg border border-gray-300 cursor-pointer hover:bg-gray-50">
+              <input
+                type="radio"
+                name="plan"
+                value="monthly"
+                checked={plan === "monthly"}
+                onChange={(e) => setPlan(e.target.value as "monthly")}
+                className="text-blue-600 focus:ring-blue-500"
+              />
+              <div className="flex-1">
+                <div className="font-medium text-sm">Monthly</div>
+                <div className="text-xs text-gray-500">Pay monthly</div>
+              </div>
+            </label>
+          </div>
+        </div>
+      )}
+
       <div className="pt-4 border-t">
         <button
           type="submit"
           className="w-full rounded-lg bg-blue-600 px-6 py-3 text-sm font-medium text-white hover:bg-blue-700"
         >
-          Create Pinboard
+          {isAdmin ? "Create Pinboard" : "Continue to Payment"}
         </button>
       </div>
 
@@ -107,7 +146,7 @@ export default function NewPinboardForm({
         {isAdmin ? (
           <p>Admin pinboards are automatically activated.</p>
         ) : (
-          <p>You'll get a 7-day free trial. After that, it's £59.88/year to keep it live.</p>
+          <p>Payment is required to create a pinboard. Your pinboard will be activated after payment.</p>
         )}
       </div>
     </form>

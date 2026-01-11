@@ -1,0 +1,177 @@
+# Pinboardly Smoke Test Results (v1.5)
+
+Date:
+Tester:
+Environment: Local / Vercel Preview / Vercel Production
+Git commit SHA:
+Supabase project:
+Stripe mode: Test / Live
+Canonical domain (NEXT_PUBLIC_SITE_URL / APP_URL):
+
+---
+
+## 1) Environment variables (Vercel)
+
+### Supabase
+- NEXT_PUBLIC_SUPABASE_URL: PASS / FAIL / N-A
+- NEXT_PUBLIC_SUPABASE_ANON_KEY: PASS / FAIL / N-A
+- SUPABASE_SERVICE_ROLE_KEY: PASS / FAIL / N-A
+
+### Stripe
+- STRIPE_SECRET_KEY: PASS / FAIL / N-A
+- STRIPE_WEBHOOK_SECRET: PASS / FAIL / N-A
+- STRIPE_PRICE_MONTHLY: PASS / FAIL / N-A
+- STRIPE_PRICE_YEARLY: PASS / FAIL / N-A
+
+### App
+- NEXT_PUBLIC_SITE_URL matches canonical https domain: PASS / FAIL / N-A
+- APP_URL matches canonical https domain: PASS / FAIL / N-A
+
+Notes:
+
+---
+
+## 2) Build integrity
+
+### Local
+- npm run lint: PASS / FAIL / N-A
+- npm run build: PASS / FAIL / N-A
+
+### Vercel
+- Build green: PASS / FAIL
+- Runtime errors observed: NONE / DETAILS
+
+Notes:
+
+---
+
+## 3) Public access guardrails
+
+### Active/trial slug
+Slug tested:
+- GET /{slug}: PASS / FAIL
+- GET /{slug}/links: PASS / FAIL
+- GET /{slug}/notes: PASS / FAIL
+- GET /{slug}/events: PASS / FAIL
+
+Observed behaviour:
+
+### Inactive slug
+Slug tested:
+- GET /{slug}: PASS / FAIL
+- GET /{slug}/links: PASS / FAIL
+- GET /{slug}/notes: PASS / FAIL
+- GET /{slug}/events: PASS / FAIL
+
+Observed behaviour:
+
+### Non-existent slug
+Slug tested:
+- GET /{slug}: PASS / FAIL
+
+Observed behaviour:
+
+---
+
+## 4) Stripe checkout end-to-end (TEST MODE first)
+
+### Monthly
+- Checkout initiated from app: PASS / FAIL
+- Redirect to success route: PASS / FAIL
+- Webhook processed: PASS / FAIL
+- Resulting pinboard status correct: PASS / FAIL
+
+Evidence:
+- Checkout session id:
+- Webhook event id:
+- Pinboard id / slug:
+- Status after:
+
+Notes:
+
+### Yearly
+- Checkout initiated from app: PASS / FAIL
+- Redirect to success route: PASS / FAIL
+- Webhook processed: PASS / FAIL
+- Resulting pinboard status correct: PASS / FAIL
+
+Evidence:
+- Checkout session id:
+- Webhook event id:
+- Pinboard id / slug:
+- Status after:
+
+Notes:
+
+---
+
+## 5) Cancel path
+
+- Cancel at Stripe checkout returns to cancel route: PASS / FAIL
+- Pinboard state after cancel is correct: PASS / FAIL
+
+Notes:
+
+---
+
+## 6) Refund / chargeback behaviour (if implemented)
+
+Tested: YES / NO
+
+If YES:
+- Refund initiated in Stripe: PASS / FAIL
+- Webhook processed: PASS / FAIL
+- Pinboard deleted/revoked as designed: PASS / FAIL
+- Slug released as designed: PASS / FAIL
+- Public pages blocked after: PASS / FAIL
+
+Evidence:
+- Refund event id:
+- Pinboard id / slug:
+- Status after:
+
+Notes:
+
+---
+
+## 7) Email verification post-payment (if implemented)
+
+Tested: YES / NO
+
+If YES:
+- Verification email sent: PASS / FAIL
+- Behaviour until verified matches spec: PASS / FAIL
+- Verify completes successfully: PASS / FAIL
+
+Notes:
+
+---
+
+## 8) Rate limits and abuse guardrails (spot check)
+
+- Rapid repeat public page hits remain stable: PASS / FAIL
+- Repeated creation attempts handled as designed: PASS / FAIL
+- No log spam observed: PASS / FAIL
+
+Notes:
+
+---
+
+## 9) Observability
+
+- Webhook logs readable (no secrets): PASS / FAIL
+- Errors actionable: PASS / FAIL
+- Noise acceptable: PASS / FAIL
+
+Notes:
+
+---
+
+## 10) Decision
+
+GO / NO-GO
+
+Reasons:
+- 
+- 
+- 

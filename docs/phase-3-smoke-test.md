@@ -83,3 +83,5 @@ Baseline smoke test checklist to verify known-good state before Phase 3 changes.
 
 **Expected result:** Public pinboard renders correctly, demo redirects.
 
+
+

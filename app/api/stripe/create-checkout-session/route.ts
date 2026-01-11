@@ -8,7 +8,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { plan, pinboardSlug } = body;
+    const { plan, pinboardSlug, ownerUserId, title } = body;
 
     // Validate plan
     if (!plan || (plan !== "monthly" && plan !== "yearly")) {
@@ -22,6 +22,22 @@ export async function POST(req: Request) {
     if (!pinboardSlug || typeof pinboardSlug !== "string" || pinboardSlug.trim() === "") {
       return NextResponse.json(
         { error: "pinboardSlug is required and must be a non-empty string" },
+        { status: 400 }
+      );
+    }
+
+    // Validate ownerUserId
+    if (!ownerUserId || typeof ownerUserId !== "string" || ownerUserId.trim() === "") {
+      return NextResponse.json(
+        { error: "ownerUserId is required and must be a non-empty string" },
+        { status: 400 }
+      );
+    }
+
+    // Validate title
+    if (!title || typeof title !== "string" || title.trim() === "") {
+      return NextResponse.json(
+        { error: "title is required and must be a non-empty string" },
         { status: 400 }
       );
     }
@@ -76,11 +92,15 @@ export async function POST(req: Request) {
       client_reference_id: pinboardSlug,
       metadata: {
         pinboard_slug: pinboardSlug,
+        owner_user_id: ownerUserId,
+        title: title,
         plan,
       },
       subscription_data: {
         metadata: {
           pinboard_slug: pinboardSlug,
+          owner_user_id: ownerUserId,
+          title: title,
         },
       },
     });

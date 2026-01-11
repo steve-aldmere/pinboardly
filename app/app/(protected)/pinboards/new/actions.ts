@@ -28,6 +28,7 @@ export async function createPinboardAction(formData: FormData) {
 
   const title = String(formData.get("title") ?? "").trim();
   const slug = String(formData.get("slug") ?? "").trim().toLowerCase();
+  const plan = String(formData.get("plan") ?? "yearly").trim(); // Default to yearly
 
   // Validation
   if (!title || title.length > 80) {
@@ -49,41 +50,80 @@ export async function createPinboardAction(formData: FormData) {
     redirect("/app/pinboards/new?error=" + encodeURIComponent("That address is reserved. Please try another."));
   }
 
+  // Check if slug already exists
+  const { data: existingPinboard } = await supabase
+    .from("pinboards")
+    .select("id")
+    .eq("slug", slug)
+    .single();
+
+  if (existingPinboard) {
+    redirect("/app/pinboards/new?error=" + encodeURIComponent("That address is already in use. Please try another."));
+  }
+
   // Check if admin
   const admin = isAdminEmail(userData.user.email);
 
-  // Determine status and dates
-  const now = new Date();
-  const trialEndsAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // 7 days from now
-  
-  let status: string;
-  let paidUntil: string | null = null;
+  // Guardrail: Payment required for non-admins
+  if (!admin) {
+    // For non-admins, create Stripe checkout session instead of inserting
+    // Validate plan
+    if (plan !== "monthly" && plan !== "yearly") {
+      redirect("/app/pinboards/new?error=" + encodeURIComponent("Invalid plan. Please select monthly or yearly."));
+    }
 
-  if (admin) {
-    // Admin gets active status with far future paid_until
-    status = "active";
-    paidUntil = "2030-12-31T23:59:59Z";
-  } else {
-    // Regular users get trial
-    status = "trial";
+    try {
+      const appUrl = process.env.APP_URL || "http://localhost:3000";
+      const response = await fetch(`${appUrl}/api/stripe/create-checkout-session`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          plan,
+          pinboardSlug: slug,
+          ownerUserId: userData.user.id,
+          title,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        redirect("/app/pinboards/new?error=" + encodeURIComponent(errorData.error || "Failed to create checkout session. Please try again."));
+      }
+
+      const { url } = await response.json();
+      if (url) {
+        redirect(url);
+      } else {
+        redirect("/app/pinboards/new?error=" + encodeURIComponent("Failed to create checkout session. Please try again."));
+      }
+    } catch (error) {
+      redirect("/app/pinboards/new?error=" + encodeURIComponent("Something went wrong. Please try again."));
+    }
+    return; // Should not reach here, but TypeScript safety
   }
 
-  // Insert pinboard
+  // Admin flow: still allow direct creation for admins
+  const now = new Date();
+  const paidUntil = "2030-12-31T23:59:59Z";
+
+  // Insert pinboard for admin
   const { data: pinboard, error } = await supabase
     .from("pinboards")
     .insert({
       owner_user_id: userData.user.id,
       slug: slug,
       title: title,
-      status: status,
-      trial_ends_at: admin ? null : trialEndsAt.toISOString(),
+      status: "active",
+      trial_ends_at: null,
       paid_until: paidUntil,
     })
     .select()
     .single();
 
   if (error) {
-    // Handle duplicate slug error
+    // Handle duplicate slug error (should not happen due to check above, but handle gracefully)
     if (error.code === "23505") {
       redirect("/app/pinboards/new?error=" + encodeURIComponent("That address is already in use. Please try another."));
     }

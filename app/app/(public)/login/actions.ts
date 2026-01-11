@@ -27,3 +27,5 @@ export async function resendVerificationEmailAction(formData: FormData) {
   redirect("/app/verify-email?email=" + encodeURIComponent(email) + "&message=" + encodeURIComponent("Verification email sent. Please check your inbox."));
 }
 
+
+

@@ -67,16 +67,26 @@ export async function POST(req: Request) {
     if (event.type === "checkout.session.completed") {
       const session = event.data.object as Stripe.Checkout.Session;
 
-      // Determine pinboardSlug
+      // Determine pinboardSlug, ownerUserId, and title from metadata
       const pinboardSlug =
         session.metadata?.pinboardSlug ??
         session.metadata?.pinboard_slug ??
         session.client_reference_id ??
         null;
 
-      if (!pinboardSlug) {
-        console.debug("Ignored checkout.session.completed without pinboardSlug", {
+      const ownerUserId =
+        session.metadata?.owner_user_id ??
+        session.metadata?.ownerUserId ??
+        null;
+
+      const title = session.metadata?.title ?? null;
+
+      if (!pinboardSlug || !ownerUserId || !title) {
+        console.debug("Ignored checkout.session.completed without required metadata", {
           sessionId: session.id,
+          pinboardSlug,
+          ownerUserId,
+          title,
         });
         return NextResponse.json({ received: true });
       }
@@ -108,23 +118,84 @@ export async function POST(req: Request) {
           ? new Date((subscription as any).current_period_end * 1000).toISOString()
           : null;
 
-      // Update pinboard with subscription info
-      const { error: updateError } = await supabase
+      // Check if pinboard already exists (idempotency)
+      const { data: existingPinboard } = await supabase
         .from("pinboards")
-        .update({
-          stripe_customer_id: customerId,
-          stripe_subscription_id: subscriptionId,
-          subscription_status: subscription.status,
-          current_period_end: currentPeriodEndIso,
-        })
-        .eq("slug", pinboardSlug);
+        .select("id")
+        .eq("slug", pinboardSlug)
+        .eq("owner_user_id", ownerUserId)
+        .single();
 
-      if (updateError) {
-        console.error("Error updating pinboard:", updateError);
-        return NextResponse.json(
-          { error: "Failed to update pinboard" },
-          { status: 500 }
-        );
+      if (existingPinboard) {
+        // Pinboard exists, just update subscription info
+        const { error: updateError } = await supabase
+          .from("pinboards")
+          .update({
+            stripe_customer_id: customerId,
+            stripe_subscription_id: subscriptionId,
+            subscription_status: subscription.status,
+            current_period_end: currentPeriodEndIso,
+            paid_until: currentPeriodEndIso,
+            status: "active",
+          })
+          .eq("slug", pinboardSlug)
+          .eq("owner_user_id", ownerUserId);
+
+        if (updateError) {
+          console.error("Error updating pinboard:", updateError);
+          return NextResponse.json(
+            { error: "Failed to update pinboard" },
+            { status: 500 }
+          );
+        }
+      } else {
+        // Pinboard doesn't exist, create it now
+        const { error: insertError } = await supabase
+          .from("pinboards")
+          .insert({
+            owner_user_id: ownerUserId,
+            slug: pinboardSlug,
+            title: title,
+            status: "active",
+            stripe_customer_id: customerId,
+            stripe_subscription_id: subscriptionId,
+            subscription_status: subscription.status,
+            current_period_end: currentPeriodEndIso,
+            paid_until: currentPeriodEndIso,
+            trial_ends_at: null,
+          });
+
+        if (insertError) {
+          // If duplicate key error, pinboard was created between check and insert, try update
+          if (insertError.code === "23505") {
+            const { error: updateError } = await supabase
+              .from("pinboards")
+              .update({
+                stripe_customer_id: customerId,
+                stripe_subscription_id: subscriptionId,
+                subscription_status: subscription.status,
+                current_period_end: currentPeriodEndIso,
+                paid_until: currentPeriodEndIso,
+                status: "active",
+              })
+              .eq("slug", pinboardSlug)
+              .eq("owner_user_id", ownerUserId);
+
+            if (updateError) {
+              console.error("Error updating pinboard after duplicate:", updateError);
+              return NextResponse.json(
+                { error: "Failed to update pinboard" },
+                { status: 500 }
+              );
+            }
+          } else {
+            console.error("Error creating pinboard:", insertError);
+            return NextResponse.json(
+              { error: "Failed to create pinboard" },
+              { status: 500 }
+            );
+          }
+        }
       }
     }
 

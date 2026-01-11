@@ -1,4 +1,4 @@
-import { createServerSupabaseClient } from "./supabase-server";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
 
 export async function getPublicPinboard(slug: string) {
   const supabase = await createServerSupabaseClient();
@@ -19,4 +19,6 @@ export async function getPublicPinboard(slug: string) {
 
   return { ok: true as const, pinboard };
 }
+
+
 
