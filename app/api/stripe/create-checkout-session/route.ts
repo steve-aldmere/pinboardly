@@ -10,6 +10,8 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { plan, pinboardSlug, ownerUserId, title } = body;
 
+    console.log("[create-checkout-session] request", { plan, pinboardSlug, ownerUserId, title });
+
     // Validate plan
     if (!plan || (plan !== "monthly" && plan !== "yearly")) {
       return NextResponse.json(
@@ -79,31 +81,44 @@ export async function POST(req: Request) {
     const stripe = new Stripe(stripeSecretKey);
 
     // Create checkout session
-    const session = await stripe.checkout.sessions.create({
-      mode: "subscription",
-      line_items: [
-        {
-          price: priceId,
-          quantity: 1,
-        },
-      ],
-      success_url: `${appUrl}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${appUrl}/billing/cancel`,
-      client_reference_id: pinboardSlug,
-      metadata: {
-        pinboard_slug: pinboardSlug,
-        owner_user_id: ownerUserId,
-        title: title,
-        plan,
-      },
-      subscription_data: {
+    let session;
+    try {
+      session = await stripe.checkout.sessions.create({
+        mode: "subscription",
+        line_items: [
+          {
+            price: priceId,
+            quantity: 1,
+          },
+        ],
+        success_url: `${appUrl}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${appUrl}/billing/cancel`,
+        client_reference_id: pinboardSlug,
         metadata: {
           pinboard_slug: pinboardSlug,
           owner_user_id: ownerUserId,
           title: title,
+          plan,
         },
-      },
-    });
+        subscription_data: {
+          metadata: {
+            pinboard_slug: pinboardSlug,
+            owner_user_id: ownerUserId,
+            title: title,
+          },
+        },
+      });
+    } catch (e) {
+      console.error("[create-checkout-session] Stripe session creation failed", {
+        message: e instanceof Error ? e.message : String(e),
+        name: e instanceof Error ? e.name : undefined,
+        stack: e instanceof Error ? e.stack : undefined,
+      });
+      return NextResponse.json(
+        { error: "create-checkout-session failed", detail: e instanceof Error ? e.message : String(e) },
+        { status: 500 }
+      );
+    }
 
     if (!session.url) {
       return NextResponse.json(
