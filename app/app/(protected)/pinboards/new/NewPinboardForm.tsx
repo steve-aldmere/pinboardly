@@ -60,7 +60,7 @@ export default function NewPinboardForm({
           placeholder="e.g., Tynemouth Sea Scouts"
           className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        <p className="mt-1 text-xs text-gray-500">This is the display name (you can change it later)</p>
+        <p className="mt-1 text-xs text-gray-500">This is the display name (you can change it later).</p>
       </div>
 
       <div>
@@ -91,45 +91,51 @@ export default function NewPinboardForm({
       </div>
 
       {!isAdmin && (
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Subscription Plan</label>
+        <>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Subscription Plan</label>
+            <div className="space-y-2">
+              <label className="flex items-center gap-3 p-3 rounded-lg border border-gray-300 cursor-pointer hover:bg-gray-50">
+                <input
+                  type="radio"
+                  name="plan"
+                  value="yearly"
+                  checked={plan === "yearly"}
+                  onChange={(e) => setPlan(e.target.value as "yearly")}
+                  className="text-blue-600 focus:ring-blue-500"
+                />
+                <div className="flex-1">
+                  <div className="font-medium text-sm">Yearly</div>
+                  <div className="text-xs text-gray-500">£59.88/year</div>
+                </div>
+              </label>
 
-          <div className="space-y-2">
-            <label className="flex items-center gap-3 p-3 rounded-lg border border-gray-300 cursor-pointer hover:bg-gray-50">
-              <input
-                type="radio"
-                name="plan"
-                value="yearly"
-                checked={plan === "yearly"}
-                onChange={(e) => setPlan(e.target.value as "yearly")}
-                className="text-blue-600 focus:ring-blue-500"
-              />
-              <div className="flex-1">
-                <div className="font-medium text-sm">Yearly</div>
-                <div className="text-xs text-gray-500">£59.88/year</div>
-              </div>
-            </label>
-
-            <label className="flex items-center gap-3 p-3 rounded-lg border border-gray-300 cursor-pointer hover:bg-gray-50">
-              <input
-                type="radio"
-                name="plan"
-                value="monthly"
-                checked={plan === "monthly"}
-                onChange={(e) => setPlan(e.target.value as "monthly")}
-                className="text-blue-600 focus:ring-blue-500"
-              />
-              <div className="flex-1">
-                <div className="font-medium text-sm">Monthly</div>
-                <div className="text-xs text-gray-500">£9.99/month</div>
-              </div>
-            </label>
+              <label className="flex items-center gap-3 p-3 rounded-lg border border-gray-300 cursor-pointer hover:bg-gray-50">
+                <input
+                  type="radio"
+                  name="plan"
+                  value="monthly"
+                  checked={plan === "monthly"}
+                  onChange={(e) => setPlan(e.target.value as "monthly")}
+                  className="text-blue-600 focus:ring-blue-500"
+                />
+                <div className="flex-1">
+                  <div className="font-medium text-sm">Monthly</div>
+                  <div className="text-xs text-gray-500">£9.99/month</div>
+                </div>
+              </label>
+            </div>
           </div>
 
-          <p className="mt-2 text-xs text-gray-500">
-            Monthly costs more over time. Yearly is best value.
-          </p>
-        </div>
+          <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+            <div className="text-sm font-medium text-gray-900">No charge today</div>
+            <p className="mt-1 text-sm text-gray-600">
+              If you have a founder code, your first 12 months can be free. A card is collected at checkout so your
+              subscription can continue after the free period. You can cancel any time before renewal and you won’t be
+              charged.
+            </p>
+          </div>
+        </>
       )}
 
       <div className="pt-4 border-t">
