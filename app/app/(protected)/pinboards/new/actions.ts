@@ -81,36 +81,31 @@ export async function createPinboardAction(formData: FormData) {
 
       console.log("[createPinboardAction] starting checkout", { slug, plan, title, userId: userData.user.id });
 
-      try {
-        const appUrl = process.env.APP_URL || "http://localhost:3000";
-        const response = await fetch(`${appUrl}/api/stripe/create-checkout-session`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            plan,
-            pinboardSlug: slug,
-            ownerUserId: userData.user.id,
-            title,
-          }),
-        });
+      const appUrl = process.env.APP_URL || "http://localhost:3000";
+      const response = await fetch(`${appUrl}/api/stripe/create-checkout-session`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          plan,
+          pinboardSlug: slug,
+          ownerUserId: userData.user.id,
+          title,
+        }),
+      });
 
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
-          redirect("/app/pinboards/new?error=" + encodeURIComponent(errorData.error || "Failed to create checkout session. Please try again."));
-        }
-
-        const { url } = await response.json();
-        if (url) {
-          redirect(url);
-        } else {
-          redirect("/app/pinboards/new?error=" + encodeURIComponent("Failed to create checkout session. Please try again."));
-        }
-      } catch (error) {
-        redirect("/app/pinboards/new?error=" + encodeURIComponent("Something went wrong. Please try again."));
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        redirect("/app/pinboards/new?error=" + encodeURIComponent(errorData.error || "Failed to create checkout session. Please try again."));
       }
-      return; // Should not reach here, but TypeScript safety
+
+      const { url } = await response.json();
+      if (!url) {
+        redirect("/app/pinboards/new?error=" + encodeURIComponent("Failed to create checkout session. Please try again."));
+      }
+
+      redirect(url);
     }
 
     // Admin flow: still allow direct creation for admins
