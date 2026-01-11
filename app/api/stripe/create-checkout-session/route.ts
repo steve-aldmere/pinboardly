@@ -84,27 +84,14 @@ export async function POST(req: Request) {
       session = await stripe.checkout.sessions.create({
         mode: "subscription",
         allow_promotion_codes: true,
-        line_items: [
-          {
-            price: priceId,
-            quantity: 1,
-          },
-        ],
+        payment_method_collection: "if_required",
+        line_items: [{ price: priceId, quantity: 1 }],
         success_url: `${appUrl}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${appUrl}/billing/cancel`,
         client_reference_id: pinboardSlug,
-        metadata: {
-          pinboard_slug: pinboardSlug,
-          owner_user_id: ownerUserId,
-          title: title,
-          plan,
-        },
+        metadata: { pinboard_slug: pinboardSlug, owner_user_id: ownerUserId, title, plan },
         subscription_data: {
-          metadata: {
-            pinboard_slug: pinboardSlug,
-            owner_user_id: ownerUserId,
-            title: title,
-          },
+          metadata: { pinboard_slug: pinboardSlug, owner_user_id: ownerUserId, title },
         },
       });
     } catch (e) {
