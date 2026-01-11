@@ -79,8 +79,6 @@ export async function createPinboardAction(formData: FormData) {
         redirect("/app/pinboards/new?error=" + encodeURIComponent("Invalid plan. Please select monthly or yearly."));
       }
 
-      console.log("[createPinboardAction] starting checkout", { slug, plan, title, userId: userData.user.id });
-
       const appUrl = process.env.APP_URL || "http://localhost:3000";
       const response = await fetch(`${appUrl}/api/stripe/create-checkout-session`, {
         method: "POST",
@@ -142,15 +140,6 @@ export async function createPinboardAction(formData: FormData) {
       throw e;
     }
 
-    console.error("[createPinboardAction] failed", {
-      message: e instanceof Error ? e.message : String(e),
-      name: e instanceof Error ? e.name : undefined,
-      stack: e instanceof Error ? e.stack : undefined,
-      slug,
-      plan,
-      title,
-      userId: userData?.user?.id ?? null
-    });
     throw new Error(`createPinboardAction failed: ${e instanceof Error ? e.message : String(e)}`);
   }
 }

@@ -10,8 +10,6 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { plan, pinboardSlug, ownerUserId, title } = body;
 
-    console.log("[create-checkout-session] request", { plan, pinboardSlug, ownerUserId, title });
-
     // Validate plan
     if (!plan || (plan !== "monthly" && plan !== "yearly")) {
       return NextResponse.json(
@@ -109,11 +107,6 @@ export async function POST(req: Request) {
         },
       });
     } catch (e) {
-      console.error("[create-checkout-session] Stripe session creation failed", {
-        message: e instanceof Error ? e.message : String(e),
-        name: e instanceof Error ? e.name : undefined,
-        stack: e instanceof Error ? e.stack : undefined,
-      });
       return NextResponse.json(
         { error: "create-checkout-session failed", detail: e instanceof Error ? e.message : String(e) },
         { status: 500 }
