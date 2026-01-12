@@ -195,6 +195,3 @@ ORDER BY tc.table_name;
 - [ ] Test that users cannot access other users' private pinboards
 - [ ] Verify foreign key constraints exist and are correct
 - [ ] Document any missing policies or security gaps
-
-
-

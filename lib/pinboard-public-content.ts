@@ -33,6 +33,3 @@ export async function getPublicPinboardContent(pinboardId: string) {
     events: eventsResult.data ?? [],
   };
 }
-
-
-

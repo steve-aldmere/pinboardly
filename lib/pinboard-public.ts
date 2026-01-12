@@ -19,6 +19,3 @@ export async function getPublicPinboard(slug: string) {
 
   return { ok: true as const, pinboard };
 }
-
-
-

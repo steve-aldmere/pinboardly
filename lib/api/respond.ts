@@ -74,6 +74,3 @@ export function serverError(
   }
   return NextResponse.json(response, { status: 500 });
 }
-
-
-

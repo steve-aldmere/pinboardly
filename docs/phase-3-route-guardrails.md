@@ -75,6 +75,3 @@ Expected authentication and authorization behavior for Pinboardly routes.
 2. **Consistent behavior:** Same error handling for missing and inactive pinboards in sub-routes
 3. **Auth required:** All `/app/*` routes require authentication
 4. **Public read-only:** `/[slug]*` routes are public but read-only (no mutations)
-
-
-

@@ -150,8 +150,3 @@ export default function MarkdownRenderer({ content }: { content: string }) {
     />
   );
 }
-
-
-
-
-

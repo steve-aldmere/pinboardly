@@ -82,6 +82,3 @@ Baseline smoke test checklist to verify known-good state before Phase 3 changes.
 - [ ] Navigate to `/demo` - redirects to `/tynemouth-scouts`
 
 **Expected result:** Public pinboard renders correctly, demo redirects.
-
-
-
