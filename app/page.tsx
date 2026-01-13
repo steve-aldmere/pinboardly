@@ -130,7 +130,7 @@ export default async function Page() {
               <div className="rounded-xl border border-gray-200 bg-white p-6">
                 <div className="flex items-baseline justify-between">
                   <div className="text-sm font-semibold text-gray-900">Yearly</div>
-                  <div className="text-sm text-gray-600">£59.88 / year</div>
+                  <div className="text-sm text-gray-600">£79 / year</div>
                 </div>
                 <div className="mt-3 flex items-baseline justify-between">
                   <div className="text-sm font-semibold text-gray-900">Monthly</div>

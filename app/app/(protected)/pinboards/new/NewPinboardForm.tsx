@@ -106,7 +106,7 @@ export default function NewPinboardForm({
                 />
                 <div className="flex-1">
                   <div className="font-medium text-sm">Yearly</div>
-                  <div className="text-xs text-gray-500">£59.88/year</div>
+                  <div className="text-xs text-gray-500">£79/year</div>
                 </div>
               </label>
 
