@@ -51,6 +51,46 @@ function formatEventDate(dateString: string, timeString: string | null) {
   return `${formatted} at ${timeFormatted}`;
 }
 
+function SectionCard({
+  title,
+  href,
+  hasItems,
+  children,
+  emptyTitle,
+  emptyBody,
+}: {
+  title: string;
+  href: string;
+  hasItems: boolean;
+  children: React.ReactNode;
+  emptyTitle: string;
+  emptyBody?: string;
+}) {
+  return (
+    <section className="mb-10">
+      <div className="bg-white border border-gray-200 rounded-lg p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-semibold">{title}</h2>
+          {hasItems ? (
+            <Link href={href} className="text-sm text-blue-600 hover:text-blue-700">
+              View all →
+            </Link>
+          ) : null}
+        </div>
+
+        {hasItems ? (
+          children
+        ) : (
+          <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+            <p className="text-sm text-gray-700">{emptyTitle}</p>
+            {emptyBody ? <p className="text-xs text-gray-500 mt-1">{emptyBody}</p> : null}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
 export default async function PinboardPage({
   params,
 }: {
@@ -63,7 +103,6 @@ export default async function PinboardPage({
   if (!result.ok) {
     if (result.reason === "not_found") notFound();
 
-    // inactive
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
         <div className="max-w-md text-center">
@@ -107,100 +146,63 @@ export default async function PinboardPage({
       <div className="max-w-4xl mx-auto px-6 py-10">
         <h1 className="text-4xl font-bold mb-8">{pinboard.title}</h1>
 
-        {/* Links */}
-        <section className="mb-10">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-semibold">Links</h2>
-            <Link
-              href={`/${slug}/links`}
-              className="text-sm text-blue-600 hover:text-blue-700"
-            >
-              View all →
-            </Link>
-          </div>
-
-          {linksPreview.length > 0 ? (
-            <div className="space-y-3">
-              {linksPreview.map((l) => (
-                <div
-                  key={l.id}
-                  className="bg-white border border-gray-200 rounded-lg p-4"
+        <SectionCard
+          title="Links"
+          href={`/${slug}/links`}
+          hasItems={linksPreview.length > 0}
+          emptyTitle="No links yet."
+          emptyBody="Add your first link to share useful resources."
+        >
+          <div className="space-y-3">
+            {linksPreview.map((l) => (
+              <div key={l.id} className="rounded-lg border border-gray-200 p-4">
+                <a
+                  href={l.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:text-blue-700 underline font-medium"
                 >
-                  <a
-                    href={l.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-700 underline font-medium"
-                  >
-                    {l.title}
-                  </a>
-                  {l.description ? (
-                    <p className="text-sm text-gray-600 mt-1">{l.description}</p>
-                  ) : null}
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <p className="text-gray-600">No links yet.</p>
-            </div>
-          )}
-        </section>
-
-        {/* Notes */}
-        <section className="mb-10">
-          <NotesOverviewClient notes={notesPreview} slug={slug} />
-          {notesPreview.length === 0 ? (
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <div className="flex items-center justify-between mb-2">
-                <h2 className="text-2xl font-semibold">Notes</h2>
-                <Link
-                  href={`/${slug}/notes`}
-                  className="text-sm text-blue-600 hover:text-blue-700"
-                >
-                  View all →
-                </Link>
+                  {l.title}
+                </a>
+                {l.description ? (
+                  <p className="text-sm text-gray-600 mt-1">{l.description}</p>
+                ) : null}
               </div>
-              <p className="text-gray-600">No notes yet.</p>
-            </div>
-          ) : null}
-        </section>
-
-        {/* Events */}
-        <section className="mb-10">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-semibold">Events</h2>
-            <Link
-              href={`/${slug}/events`}
-              className="text-sm text-blue-600 hover:text-blue-700"
-            >
-              View all →
-            </Link>
+            ))}
           </div>
+        </SectionCard>
 
-          {eventsPreview.length > 0 ? (
-            <div className="space-y-3">
-              {eventsPreview.map((e) => (
-                <div
-                  key={e.id}
-                  className="bg-white border border-gray-200 rounded-lg p-4"
-                >
-                  <div className="text-sm text-blue-600 font-medium">
-                    {formatEventDate(e.date, e.time)}
-                  </div>
-                  <div className="font-semibold mt-1">{e.title}</div>
-                  {e.location ? (
-                    <div className="text-sm text-gray-600 mt-1">📍 {e.location}</div>
-                  ) : null}
+        <SectionCard
+          title="Notes"
+          href={`/${slug}/notes`}
+          hasItems={notesPreview.length > 0}
+          emptyTitle="No notes yet."
+          emptyBody="Notes are great for updates, instructions, and key info."
+        >
+          <NotesOverviewClient notes={notesPreview} slug={slug} />
+        </SectionCard>
+
+        <SectionCard
+          title="Events"
+          href={`/${slug}/events`}
+          hasItems={eventsPreview.length > 0}
+          emptyTitle="No events yet."
+          emptyBody="Add dates and reminders so people know what’s coming up."
+        >
+          <div className="space-y-3">
+            {eventsPreview.map((e) => (
+              <div key={e.id} className="rounded-lg border border-gray-200 p-4">
+                <div className="text-sm text-blue-600 font-medium">
+                  {formatEventDate(e.date, e.time)}
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <p className="text-gray-600">No events yet.</p>
-            </div>
-          )}
-        </section>
+                <div className="font-semibold mt-1">{e.title}</div>
+                {e.location ? (
+                  <div className="text-sm text-gray-600 mt-1">📍 {e.location}</div>
+                ) : null}
+              </div>
+            ))}
+          </div>
+        </SectionCard>
       </div>
     </div>
   );
