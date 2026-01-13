@@ -1,6 +1,35 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
+async function pickBestCustomerForEmail(stripe: Stripe, email: string) {
+  const customers = await stripe.customers.list({ email, limit: 100 });
+
+  if (!customers.data.length) return null;
+  if (customers.data.length === 1) return customers.data[0];
+
+  const scored = await Promise.all(
+    customers.data.map(async (c) => {
+      const subs = await stripe.subscriptions.list({
+        customer: c.id,
+        status: "all",
+        limit: 100,
+      });
+
+      const created =
+        typeof c.created === "number" ? c.created : 0;
+
+      return { customer: c, subCount: subs.data.length, created };
+    })
+  );
+
+  scored.sort((a, b) => {
+    if (b.subCount !== a.subCount) return b.subCount - a.subCount;
+    return b.created - a.created;
+  });
+
+  return scored[0].customer;
+}
+
 export async function GET() {
   return NextResponse.json({ error: "Use POST" }, { status: 405 });
 }
@@ -56,9 +85,7 @@ export async function POST(req: Request) {
 
     if (!priceId) {
       return NextResponse.json(
-        {
-          error: `Environment variable STRIPE_PRICE_${plan.toUpperCase()} is not set`,
-        },
+        { error: `Environment variable STRIPE_PRICE_${plan.toUpperCase()} is not set` },
         { status: 500 }
       );
     }
@@ -86,6 +113,13 @@ export async function POST(req: Request) {
 
     const subscriptionDescription = `Pinboardly: ${title} (${pinboardSlug})`;
 
+    // If we have an email, reuse an existing customer to avoid duplicate customers-per-email.
+    let existingCustomerId: string | null = null;
+    if (email) {
+      const bestCustomer = await pickBestCustomerForEmail(stripe, email);
+      if (bestCustomer) existingCustomerId = bestCustomer.id;
+    }
+
     // Create checkout session
     let session;
     try {
@@ -97,7 +131,10 @@ export async function POST(req: Request) {
         success_url: `${appUrl}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${appUrl}/billing/cancel`,
         client_reference_id: pinboardSlug,
-        ...(email ? { customer_email: email } : {}),
+
+        ...(existingCustomerId ? { customer: existingCustomerId } : {}),
+        ...(!existingCustomerId && email ? { customer_email: email } : {}),
+
         metadata: {
           pinboard_slug: pinboardSlug,
           owner_user_id: ownerUserId,
@@ -115,19 +152,13 @@ export async function POST(req: Request) {
       });
     } catch (e) {
       return NextResponse.json(
-        {
-          error: "create-checkout-session failed",
-          detail: e instanceof Error ? e.message : String(e),
-        },
+        { error: "create-checkout-session failed", detail: e instanceof Error ? e.message : String(e) },
         { status: 500 }
       );
     }
 
     if (!session.url) {
-      return NextResponse.json(
-        { error: "Failed to create checkout session URL" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Failed to create checkout session URL" }, { status: 500 });
     }
 
     return NextResponse.json({ url: session.url });
@@ -137,10 +168,7 @@ export async function POST(req: Request) {
     }
 
     if (error instanceof SyntaxError) {
-      return NextResponse.json(
-        { error: "Invalid request body. Expected JSON." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Invalid request body. Expected JSON." }, { status: 400 });
     }
 
     return NextResponse.json(

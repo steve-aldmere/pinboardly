@@ -2,6 +2,38 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 
+async function pickBestCustomerForEmail(stripe: Stripe, email: string) {
+  // Stripe can return multiple customers for the same email (especially if older code created new customers each checkout).
+  const customers = await stripe.customers.list({ email, limit: 100 });
+
+  if (!customers.data.length) return null;
+  if (customers.data.length === 1) return customers.data[0];
+
+  // Pick the customer with the most subscriptions (active or otherwise).
+  // If there is a tie, pick the most recently created customer.
+  const scored = await Promise.all(
+    customers.data.map(async (c) => {
+      const subs = await stripe.subscriptions.list({
+        customer: c.id,
+        status: "all",
+        limit: 100,
+      });
+
+      const created =
+        typeof c.created === "number" ? c.created : 0;
+
+      return { customer: c, subCount: subs.data.length, created };
+    })
+  );
+
+  scored.sort((a, b) => {
+    if (b.subCount !== a.subCount) return b.subCount - a.subCount;
+    return b.created - a.created;
+  });
+
+  return scored[0].customer;
+}
+
 export async function GET() {
   return NextResponse.json({ error: "Use POST" }, { status: 405 });
 }
@@ -10,12 +42,18 @@ export async function POST(req: Request) {
   try {
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
     if (!stripeSecretKey) {
-      return NextResponse.json({ error: "STRIPE_SECRET_KEY environment variable is not set" }, { status: 500 });
+      return NextResponse.json(
+        { error: "STRIPE_SECRET_KEY environment variable is not set" },
+        { status: 500 }
+      );
     }
 
     const appUrl = process.env.APP_URL;
     if (!appUrl) {
-      return NextResponse.json({ error: "APP_URL environment variable is not set" }, { status: 500 });
+      return NextResponse.json(
+        { error: "APP_URL environment variable is not set" },
+        { status: 500 }
+      );
     }
 
     // Auth: current user
@@ -45,10 +83,7 @@ export async function POST(req: Request) {
 
     const stripe = new Stripe(stripeSecretKey);
 
-    // Find Stripe customer by email.
-    // (Later we can store stripe_customer_id in Supabase to avoid email lookup.)
-    const customers = await stripe.customers.list({ email, limit: 1 });
-    const customer = customers.data[0];
+    const customer = await pickBestCustomerForEmail(stripe, email);
 
     if (!customer) {
       return NextResponse.json(
