@@ -33,6 +33,14 @@ export default async function AccountPage({
 
         <div className="space-y-4 mb-6">
           <ManageSubscriptionButton />
+
+          <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+            <p className="text-sm text-gray-700">
+              Subscriptions are managed securely by Stripe. Each pinboard has its own subscription, so if you have more
+              than one pinboard you may see multiple subscriptions in Stripe. You can manage or cancel any subscription
+              at any time.
+            </p>
+          </div>
         </div>
 
         <AccountClient
