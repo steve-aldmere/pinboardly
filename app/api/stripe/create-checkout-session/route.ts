@@ -92,7 +92,7 @@ export async function POST(req: Request) {
       session = await stripe.checkout.sessions.create({
         mode: "subscription",
         allow_promotion_codes: true,
-        payment_method_collection: "if_required",
+        payment_method_collection: "always",
         line_items: [{ price: priceId, quantity: 1 }],
         success_url: `${appUrl}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${appUrl}/billing/cancel`,
