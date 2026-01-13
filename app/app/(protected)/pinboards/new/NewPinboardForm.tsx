@@ -129,9 +129,8 @@ export default function NewPinboardForm({
 
           <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
             <p className="text-sm text-gray-700">
-              If you have a discount code, your first 12 months will be free. A card is collected at checkout so your
-              subscription can continue after the free period. You can cancel at any time before renewal and you won’t
-              be charged.
+              You’ll be taken to secure checkout to confirm your subscription. A card is collected so your pinboard can renew
+              automatically, and you can cancel any time before renewal.
             </p>
           </div>
         </>
