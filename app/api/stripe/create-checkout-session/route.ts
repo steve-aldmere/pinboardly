@@ -8,7 +8,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { plan, pinboardSlug, ownerUserId, title } = body;
+    const { plan, pinboardSlug, ownerUserId, title, customerEmail } = body;
 
     // Validate plan
     if (!plan || (plan !== "monthly" && plan !== "yearly")) {
@@ -41,6 +41,12 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
+
+    // Optional: customerEmail
+    const email =
+      typeof customerEmail === "string" && customerEmail.trim() !== ""
+        ? customerEmail.trim()
+        : null;
 
     // Get priceId from environment variables
     const priceId =
@@ -78,6 +84,8 @@ export async function POST(req: Request) {
     // Create Stripe client
     const stripe = new Stripe(stripeSecretKey);
 
+    const subscriptionDescription = `Pinboardly: ${title} (${pinboardSlug})`;
+
     // Create checkout session
     let session;
     try {
@@ -89,14 +97,28 @@ export async function POST(req: Request) {
         success_url: `${appUrl}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${appUrl}/billing/cancel`,
         client_reference_id: pinboardSlug,
-        metadata: { pinboard_slug: pinboardSlug, owner_user_id: ownerUserId, title, plan },
+        ...(email ? { customer_email: email } : {}),
+        metadata: {
+          pinboard_slug: pinboardSlug,
+          owner_user_id: ownerUserId,
+          title,
+          plan,
+        },
         subscription_data: {
-          metadata: { pinboard_slug: pinboardSlug, owner_user_id: ownerUserId, title },
+          description: subscriptionDescription,
+          metadata: {
+            pinboard_slug: pinboardSlug,
+            owner_user_id: ownerUserId,
+            title,
+          },
         },
       });
     } catch (e) {
       return NextResponse.json(
-        { error: "create-checkout-session failed", detail: e instanceof Error ? e.message : String(e) },
+        {
+          error: "create-checkout-session failed",
+          detail: e instanceof Error ? e.message : String(e),
+        },
         { status: 500 }
       );
     }
@@ -111,15 +133,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ url: session.url });
   } catch (error) {
     if (error instanceof Error && error.name === "StripeError") {
-      return NextResponse.json(
-        { error: error.message },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
     if (error instanceof SyntaxError) {
       return NextResponse.json(
-        { error: "Invalid request body. Expected JSON with 'plan' field." },
+        { error: "Invalid request body. Expected JSON." },
         { status: 400 }
       );
     }
@@ -130,4 +149,3 @@ export async function POST(req: Request) {
     );
   }
 }
-

@@ -152,6 +152,7 @@ export default async function DashboardPage() {
                           slug={board.slug}
                           title={board.title}
                           ownerUserId={userData.user.id}
+                          customerEmail={userData.user.email ?? null}
                         />
                       )}
                       {isActive && !isRemoved && (

@@ -25,7 +25,7 @@ export async function createPinboardAction(formData: FormData) {
 
   try {
     const supabase = await createServerSupabaseClient();
-    
+
     // Get current user
     const authResult = await supabase.auth.getUser();
     userData = authResult.data;
@@ -34,7 +34,9 @@ export async function createPinboardAction(formData: FormData) {
     }
 
     title = String(formData.get("title") ?? "").trim();
-    slug = String(formData.get("slug") ?? "").trim().toLowerCase();
+    slug = String(formData.get("slug") ?? "")
+      .trim()
+      .toLowerCase();
     plan = String(formData.get("plan") ?? "yearly").trim(); // Default to yearly
 
     // Validation
@@ -49,7 +51,10 @@ export async function createPinboardAction(formData: FormData) {
     // Check slug format (spec Section 6.1)
     const slugRegex = /^[a-z0-9][a-z0-9-]*[a-z0-9]$|^[a-z0-9]$/;
     if (!slugRegex.test(slug)) {
-      redirect("/app/pinboards/new?error=" + encodeURIComponent("That address isn't valid. Use letters, numbers, and dashes only."));
+      redirect(
+        "/app/pinboards/new?error=" +
+          encodeURIComponent("That address isn't valid. Use letters, numbers, and dashes only.")
+      );
     }
 
     // Check reserved slugs
@@ -90,24 +95,30 @@ export async function createPinboardAction(formData: FormData) {
           pinboardSlug: slug,
           ownerUserId: userData.user.id,
           title,
+          customerEmail: userData.user.email ?? null,
         }),
       });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        redirect("/app/pinboards/new?error=" + encodeURIComponent(errorData.error || "Failed to create checkout session. Please try again."));
+        redirect(
+          "/app/pinboards/new?error=" +
+            encodeURIComponent(errorData.error || "Failed to create checkout session. Please try again.")
+        );
       }
 
       const { url } = await response.json();
       if (!url) {
-        redirect("/app/pinboards/new?error=" + encodeURIComponent("Failed to create checkout session. Please try again."));
+        redirect(
+          "/app/pinboards/new?error=" +
+            encodeURIComponent("Failed to create checkout session. Please try again.")
+        );
       }
 
       redirect(url);
     }
 
     // Admin flow: still allow direct creation for admins
-    const now = new Date();
     const paidUntil = "2030-12-31T23:59:59Z";
 
     // Insert pinboard for admin
@@ -136,7 +147,13 @@ export async function createPinboardAction(formData: FormData) {
     redirect(`/app/pinboards/${pinboard.id}/edit`);
   } catch (e) {
     // Re-throw redirect errors (they're expected and should propagate)
-    if (e && typeof e === "object" && "digest" in e && typeof (e as any).digest === "string" && (e as any).digest.includes("NEXT_REDIRECT")) {
+    if (
+      e &&
+      typeof e === "object" &&
+      "digest" in e &&
+      typeof (e as any).digest === "string" &&
+      (e as any).digest.includes("NEXT_REDIRECT")
+    ) {
       throw e;
     }
 

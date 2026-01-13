@@ -5,10 +5,12 @@ export default function UpgradeButton({
   slug,
   title,
   ownerUserId,
+  customerEmail,
 }: {
   slug: string;
   title: string;
   ownerUserId: string;
+  customerEmail: string | null;
 }) {
   const [loading, setLoading] = useState(false);
 
@@ -23,8 +25,9 @@ export default function UpgradeButton({
         body: JSON.stringify({
           plan: "yearly", // Default to yearly for upgrades
           pinboardSlug: slug,
-          ownerUserId: ownerUserId,
-          title: title,
+          ownerUserId,
+          title,
+          customerEmail,
         }),
       });
 
@@ -38,11 +41,12 @@ export default function UpgradeButton({
       const { url } = await response.json();
       if (url) {
         window.location.href = url;
-      } else {
-        alert("Failed to create checkout session. Please try again.");
-        setLoading(false);
+        return;
       }
-    } catch (error) {
+
+      alert("Failed to create checkout session. Please try again.");
+      setLoading(false);
+    } catch {
       alert("Something went wrong. Please try again.");
       setLoading(false);
     }
