@@ -1,5 +1,6 @@
 // app/layout.tsx
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 import TopNav from "./components/TopNav";
 
@@ -23,6 +24,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-screen bg-gray-50 text-gray-900">
+        <Script
+          defer
+          data-domain="pinboardly.com"
+          src="https://plausible.io/js/script.js"
+        />
         <TopNav />
         <main className="mx-auto max-w-5xl px-6 py-8">{children}</main>
       </body>

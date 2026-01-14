@@ -1,3 +1,5 @@
+import TrackSuccess from "./TrackSuccess";
+
 export default async function BillingSuccessPage({
   searchParams,
 }: {
@@ -8,6 +10,7 @@ export default async function BillingSuccessPage({
 
   return (
     <div style={{ padding: "40px", maxWidth: "600px", margin: "0 auto" }}>
+      <TrackSuccess />
       <h1>Payment successful</h1>
       {sessionId && (
         <p>
@@ -22,4 +25,3 @@ export default async function BillingSuccessPage({
     </div>
   );
 }
-
