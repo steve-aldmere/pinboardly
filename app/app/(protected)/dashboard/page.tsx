@@ -19,7 +19,7 @@ type Pinboard = {
 
 export default async function DashboardPage() {
   const supabase = await createServerSupabaseClient();
-  
+
   // Require login
   const { data: userData } = await supabase.auth.getUser();
   if (!userData?.user) {
@@ -29,7 +29,9 @@ export default async function DashboardPage() {
   // Get user's pinboards
   const { data: pinboards, error } = await supabase
     .from("pinboards")
-    .select("id, slug, title, status, trial_ends_at, paid_until, created_at, removed_at, restore_until, stripe_subscription_id")
+    .select(
+      "id, slug, title, status, trial_ends_at, paid_until, created_at, removed_at, restore_until, stripe_subscription_id"
+    )
     .eq("owner_user_id", userData.user.id)
     .order("created_at", { ascending: false })
     .returns<Pinboard[]>();
@@ -40,34 +42,11 @@ export default async function DashboardPage() {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-6 py-10">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="mb-8">
           <h1 className="text-3xl font-semibold">Your Pinboards</h1>
-          <div className="flex gap-4 text-sm">
-            <Link 
-              href="/app/account" 
-              className="text-gray-600 hover:text-gray-900"
-            >
-              Account
-            </Link>
-            <form action={async () => {
-              "use server";
-              const supabase = await createServerSupabaseClient();
-              await supabase.auth.signOut();
-              redirect("/");
-            }}>
-              <button 
-                type="submit"
-                className="text-gray-600 hover:text-gray-900"
-              >
-                Sign out
-              </button>
-            </form>
-          </div>
         </div>
 
-        {error && (
-          <p className="mb-6 text-sm text-red-600">{error.message}</p>
-        )}
+        {error && <p className="mb-6 text-sm text-red-600">{error.message}</p>}
 
         {/* Create New Pinboard Button */}
         <div className="mb-6">
@@ -82,9 +61,7 @@ export default async function DashboardPage() {
         {/* Pinboards List */}
         {userPinboards.length === 0 ? (
           <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
-            <p className="text-gray-600">
-              You haven't created any pinboards yet.
-            </p>
+            <p className="text-gray-600">You haven't created any pinboards yet.</p>
             <p className="mt-2 text-sm text-gray-500">
               Create your first pinboard to get started.
             </p>
@@ -94,20 +71,22 @@ export default async function DashboardPage() {
             {userPinboards.map((board) => {
               const isActive = board.status === "trial" || board.status === "active";
               const isRemoved = board.status === "removed";
-              const statusColor = 
-                board.status === "active" ? "text-green-600" :
-                board.status === "trial" ? "text-blue-600" :
-                board.status === "expired" ? "text-orange-600" :
-                board.status === "removed" ? "text-gray-500" :
-                "text-gray-600";
+              const statusColor =
+                board.status === "active"
+                  ? "text-green-600"
+                  : board.status === "trial"
+                  ? "text-blue-600"
+                  : board.status === "expired"
+                  ? "text-orange-600"
+                  : board.status === "removed"
+                  ? "text-gray-500"
+                  : "text-gray-600";
 
               return (
-                <div 
-                  key={board.id} 
+                <div
+                  key={board.id}
                   className={`rounded-lg border p-6 ${
-                    isRemoved 
-                      ? "bg-gray-50 border-gray-300 opacity-75" 
-                      : "bg-white border-gray-200"
+                    isRemoved ? "bg-gray-50 border-gray-300 opacity-75" : "bg-white border-gray-200"
                   }`}
                 >
                   <div className="flex items-start justify-between">
@@ -121,9 +100,7 @@ export default async function DashboardPage() {
                             Removed
                           </span>
                         ) : (
-                          <span className={`text-xs font-medium ${statusColor}`}>
-                            {board.status}
-                          </span>
+                          <span className={`text-xs font-medium ${statusColor}`}>{board.status}</span>
                         )}
                       </div>
                       <p className={`mt-1 text-sm ${isRemoved ? "text-gray-400" : "text-gray-500"}`}>
@@ -167,10 +144,7 @@ export default async function DashboardPage() {
                       {isRemoved ? (
                         <form action={restorePinboardAction}>
                           <input type="hidden" name="pinboardId" value={board.id} />
-                          <button
-                            type="submit"
-                            className="text-sm text-blue-600 hover:text-blue-700"
-                          >
+                          <button type="submit" className="text-sm text-blue-600 hover:text-blue-700">
                             Restore
                           </button>
                         </form>
