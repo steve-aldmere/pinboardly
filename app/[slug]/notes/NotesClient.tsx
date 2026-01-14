@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 
 type NotePin = {
   id: string;
@@ -13,6 +13,10 @@ export default function NotesClient({ notes }: { notes: NotePin[] }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const params = useParams();
+
+  const slug = String((params as any)?.slug || "");
+  const from = searchParams.get("from");
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -44,17 +48,17 @@ export default function NotesClient({ notes }: { notes: NotePin[] }) {
   }, [selectedId]);
 
   function setNoteInUrl(noteId: string) {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("note", noteId);
-    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    const qs = new URLSearchParams(searchParams.toString());
+    qs.set("note", noteId);
+    router.push(`${pathname}?${qs.toString()}`, { scroll: false });
   }
 
   function clearNoteInUrl() {
-    const params = new URLSearchParams(searchParams.toString());
-    params.delete("note");
+    const qs = new URLSearchParams(searchParams.toString());
+    qs.delete("note");
 
-    const qs = params.toString();
-    router.push(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+    const nextQs = qs.toString();
+    router.push(nextQs ? `${pathname}?${nextQs}` : pathname, { scroll: false });
   }
 
   function openModal(note: NotePin) {
@@ -64,6 +68,14 @@ export default function NotesClient({ notes }: { notes: NotePin[] }) {
 
   function closeModal() {
     setSelectedId(null);
+
+    // If this note was opened from the main pinboard overview,
+    // closing should return to the overview rather than leaving the user on /notes.
+    if (from === "overview" && slug) {
+      router.push(`/${slug}`, { scroll: false });
+      return;
+    }
+
     clearNoteInUrl();
   }
 
@@ -85,7 +97,9 @@ export default function NotesClient({ notes }: { notes: NotePin[] }) {
     return (
       <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
         <p className="text-gray-600">No notes yet.</p>
-        <p className="text-sm text-gray-500 mt-1">This pinboard doesn't have any notes.</p>
+        <p className="text-sm text-gray-500 mt-1">
+          This pinboard doesn't have any notes.
+        </p>
       </div>
     );
   }
@@ -104,14 +118,14 @@ export default function NotesClient({ notes }: { notes: NotePin[] }) {
               onClick={() => openModal(note)}
               className="w-full text-left bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
             >
-              {note.title && <h3 className="font-medium mb-2 text-lg">{note.title}</h3>}
+              {note.title && (
+                <h3 className="font-medium mb-2 text-lg">{note.title}</h3>
+              )}
               <p className="text-sm text-gray-700">
                 {preview}
                 {hasMore && "..."}
               </p>
-              <p className="text-xs text-blue-600 mt-2">
-                Click to view full note
-              </p>
+              <p className="text-xs text-blue-600 mt-2">Click to view full note</p>
             </button>
           );
         })}
@@ -156,7 +170,8 @@ export default function NotesClient({ notes }: { notes: NotePin[] }) {
             </div>
 
             <div className="px-5 py-3 border-t text-xs text-gray-500">
-              Shareable link: <span className="font-mono">{`?note=${selectedNote.id}`}</span>
+              Shareable link:{" "}
+              <span className="font-mono">{`?note=${selectedNote.id}`}</span>
             </div>
           </div>
         </div>

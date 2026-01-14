@@ -52,7 +52,7 @@ export default function NotesOverviewClient({
           return (
             <Link
               key={note.id}
-              href={`/${slug}/notes?note=${encodeURIComponent(note.id)}`}
+              href={`/${slug}/notes?note=${encodeURIComponent(note.id)}&from=overview`}
               className="block bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
             >
               {note.title && <h3 className="font-medium mb-1">{note.title}</h3>}
