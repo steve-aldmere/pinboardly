@@ -40,6 +40,18 @@ export default function PrivacyPage() {
           </section>
 
           <section>
+            <h2 className="text-base font-semibold text-gray-900">Analytics</h2>
+            <p className="mt-2">
+              We use privacy-friendly analytics to understand basic usage of the site, such as
+              page views and which buttons are clicked. This helps us improve Pinboardly.
+            </p>
+            <p className="mt-2">
+              These analytics do not use cookies, do not track you across sites, and do not
+              collect personal information.
+            </p>
+          </section>
+
+          <section>
             <h2 className="text-base font-semibold text-gray-900">Public content</h2>
             <p className="mt-2">
               Pinboards are designed to be public. Anything you publish to a pinboard may be viewed by anyone
