@@ -13,76 +13,55 @@ export default async function Page() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Top bar */}
+      {/* Top block: centred stacked logo only */}
       <header className="border-b border-gray-100">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <Link href="/" className="flex items-center gap-3">
+        <div className="mx-auto flex max-w-5xl justify-center px-6 py-10">
+          <Link href="/" aria-label="Pinboardly home">
             <img
               src="/pinboardly-icon2.svg"
               alt="Pinboardly"
-              className="h-9 w-9"
+              className="h-36 w-36"
             />
-            <span className="text-sm font-semibold tracking-tight">Pinboardly</span>
           </Link>
-
-          <nav className="flex items-center gap-4">
-            <Link
-              href="/demo-board"
-              className="text-sm text-gray-700 hover:text-gray-900"
-            >
-              View demo
-            </Link>
-            <Link
-              href="/app/login"
-              className="text-sm text-gray-700 hover:text-gray-900"
-            >
-              Sign in / Sign up
-            </Link>
-            <Link
-              href="/app/pinboards/new"
-              className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-            >
-              Create a pinboard
-            </Link>
-          </nav>
         </div>
       </header>
 
       {/* Hero */}
       <main>
         <section className="mx-auto max-w-5xl px-6 py-14">
-          <div className="mx-auto max-w-2xl text-center">   
+          <div className="mx-auto max-w-2xl text-center">
             <h1 className="text-4xl font-semibold tracking-tight text-gray-900">
               A simple public pinboard for links, notes and events.
             </h1>
             <p className="mt-4 text-base leading-relaxed text-gray-600">
-              Share one clean page with the essentials. No clutter, no feeds, no fuss.
-              Perfect for groups, teams, projects, or your own personal hub.
+              Share one clean page with the essentials. No clutter, no feeds, no
+              fuss. Perfect for groups, teams, projects, or your own personal hub.
             </p>
 
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <div className="mt-8 flex w-full flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center sm:justify-center">
               <Link
                 href="/app/pinboards/new"
-                className="rounded-lg bg-blue-600 px-5 py-3 text-sm font-medium text-white hover:bg-blue-700"
+                className="rounded-lg bg-blue-600 px-5 py-3 text-center text-sm font-medium text-white hover:bg-blue-700"
               >
                 Create your pinboard
               </Link>
               <Link
                 href="/demo-board"
-                className="rounded-lg border border-gray-200 px-5 py-3 text-sm font-medium text-gray-800 hover:bg-gray-50"
+                className="rounded-lg border border-gray-200 px-5 py-3 text-center text-sm font-medium text-gray-800 hover:bg-gray-50"
               >
                 View the demo pinboard
               </Link>
               <Link
                 href="/app/login"
-                className="text-sm font-medium text-gray-600 hover:text-gray-900"
+                className="py-2 text-center text-sm font-medium text-gray-600 hover:text-gray-900 sm:py-0"
               >
                 Sign in / Sign up
               </Link>
             </div>
 
             <p className="mt-4 text-xs text-gray-500">
-              You choose your address once. Your pinboard stays live while your subscription is active.
+              You choose your address once. Your pinboard stays live while your
+              subscription is active.
             </p>
           </div>
         </section>
@@ -93,7 +72,8 @@ export default async function Page() {
             <div className="rounded-xl border border-gray-200 bg-white p-6">
               <h2 className="text-sm font-semibold text-gray-900">Links</h2>
               <p className="mt-2 text-sm text-gray-600">
-                Share the important URLs with short descriptions, all in one place.
+                Share the important URLs with short descriptions, all in one
+                place.
               </p>
             </div>
 
@@ -107,7 +87,8 @@ export default async function Page() {
             <div className="rounded-xl border border-gray-200 bg-white p-6">
               <h2 className="text-sm font-semibold text-gray-900">Events</h2>
               <p className="mt-2 text-sm text-gray-600">
-                Keep dates visible, with optional times, locations and descriptions.
+                Keep dates visible, with optional times, locations and
+                descriptions.
               </p>
             </div>
           </div>
@@ -122,8 +103,9 @@ export default async function Page() {
                   Straightforward pricing
                 </h2>
                 <p className="mt-3 text-sm leading-relaxed text-gray-600">
-                  Each pinboard has its own subscription. That keeps things simple if you
-                  want separate pinboards for different groups or projects.
+                  Each pinboard has its own subscription. That keeps things
+                  simple if you want separate pinboards for different groups or
+                  projects.
                 </p>
               </div>
 
@@ -133,7 +115,9 @@ export default async function Page() {
                   <div className="text-sm text-gray-600">£79 / year</div>
                 </div>
                 <div className="mt-3 flex items-baseline justify-between">
-                  <div className="text-sm font-semibold text-gray-900">Monthly</div>
+                  <div className="text-sm font-semibold text-gray-900">
+                    Monthly
+                  </div>
                   <div className="text-sm text-gray-600">£9.99 / month</div>
                 </div>
 
@@ -145,7 +129,8 @@ export default async function Page() {
                     Create a pinboard
                   </Link>
                   <p className="mt-3 text-xs text-gray-500">
-                    You’ll be taken to secure checkout to confirm your subscription. You can cancel any time.
+                    You’ll be taken to secure checkout to confirm your
+                    subscription. You can cancel any time.
                   </p>
                 </div>
               </div>
