@@ -40,8 +40,8 @@ export default function ManageSubscriptionButton() {
 
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-4">
-      <div className="flex items-start justify-between gap-4">
-        <div>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+        <div className="min-w-0">
           <div className="text-sm font-medium text-gray-900">Subscription</div>
           <p className="mt-1 text-sm text-gray-600">
             Manage your plan, update payment method, or cancel your subscription.
@@ -52,7 +52,7 @@ export default function ManageSubscriptionButton() {
           type="button"
           onClick={onClick}
           disabled={loading}
-          className="shrink-0 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 disabled:opacity-50"
+          className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 disabled:opacity-50 sm:w-auto"
         >
           {loading ? "Opening…" : "Manage subscription"}
         </button>
