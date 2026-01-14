@@ -19,10 +19,10 @@ export default function SupportPage() {
           <p className="text-sm text-gray-700">
             Email:{" "}
             <a
-              href="mailto:support@pinboardly.com"
+              href="mailto:hello@aldmere.co.uk"
               className="font-medium text-blue-600 hover:text-blue-700"
             >
-              support@pinboardly.com
+              hello@aldmere.co.uk
             </a>
           </p>
           <p className="mt-3 text-xs text-gray-500">
