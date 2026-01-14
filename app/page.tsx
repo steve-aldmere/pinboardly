@@ -20,7 +20,7 @@ export default async function Page() {
             <img
               src="/pinboardly-icon2.svg"
               alt="Pinboardly"
-              className="h-36 w-36"
+              className="h-32 w-32"
             />
           </Link>
         </div>
@@ -43,20 +43,32 @@ export default async function Page() {
                 href="/app/pinboards/new"
                 className="rounded-lg bg-blue-600 px-5 py-3 text-center text-sm font-medium text-white hover:bg-blue-700"
               >
-                Create your pinboard
+                Sign in to create your pinboard
               </Link>
+
               <Link
                 href="/demo-board"
                 className="rounded-lg border border-gray-200 px-5 py-3 text-center text-sm font-medium text-gray-800 hover:bg-gray-50"
               >
                 View the demo pinboard
               </Link>
+
               <Link
                 href="/app/login"
                 className="py-2 text-center text-sm font-medium text-gray-600 hover:text-gray-900 sm:py-0"
               >
                 Sign in / Sign up
               </Link>
+            </div>
+
+            {/* Expectation setting */}
+            <div className="mt-4 space-y-1">
+              <p className="text-xs text-gray-500">
+                Sign in is required to create and manage a pinboard.
+              </p>
+              <p className="text-xs text-gray-500">
+                No sign in needed to view the demo.
+              </p>
             </div>
 
             <p className="mt-4 text-xs text-gray-500">
@@ -72,8 +84,7 @@ export default async function Page() {
             <div className="rounded-xl border border-gray-200 bg-white p-6">
               <h2 className="text-sm font-semibold text-gray-900">Links</h2>
               <p className="mt-2 text-sm text-gray-600">
-                Share the important URLs with short descriptions, all in one
-                place.
+                Share the important URLs with short descriptions, all in one place.
               </p>
             </div>
 
@@ -87,8 +98,7 @@ export default async function Page() {
             <div className="rounded-xl border border-gray-200 bg-white p-6">
               <h2 className="text-sm font-semibold text-gray-900">Events</h2>
               <p className="mt-2 text-sm text-gray-600">
-                Keep dates visible, with optional times, locations and
-                descriptions.
+                Keep dates visible, with optional times, locations and descriptions.
               </p>
             </div>
           </div>
@@ -103,9 +113,8 @@ export default async function Page() {
                   Straightforward pricing
                 </h2>
                 <p className="mt-3 text-sm leading-relaxed text-gray-600">
-                  Each pinboard has its own subscription. That keeps things
-                  simple if you want separate pinboards for different groups or
-                  projects.
+                  Each pinboard has its own subscription. That keeps things simple if you
+                  want separate pinboards for different groups or projects.
                 </p>
               </div>
 
@@ -115,9 +124,7 @@ export default async function Page() {
                   <div className="text-sm text-gray-600">£79 / year</div>
                 </div>
                 <div className="mt-3 flex items-baseline justify-between">
-                  <div className="text-sm font-semibold text-gray-900">
-                    Monthly
-                  </div>
+                  <div className="text-sm font-semibold text-gray-900">Monthly</div>
                   <div className="text-sm text-gray-600">£9.99 / month</div>
                 </div>
 
@@ -129,8 +136,7 @@ export default async function Page() {
                     Create a pinboard
                   </Link>
                   <p className="mt-3 text-xs text-gray-500">
-                    You’ll be taken to secure checkout to confirm your
-                    subscription. You can cancel any time.
+                    You’ll be taken to secure checkout to confirm your subscription. You can cancel any time.
                   </p>
                 </div>
               </div>
