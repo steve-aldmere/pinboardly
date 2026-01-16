@@ -112,7 +112,7 @@ export default async function PinboardPage({
             <p className="text-sm text-slate-700">
               <span className="font-semibold">Demo pinboard:</span> This is an
               example of a pinboard. Everything you can see is editable,
-              including the title and the Notes, Links and Events sections.
+              including the title and the content in each Note, Link and Event.
             </p>
             <div className="mt-3">
               <Link
