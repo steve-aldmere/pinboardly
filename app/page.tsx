@@ -1,183 +1,284 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { createServerSupabaseClient } from "@/lib/supabase-server";
-import { PlausibleLink } from "./components/PlausibleTrack";
 
-export default async function Page() {
-  const supabase = await createServerSupabaseClient();
-  const { data } = await supabase.auth.getUser();
-
-  // If already signed in, go to dashboard
-  if (data?.user) {
-    redirect("/app/dashboard");
-  }
-
+export default function HomePage() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Top block: centred stacked logo only */}
-      <header className="border-b border-gray-100">
-        <div className="mx-auto flex max-w-5xl justify-center px-6 py-10">
-          <Link href="/" aria-label="Pinboardly home">
-            <img
-              src="/pinboardly-icon2.svg"
-              alt="Pinboardly"
-              className="h-32 w-32"
-            />
-          </Link>
+    <main className="min-h-screen bg-white text-slate-900">
+      {/* Top area: Sign in (small) + centred stacked logo */}
+      <header className="border-b border-slate-100">
+        <div className="mx-auto max-w-5xl px-6 py-6">
+          <div className="flex items-start justify-end">
+            <Link
+              href="/app"
+              className="text-sm font-medium text-slate-700 hover:text-slate-900"
+            >
+              Sign in
+            </Link>
+          </div>
+
+          <div className="mt-6 flex justify-center">
+            <Link href="/" aria-label="Pinboardly home">
+              <img
+                src="/pinboardly-icon2.svg"
+                alt="Pinboardly"
+                className="h-32 w-32"
+              />
+            </Link>
+          </div>
         </div>
       </header>
 
-      {/* Hero */}
-      <main>
-        <section className="mx-auto max-w-5xl px-6 py-14">
-          <div className="mx-auto max-w-2xl text-center">
-            <h1 className="text-4xl font-semibold tracking-tight text-gray-900">
-              A simple public pinboard for links, notes and events.
-            </h1>
-            <p className="mt-4 text-base leading-relaxed text-gray-600">
-              Share one clean page with the essentials. No clutter, no feeds, no
-              fuss. Perfect for groups, teams, projects, or your own personal hub.
-            </p>
+      {/* Content */}
+      <section className="mx-auto max-w-4xl px-6 pb-20 pt-10">
+        {/* Hero */}
+        <div className="mt-4 text-center">
+          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+            A virtual public notice board for links, notes and events
+          </h1>
 
-            <div className="mt-8 flex w-full flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center sm:justify-center">
-              <PlausibleLink
-                href="/app/pinboards/new"
-                event="home_create_click"
-                className="rounded-lg bg-blue-600 px-5 py-3 text-center text-sm font-medium text-white hover:bg-blue-700"
-              >
-                Sign in to create your pinboard
-              </PlausibleLink>
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-700 sm:text-lg">
+            One simple public page you can share.
+            <br />
+            For yourself, your group, or anything you run.
+          </p>
 
-              <PlausibleLink
-                href="/demo-board"
-                event="home_demo_click"
-                className="rounded-lg border border-gray-200 px-5 py-3 text-center text-sm font-medium text-gray-800 hover:bg-gray-50"
-              >
-                View the demo pinboard
-              </PlausibleLink>
-
-              <Link
-                href="/app/login"
-                className="py-2 text-center text-sm font-medium text-gray-600 hover:text-gray-900 sm:py-0"
-              >
-                Sign in / Sign up
-              </Link>
-            </div>
-
-            {/* Expectation setting */}
-            <div className="mt-4 space-y-1">
-              <p className="text-xs text-gray-500">
-                Sign in is required to create and manage a pinboard.
-              </p>
-              <p className="text-xs text-gray-500">No sign in needed to view the demo.</p>
-            </div>
-
-            <p className="mt-4 text-xs text-gray-500">
-              You choose your address once. Your pinboard stays live while your
-              subscription is active.
+          <div className="mt-7 flex flex-col items-center gap-3">
+            <Link
+              href="/demo-board"
+              className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-6 py-3 text-base font-semibold text-white hover:bg-slate-800"
+            >
+              View the demo notice board
+            </Link>
+            <p className="text-sm text-slate-600">
+              See exactly how Pinboardly works before doing anything else.
             </p>
           </div>
-        </section>
+        </div>
 
-        {/* Features */}
-        <section className="mx-auto max-w-5xl px-6 pb-14">
-          <div className="grid gap-6 md:grid-cols-3">
-            <div className="rounded-xl border border-gray-200 bg-white p-6">
-              <h2 className="text-sm font-semibold text-gray-900">Links</h2>
-              <p className="mt-2 text-sm text-gray-600">
-                Share the important URLs with short descriptions, all in one place.
+        {/* What it is */}
+        <div className="mt-14 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
+          <h2 className="text-xl font-semibold tracking-tight">
+            What Pinboardly is
+          </h2>
+          <p className="mt-3 text-slate-700">
+            Pinboardly replaces scattered links, old posts, and buried documents
+            with one clear public notice board.
+          </p>
+          <p className="mt-2 text-slate-700">
+            Everything lives in one place, stays up to date, and is easy to
+            share.
+          </p>
+
+          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+            <div className="rounded-2xl border border-slate-200 p-5">
+              <h3 className="font-semibold">Links</h3>
+              <p className="mt-2 text-sm leading-6 text-slate-700">
+                Send people to the right place. Forms, documents, resources,
+                websites.
               </p>
             </div>
 
-            <div className="rounded-xl border border-gray-200 bg-white p-6">
-              <h2 className="text-sm font-semibold text-gray-900">Notes</h2>
-              <p className="mt-2 text-sm text-gray-600">
-                Post updates, guidance or key info. Supports simple formatting.
+            <div className="rounded-2xl border border-slate-200 p-5">
+              <h3 className="font-semibold">Notes</h3>
+              <p className="mt-2 text-sm leading-6 text-slate-700">
+                Share updates, guidance, or information that stays visible and
+                easy to find.
               </p>
             </div>
 
-            <div className="rounded-xl border border-gray-200 bg-white p-6">
-              <h2 className="text-sm font-semibold text-gray-900">Events</h2>
-              <p className="mt-2 text-sm text-gray-600">
-                Keep dates visible, with optional times, locations and descriptions.
+            <div className="rounded-2xl border border-slate-200 p-5">
+              <h3 className="font-semibold">Events</h3>
+              <p className="mt-2 text-sm leading-6 text-slate-700">
+                Make dates obvious. With or without times and locations.
               </p>
             </div>
           </div>
-        </section>
 
-        {/* Pricing */}
-        <section className="border-t border-gray-100 bg-gray-50">
-          <div className="mx-auto max-w-5xl px-6 py-14">
-            <div className="grid gap-8 md:grid-cols-2 md:items-start">
-              <div>
-                <h2 className="text-2xl font-semibold tracking-tight text-gray-900">
-                  Straightforward pricing
-                </h2>
-                <p className="mt-3 text-sm leading-relaxed text-gray-600">
-                  Each pinboard has its own subscription. That keeps things simple if you
-                  want separate pinboards for different groups or projects.
-                </p>
-              </div>
+          <p className="mt-6 text-slate-700">
+            Everything appears on one public notice board you control.
+          </p>
+        </div>
 
-              <div className="rounded-xl border border-gray-200 bg-white p-6">
-                <div className="flex items-baseline justify-between">
-                  <div className="text-sm font-semibold text-gray-900">Yearly</div>
-                  <div className="text-sm text-gray-600">£79 / year</div>
-                </div>
-                <div className="mt-3 flex items-baseline justify-between">
-                  <div className="text-sm font-semibold text-gray-900">Monthly</div>
-                  <div className="text-sm text-gray-600">£9.99 / month</div>
-                </div>
+        {/* How people use it */}
+        <div className="mt-14">
+          <h2 className="text-xl font-semibold tracking-tight">
+            How people use it
+          </h2>
+          <p className="mt-3 text-slate-700">
+            Pinboardly works wherever you need a single public source of truth.
+          </p>
 
-                <div className="mt-5">
-                  <PlausibleLink
-                    href="/app/pinboards/new"
-                    event="home_create_click"
-                    props={{ location: "pricing" }}
-                    className="block w-full rounded-lg bg-blue-600 px-4 py-2 text-center text-sm font-medium text-white hover:bg-blue-700"
-                  >
-                    Create a pinboard
-                  </PlausibleLink>
-                  <p className="mt-3 text-xs text-gray-500">
-                    You’ll be taken to secure checkout to confirm your subscription. You can cancel any time.
-                  </p>
-                </div>
-              </div>
-            </div>
+          <ul className="mt-5 space-y-2 text-slate-800">
+            <li className="flex gap-3">
+              <span
+                className="mt-2 h-2 w-2 rounded-full bg-slate-900"
+                aria-hidden="true"
+              />
+              <span>
+                A personal notice board with everything you want to share
+              </span>
+            </li>
+            <li className="flex gap-3">
+              <span
+                className="mt-2 h-2 w-2 rounded-full bg-slate-900"
+                aria-hidden="true"
+              />
+              <span>A club, PTA, or committee notice board</span>
+            </li>
+            <li className="flex gap-3">
+              <span
+                className="mt-2 h-2 w-2 rounded-full bg-slate-900"
+                aria-hidden="true"
+              />
+              <span>A community group or society</span>
+            </li>
+            <li className="flex gap-3">
+              <span
+                className="mt-2 h-2 w-2 rounded-full bg-slate-900"
+                aria-hidden="true"
+              />
+              <span>A project, campaign, or ongoing activity</span>
+            </li>
+            <li className="flex gap-3">
+              <span
+                className="mt-2 h-2 w-2 rounded-full bg-slate-900"
+                aria-hidden="true"
+              />
+              <span>Anything that benefits from one clear public page</span>
+            </li>
+          </ul>
 
-            <div className="mt-10 text-center">
-              <PlausibleLink
-                href="/demo-board"
-                event="home_demo_click"
-                props={{ location: "footer" }}
-                className="text-sm font-medium text-blue-600 hover:text-blue-700"
-              >
-                Not sure yet? View the demo →
-              </PlausibleLink>
-            </div>
+          <p className="mt-6 text-slate-700">
+            No feeds. No algorithms. No distractions.
+          </p>
+        </div>
+
+        {/* How it works */}
+        <div className="mt-14 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
+          <h2 className="text-xl font-semibold tracking-tight">How it works</h2>
+
+          <ol className="mt-5 space-y-3 text-slate-800">
+            <li className="flex gap-3">
+              <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-900 text-sm font-semibold text-white">
+                1
+              </span>
+              <span className="mt-1">Create your notice board</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-900 text-sm font-semibold text-white">
+                2
+              </span>
+              <span className="mt-1">Add links, notes and events</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-900 text-sm font-semibold text-white">
+                3
+              </span>
+              <span className="mt-1">Share one simple URL</span>
+            </li>
+          </ol>
+
+          <p className="mt-6 text-slate-700">That’s it.</p>
+        </div>
+
+        {/* Demo spotlight */}
+        <div className="mt-14 rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:p-8">
+          <h2 className="text-xl font-semibold tracking-tight">
+            See the demo notice board
+          </h2>
+          <p className="mt-3 text-slate-700">
+            The demo shows a complete Pinboardly notice board with links, notes
+            and events, exactly as they appear in everyday use.
+          </p>
+
+          <div className="mt-6 flex flex-col items-start gap-2">
+            <Link
+              href="/demo-board"
+              className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-6 py-3 text-base font-semibold text-white hover:bg-slate-800"
+            >
+              Open the demo notice board
+            </Link>
+            <p className="text-sm text-slate-600">No account required.</p>
           </div>
-        </section>
+        </div>
+
+        {/* Philosophy */}
+        <div className="mt-14">
+          <h2 className="text-xl font-semibold tracking-tight">
+            Designed for clarity
+          </h2>
+          <p className="mt-3 text-slate-700">
+            Pinboardly is designed to be calm, predictable, and easy to maintain
+            over time.
+          </p>
+          <p className="mt-2 text-slate-700">
+            It’s a notice board, not a social network.
+          </p>
+        </div>
+
+        {/* Pricing (bottom, low emphasis) */}
+        <div className="mt-14 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
+          <h2 className="text-xl font-semibold tracking-tight">Pricing</h2>
+
+          <div className="mt-4 text-slate-900">
+            <div className="text-lg font-semibold">£9 per month</div>
+            <div className="mt-1 text-slate-700">or £79 per year</div>
+          </div>
+
+          <ul className="mt-5 space-y-2 text-slate-800">
+            <li className="flex gap-3">
+              <span
+                className="mt-2 h-2 w-2 rounded-full bg-slate-900"
+                aria-hidden="true"
+              />
+              <span>One public notice board</span>
+            </li>
+            <li className="flex gap-3">
+              <span
+                className="mt-2 h-2 w-2 rounded-full bg-slate-900"
+                aria-hidden="true"
+              />
+              <span>Links, notes and events included</span>
+            </li>
+            <li className="flex gap-3">
+              <span
+                className="mt-2 h-2 w-2 rounded-full bg-slate-900"
+                aria-hidden="true"
+              />
+              <span>Cancel anytime</span>
+            </li>
+          </ul>
+
+          <div className="mt-6">
+            <Link
+              href="/app/pinboards/new"
+              className="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-6 py-3 text-base font-semibold text-slate-900 hover:bg-slate-50"
+            >
+              Create your own notice board
+            </Link>
+          </div>
+        </div>
 
         {/* Footer */}
-        <footer className="border-t border-gray-100">
-          <div className="mx-auto max-w-5xl px-6 py-10">
-            <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-              <div className="text-xs text-gray-500">© {new Date().getFullYear()} Pinboardly</div>
-              <div className="flex gap-4">
-                <Link href="/terms" className="text-xs text-gray-500 hover:text-gray-700">
-                  Terms
-                </Link>
-                <Link href="/privacy" className="text-xs text-gray-500 hover:text-gray-700">
-                  Privacy
-                </Link>
-                <Link href="/support" className="text-xs text-gray-500 hover:text-gray-700">
-                  Support
-                </Link>
-              </div>
-            </div>
+        <footer className="mt-16 border-t border-slate-200 pt-8">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-700">
+            <Link href="/privacy" className="hover:text-slate-900">
+              Privacy Policy
+            </Link>
+            <Link href="/terms" className="hover:text-slate-900">
+              Terms of Service
+            </Link>
+            <Link href="/support" className="hover:text-slate-900">
+              Support
+            </Link>
+            <span className="text-slate-500">support@pinboardly.com</span>
+          </div>
+
+          <div className="mt-6 text-sm text-slate-600">
+            <div>© 2026 Aldmere Ltd. All rights reserved.</div>
+            <div>Pinboardly is a product of Aldmere Ltd.</div>
           </div>
         </footer>
-      </main>
-    </div>
+      </section>
+    </main>
   );
 }
