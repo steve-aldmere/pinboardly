@@ -40,13 +40,17 @@ export default function NewPinboardForm({
       {isAdmin && (
         <div className="rounded-lg bg-blue-50 border border-blue-200 p-4">
           <p className="text-sm text-blue-600">
-            ✓ Admin mode: Your pinboards will be automatically activated without payment.
+            ✓ Admin mode: Your pinboards will be automatically activated without
+            payment.
           </p>
         </div>
       )}
 
       <div>
-        <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+        <label
+          htmlFor="title"
+          className="block text-sm font-medium text-gray-700 mb-2"
+        >
           Pinboard Title
         </label>
         <input
@@ -60,15 +64,24 @@ export default function NewPinboardForm({
           placeholder="e.g., Tynemouth Sea Scouts"
           className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        <p className="mt-1 text-xs text-gray-500">This is the display name (you can change it later).</p>
+        <p className="mt-1 text-xs text-gray-500">
+          This is the display name (you can change it later).
+        </p>
       </div>
 
       <div>
-        <label htmlFor="slug" className="block text-sm font-medium text-gray-700 mb-2">
+        <label
+          htmlFor="slug"
+          className="block text-sm font-medium text-gray-700 mb-2"
+        >
           Web Address (Slug)
         </label>
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-500">pinboardly.com/</span>
+
+        {/* Fix overflow on small screens: allow input to shrink */}
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="text-sm text-gray-500 shrink-0">
+            pinboardly.com/
+          </span>
           <input
             type="text"
             id="slug"
@@ -77,15 +90,18 @@ export default function NewPinboardForm({
             value={slug}
             onChange={handleSlugChange}
             placeholder="tynemouth-scouts"
-            className="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 min-w-0 rounded-lg border border-gray-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
+
         <p className="mt-1 text-xs text-gray-500">
           Lowercase letters, numbers, and dashes only. Cannot be changed later.
         </p>
+
         {slug && (
-          <p className="mt-2 text-sm text-gray-700">
-            Your pinboard will be at: <strong>pinboardly.com/{slug}</strong>
+          <p className="mt-2 text-sm text-gray-700 break-all">
+            Your pinboard will be at:{" "}
+            <strong>pinboardly.com/{slug}</strong>
           </p>
         )}
       </div>
@@ -93,7 +109,9 @@ export default function NewPinboardForm({
       {!isAdmin && (
         <>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Subscription Plan</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Subscription Plan
+            </label>
             <div className="space-y-2">
               <label className="flex items-center gap-3 p-3 rounded-lg border border-gray-300 cursor-pointer hover:bg-gray-50">
                 <input
@@ -121,7 +139,7 @@ export default function NewPinboardForm({
                 />
                 <div className="flex-1">
                   <div className="font-medium text-sm">Monthly</div>
-                  <div className="text-xs text-gray-500">£9.99/month</div>
+                  <div className="text-xs text-gray-500">£9/month</div>
                 </div>
               </label>
             </div>
@@ -129,8 +147,9 @@ export default function NewPinboardForm({
 
           <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
             <p className="text-sm text-gray-700">
-              You’ll be taken to secure checkout to confirm your subscription. A card is collected so your pinboard can renew
-              automatically, and you can cancel any time before renewal.
+              You’ll be taken to secure checkout to confirm your subscription. A
+              card is collected so your pinboard can renew automatically, and
+              you can cancel any time before renewal.
             </p>
           </div>
         </>
@@ -149,7 +168,10 @@ export default function NewPinboardForm({
         {isAdmin ? (
           <p>Admin pinboards are automatically activated.</p>
         ) : (
-          <p>Payment is required to create a pinboard. Your pinboard will be activated after payment.</p>
+          <p>
+            Payment is required to create a pinboard. Your pinboard will be
+            activated after payment.
+          </p>
         )}
       </div>
     </form>
