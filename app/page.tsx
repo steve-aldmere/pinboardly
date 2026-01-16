@@ -21,7 +21,7 @@ export default function HomePage() {
         {/* Hero */}
         <div className="mt-4 text-center">
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            A virtual public notice board for links, notes and events
+            A public pinboard for links, notes and events
           </h1>
 
           <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-700 sm:text-lg">
@@ -35,7 +35,7 @@ export default function HomePage() {
               href="/demo-board"
               className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-6 py-3 text-base font-semibold text-white hover:bg-slate-800"
             >
-              View the demo notice board
+              View the demo pinboard
             </Link>
             <p className="text-sm text-slate-600">
               See exactly how Pinboardly works before doing anything else.
@@ -50,7 +50,7 @@ export default function HomePage() {
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-slate-700">
             Pinboardly replaces scattered links, old posts, and buried documents
-            with one clear public notice board.
+            with one clear public pinboard.
           </p>
           <p className="mx-auto mt-2 max-w-2xl text-slate-700">
             Everything lives in one place, stays up to date, and is easy to
@@ -83,7 +83,7 @@ export default function HomePage() {
           </div>
 
           <p className="mx-auto mt-6 max-w-2xl text-slate-700">
-            Everything appears on one public notice board you control.
+            Everything appears on one public pinboard you control.
           </p>
         </div>
 
@@ -97,8 +97,8 @@ export default function HomePage() {
           </p>
 
           <ul className="mx-auto mt-6 max-w-2xl space-y-2 text-left text-slate-800">
-            <li>• A personal notice board with everything you want to share</li>
-            <li>• A club, PTA, or committee notice board</li>
+            <li>• A personal pinboard with everything you want to share</li>
+            <li>• A club, PTA, or committee pinboard</li>
             <li>• A community group or society</li>
             <li>• A project, campaign, or ongoing activity</li>
             <li>• Anything that benefits from one clear public page</li>
@@ -111,14 +111,16 @@ export default function HomePage() {
 
         {/* How it works */}
         <div className="mt-14 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
-          <h2 className="text-xl font-semibold tracking-tight">How it works</h2>
+          <h2 className="text-xl font-semibold tracking-tight text-center">
+            How it works
+          </h2>
 
-          <ol className="mt-5 space-y-3 text-slate-800">
+          <ol className="mx-auto mt-5 max-w-2xl space-y-3 text-slate-800">
             <li className="flex gap-3">
               <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-900 text-sm font-semibold text-white">
                 1
               </span>
-              <span className="mt-1">Create your notice board</span>
+              <span className="mt-1">Create your pinboard</span>
             </li>
             <li className="flex gap-3">
               <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-900 text-sm font-semibold text-white">
@@ -134,17 +136,17 @@ export default function HomePage() {
             </li>
           </ol>
 
-          <p className="mt-6 text-slate-700">That’s it.</p>
+          <p className="mt-6 text-center text-slate-700">That’s it.</p>
         </div>
 
         {/* Demo spotlight */}
-        <div className="mt-14 rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:p-8">
+        <div className="mt-14 rounded-2xl border border-slate-200 bg-slate-50 p-6 text-center sm:p-8">
           <h2 className="text-xl font-semibold tracking-tight">
-            See the demo notice board
+            See the demo pinboard
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-slate-700">
-            The demo shows a complete Pinboardly notice board with links, notes
-            and events, exactly as they appear in everyday use.
+            The demo shows a complete Pinboardly pinboard with links, notes and
+            events, exactly as they appear in everyday use.
           </p>
 
           <div className="mt-6 flex flex-col items-center gap-2">
@@ -152,7 +154,7 @@ export default function HomePage() {
               href="/demo-board"
               className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-6 py-3 text-base font-semibold text-white hover:bg-slate-800"
             >
-              Open the demo notice board
+              Open the demo pinboard
             </Link>
             <p className="text-sm text-slate-600">No account required.</p>
           </div>
@@ -168,12 +170,12 @@ export default function HomePage() {
             over time.
           </p>
           <p className="mx-auto mt-2 max-w-2xl text-slate-700">
-            It’s a notice board, not a social network.
+            It’s a pinboard, not a social network.
           </p>
         </div>
 
-        {/* Pricing (bottom, low emphasis) */}
-        <div className="mt-14 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
+        {/* Pricing */}
+        <div className="mt-14 rounded-2xl border border-slate-200 bg-white p-6 text-center sm:p-8">
           <h2 className="text-xl font-semibold tracking-tight">Pricing</h2>
 
           <div className="mt-4 text-slate-900">
@@ -181,43 +183,25 @@ export default function HomePage() {
             <div className="mt-1 text-slate-700">or £79 per year</div>
           </div>
 
-          <ul className="mt-5 space-y-2 text-slate-800">
-            <li className="flex gap-3">
-              <span
-                className="mt-2 h-2 w-2 rounded-full bg-slate-900"
-                aria-hidden="true"
-              />
-              <span>One public notice board</span>
-            </li>
-            <li className="flex gap-3">
-              <span
-                className="mt-2 h-2 w-2 rounded-full bg-slate-900"
-                aria-hidden="true"
-              />
-              <span>Links, notes and events included</span>
-            </li>
-            <li className="flex gap-3">
-              <span
-                className="mt-2 h-2 w-2 rounded-full bg-slate-900"
-                aria-hidden="true"
-              />
-              <span>Cancel anytime</span>
-            </li>
+          <ul className="mx-auto mt-5 max-w-2xl space-y-2 text-left text-slate-800">
+            <li>• One public pinboard</li>
+            <li>• Links, notes and events included</li>
+            <li>• Cancel anytime</li>
           </ul>
 
-          <div className="mt-6">
+          <div className="mt-6 flex justify-center">
             <Link
               href="/app/pinboards/new"
               className="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-6 py-3 text-base font-semibold text-slate-900 hover:bg-slate-50"
             >
-              Create your own notice board
+              Create your own pinboard
             </Link>
           </div>
         </div>
 
         {/* Footer */}
-        <footer className="mt-16 border-t border-slate-200 pt-8">
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-700">
+        <footer className="mt-16 border-t border-slate-200 pt-8 text-center">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-slate-700">
             <Link href="/privacy" className="hover:text-slate-900">
               Privacy Policy
             </Link>
