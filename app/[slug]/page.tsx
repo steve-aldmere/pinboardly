@@ -63,7 +63,6 @@ export default async function PinboardPage({
   if (!result.ok) {
     if (result.reason === "not_found") notFound();
 
-    // inactive
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
         <div className="max-w-md text-center">
@@ -129,19 +128,20 @@ export default async function PinboardPage({
 
         {/* Notes */}
         <section className="mb-10">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-semibold">Notes</h2>
+            <Link
+              href={`/${slug}/notes`}
+              className="text-sm text-blue-600 hover:text-blue-700"
+            >
+              View all →
+            </Link>
+          </div>
+
           {notesPreview.length > 0 ? (
             <NotesOverviewClient notes={notesPreview} slug={slug} />
           ) : (
             <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <div className="flex items-center justify-between mb-2">
-                <h2 className="text-2xl font-semibold">Notes</h2>
-                <Link
-                  href={`/${slug}/notes`}
-                  className="text-sm text-blue-600 hover:text-blue-700"
-                >
-                  View all →
-                </Link>
-              </div>
               <p className="text-gray-600">No notes yet.</p>
             </div>
           )}
