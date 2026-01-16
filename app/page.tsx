@@ -3,27 +3,16 @@ import Link from "next/link";
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-white text-slate-900">
-      {/* Top area: Sign in (small) + centred stacked logo */}
+      {/* Top area: centred stacked logo only */}
       <header className="border-b border-slate-100">
-        <div className="mx-auto max-w-5xl px-6 py-6">
-          <div className="flex items-start justify-end">
-            <Link
-              href="/app"
-              className="text-sm font-medium text-slate-700 hover:text-slate-900"
-            >
-              Sign in
-            </Link>
-          </div>
-
-          <div className="mt-6 flex justify-center">
-            <Link href="/" aria-label="Pinboardly home">
-              <img
-                src="/pinboardly-icon2.svg"
-                alt="Pinboardly"
-                className="h-32 w-32"
-              />
-            </Link>
-          </div>
+        <div className="mx-auto flex max-w-5xl justify-center px-6 py-10">
+          <Link href="/" aria-label="Pinboardly home">
+            <img
+              src="/pinboardly-icon2.svg"
+              alt="Pinboardly"
+              className="h-32 w-32"
+            />
+          </Link>
         </div>
       </header>
 
@@ -55,20 +44,20 @@ export default function HomePage() {
         </div>
 
         {/* What it is */}
-        <div className="mt-14 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
+        <div className="mt-14 rounded-2xl border border-slate-200 bg-white p-6 text-center sm:p-8">
           <h2 className="text-xl font-semibold tracking-tight">
             What Pinboardly is
           </h2>
-          <p className="mt-3 text-slate-700">
+          <p className="mx-auto mt-3 max-w-2xl text-slate-700">
             Pinboardly replaces scattered links, old posts, and buried documents
             with one clear public notice board.
           </p>
-          <p className="mt-2 text-slate-700">
+          <p className="mx-auto mt-2 max-w-2xl text-slate-700">
             Everything lives in one place, stays up to date, and is easy to
             share.
           </p>
 
-          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          <div className="mt-8 grid gap-4 text-left sm:grid-cols-3">
             <div className="rounded-2xl border border-slate-200 p-5">
               <h3 className="font-semibold">Links</h3>
               <p className="mt-2 text-sm leading-6 text-slate-700">
@@ -93,61 +82,29 @@ export default function HomePage() {
             </div>
           </div>
 
-          <p className="mt-6 text-slate-700">
+          <p className="mx-auto mt-6 max-w-2xl text-slate-700">
             Everything appears on one public notice board you control.
           </p>
         </div>
 
         {/* How people use it */}
-        <div className="mt-14">
+        <div className="mt-14 text-center">
           <h2 className="text-xl font-semibold tracking-tight">
             How people use it
           </h2>
-          <p className="mt-3 text-slate-700">
+          <p className="mx-auto mt-3 max-w-2xl text-slate-700">
             Pinboardly works wherever you need a single public source of truth.
           </p>
 
-          <ul className="mt-5 space-y-2 text-slate-800">
-            <li className="flex gap-3">
-              <span
-                className="mt-2 h-2 w-2 rounded-full bg-slate-900"
-                aria-hidden="true"
-              />
-              <span>
-                A personal notice board with everything you want to share
-              </span>
-            </li>
-            <li className="flex gap-3">
-              <span
-                className="mt-2 h-2 w-2 rounded-full bg-slate-900"
-                aria-hidden="true"
-              />
-              <span>A club, PTA, or committee notice board</span>
-            </li>
-            <li className="flex gap-3">
-              <span
-                className="mt-2 h-2 w-2 rounded-full bg-slate-900"
-                aria-hidden="true"
-              />
-              <span>A community group or society</span>
-            </li>
-            <li className="flex gap-3">
-              <span
-                className="mt-2 h-2 w-2 rounded-full bg-slate-900"
-                aria-hidden="true"
-              />
-              <span>A project, campaign, or ongoing activity</span>
-            </li>
-            <li className="flex gap-3">
-              <span
-                className="mt-2 h-2 w-2 rounded-full bg-slate-900"
-                aria-hidden="true"
-              />
-              <span>Anything that benefits from one clear public page</span>
-            </li>
+          <ul className="mx-auto mt-6 max-w-2xl space-y-2 text-left text-slate-800">
+            <li>• A personal notice board with everything you want to share</li>
+            <li>• A club, PTA, or committee notice board</li>
+            <li>• A community group or society</li>
+            <li>• A project, campaign, or ongoing activity</li>
+            <li>• Anything that benefits from one clear public page</li>
           </ul>
 
-          <p className="mt-6 text-slate-700">
+          <p className="mx-auto mt-6 max-w-2xl text-slate-700">
             No feeds. No algorithms. No distractions.
           </p>
         </div>
@@ -185,12 +142,12 @@ export default function HomePage() {
           <h2 className="text-xl font-semibold tracking-tight">
             See the demo notice board
           </h2>
-          <p className="mt-3 text-slate-700">
+          <p className="mx-auto mt-3 max-w-2xl text-slate-700">
             The demo shows a complete Pinboardly notice board with links, notes
             and events, exactly as they appear in everyday use.
           </p>
 
-          <div className="mt-6 flex flex-col items-start gap-2">
+          <div className="mt-6 flex flex-col items-center gap-2">
             <Link
               href="/demo-board"
               className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-6 py-3 text-base font-semibold text-white hover:bg-slate-800"
@@ -202,15 +159,15 @@ export default function HomePage() {
         </div>
 
         {/* Philosophy */}
-        <div className="mt-14">
+        <div className="mt-14 text-center">
           <h2 className="text-xl font-semibold tracking-tight">
             Designed for clarity
           </h2>
-          <p className="mt-3 text-slate-700">
+          <p className="mx-auto mt-3 max-w-2xl text-slate-700">
             Pinboardly is designed to be calm, predictable, and easy to maintain
             over time.
           </p>
-          <p className="mt-2 text-slate-700">
+          <p className="mx-auto mt-2 max-w-2xl text-slate-700">
             It’s a notice board, not a social network.
           </p>
         </div>
