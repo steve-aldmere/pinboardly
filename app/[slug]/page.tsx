@@ -102,10 +102,50 @@ export default async function PinboardPage({
   const notesPreview = (notes as NotePin[]).slice(0, 5);
   const eventsPreview = (events as EventPin[]).slice(0, 5);
 
+  const isDemo = slug === "demo-board";
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-6 py-10">
+        {isDemo ? (
+          <div className="mb-8 rounded-xl border border-slate-200 bg-white p-5">
+            <p className="text-sm text-slate-700">
+              <span className="font-semibold">Demo pinboard:</span> This is an
+              example of a pinboard. Everything you can see is editable,
+              including the title and the Notes, Links and Events sections.
+            </p>
+            <div className="mt-3">
+              <Link
+                href="/app/pinboards/new"
+                className="text-sm font-medium text-blue-600 hover:text-blue-700"
+              >
+                Create your own pinboard →
+              </Link>
+            </div>
+          </div>
+        ) : null}
+
         <h1 className="text-4xl font-bold mb-8">{pinboard.title}</h1>
+
+        {/* Notes */}
+        <section className="mb-10">
+          {notesPreview.length > 0 ? (
+            <NotesOverviewClient notes={notesPreview} slug={slug} />
+          ) : (
+            <div className="bg-white border border-gray-200 rounded-lg p-6">
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="text-2xl font-semibold">Notes</h2>
+                <Link
+                  href={`/${slug}/notes`}
+                  className="text-sm text-blue-600 hover:text-blue-700"
+                >
+                  View all →
+                </Link>
+              </div>
+              <p className="text-gray-600">No notes yet.</p>
+            </div>
+          )}
+        </section>
 
         {/* Links */}
         <section className="mb-10">
@@ -143,26 +183,6 @@ export default async function PinboardPage({
           ) : (
             <div className="bg-white border border-gray-200 rounded-lg p-6">
               <p className="text-gray-600">No links yet.</p>
-            </div>
-          )}
-        </section>
-
-        {/* Notes */}
-        <section className="mb-10">
-          {notesPreview.length > 0 ? (
-            <NotesOverviewClient notes={notesPreview} slug={slug} />
-          ) : (
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <div className="flex items-center justify-between mb-2">
-                <h2 className="text-2xl font-semibold">Notes</h2>
-                <Link
-                  href={`/${slug}/notes`}
-                  className="text-sm text-blue-600 hover:text-blue-700"
-                >
-                  View all →
-                </Link>
-              </div>
-              <p className="text-gray-600">No notes yet.</p>
             </div>
           )}
         </section>
