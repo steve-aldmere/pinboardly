@@ -75,7 +75,10 @@ export default async function EditPinboardPage({
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-6 py-10">
         <div className="mb-6">
-          <Link href="/app/dashboard" className="text-sm text-blue-600 hover:text-blue-700">
+          <Link
+            href="/app/dashboard"
+            className="text-sm text-blue-600 hover:text-blue-700"
+          >
             ← Back to dashboard
           </Link>
         </div>
@@ -83,7 +86,9 @@ export default async function EditPinboardPage({
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-semibold">{pinboard.title}</h1>
-            <p className="text-sm text-gray-500 mt-1">pinboardly.com/{pinboard.slug}</p>
+            <p className="text-sm text-gray-500 mt-1">
+              pinboardly.com/{pinboard.slug}
+            </p>
           </div>
           <Link
             href={`/${pinboard.slug}`}
@@ -103,9 +108,9 @@ export default async function EditPinboardPage({
         />
 
         <div className="space-y-10">
-          <LinkManager pinboardId={pinboardId} initialLinks={links ?? []} />
-
           <NoteManager pinboardId={pinboardId} initialNotes={notes ?? []} />
+
+          <LinkManager pinboardId={pinboardId} initialLinks={links ?? []} />
 
           <EventManager pinboardId={pinboardId} initialEvents={events ?? []} />
         </div>
