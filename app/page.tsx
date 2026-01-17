@@ -21,7 +21,7 @@ export default function HomePage() {
         {/* Hero */}
         <div className="mt-4 text-center">
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            A public pinboard for links, notes and events
+            A public pinboard for notes, links and events
           </h1>
 
           <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-700 sm:text-lg">
@@ -59,18 +59,18 @@ export default function HomePage() {
 
           <div className="mt-8 grid gap-4 text-left sm:grid-cols-3">
             <div className="rounded-2xl border border-slate-200 p-5">
-              <h3 className="font-semibold">Links</h3>
-              <p className="mt-2 text-sm leading-6 text-slate-700">
-                Send people to the right place. Forms, documents, resources,
-                websites.
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-slate-200 p-5">
               <h3 className="font-semibold">Notes</h3>
               <p className="mt-2 text-sm leading-6 text-slate-700">
                 Share updates, guidance, or information that stays visible and
                 easy to find.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 p-5">
+              <h3 className="font-semibold">Links</h3>
+              <p className="mt-2 text-sm leading-6 text-slate-700">
+                Send people to the right place. Forms, documents, resources,
+                websites.
               </p>
             </div>
 
@@ -126,7 +126,7 @@ export default function HomePage() {
               <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-900 text-sm font-semibold text-white">
                 2
               </span>
-              <span className="mt-1">Add links, notes and events</span>
+              <span className="mt-1">Add notes, links and events</span>
             </li>
             <li className="flex gap-3">
               <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-900 text-sm font-semibold text-white">
@@ -145,7 +145,7 @@ export default function HomePage() {
             See the demo pinboard
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-slate-700">
-            The demo shows a complete Pinboardly pinboard with links, notes and
+            The demo shows a complete Pinboardly pinboard with notes, links and
             events, exactly as they appear in everyday use.
           </p>
 
@@ -185,7 +185,8 @@ export default function HomePage() {
 
           <ul className="mx-auto mt-5 max-w-2xl space-y-2 text-left text-slate-800">
             <li>• One public pinboard</li>
-            <li>• Links, notes and events included</li>
+            <li>• Notes, links and events included</li>
+            <li>• Up to 50 notes, 50 links and 100 events</li>
             <li>• Cancel anytime</li>
           </ul>
 
@@ -215,8 +216,7 @@ export default function HomePage() {
           </div>
 
           <div className="mt-6 text-sm text-slate-600">
-            <div>© 2026 Aldmere Ltd. All rights reserved.</div>
-            <div>Pinboardly is a product of Aldmere Ltd.</div>
+            © 2026 Pinboardly. A product of Aldmere Ltd.
           </div>
         </footer>
       </section>
