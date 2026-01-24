@@ -23,10 +23,10 @@ export default async function NewPinboardPage({
   // Allow admin to bypass email verification
   if (!isEmailVerified && !isAdmin) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-muted">
         <div className="max-w-2xl mx-auto px-6 py-10">
           <div className="mb-6">
-            <a href="/app/dashboard" className="text-sm text-blue-600 hover:text-blue-700">
+            <a href="/app/dashboard" className="text-sm text-primary hover:text-primary">
               ← Back to dashboard
             </a>
           </div>
@@ -44,17 +44,17 @@ export default async function NewPinboardPage({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted">
       <div className="max-w-2xl mx-auto px-6 py-10">
         <div className="mb-6">
-          <a href="/app/dashboard" className="text-sm text-blue-600 hover:text-blue-700">
+          <a href="/app/dashboard" className="text-sm text-primary hover:text-primary">
             ← Back to dashboard
           </a>
         </div>
 
         <h1 className="text-3xl font-semibold mb-8">Create New Pinboard</h1>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-8">
+        <div className="bg-white rounded-lg border border-border p-8">
           <NewPinboardForm isAdmin={isAdmin} error={params.error} />
         </div>
       </div>

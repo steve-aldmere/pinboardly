@@ -40,17 +40,17 @@ export default function PinboardSettings({
   }, [initialTitle]);
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
+    <div className="bg-white rounded-lg border border-border p-6 mb-8">
       <h2 className="text-xl font-semibold mb-4">Pinboard Settings</h2>
       <div className="space-y-4">
         <div>
           <div className="flex items-center justify-between mb-2">
-            <label className="text-sm font-medium text-gray-700">Title</label>
+            <label className="text-sm font-medium text-foreground">Title</label>
             {!isEditing && (
               <button
                 type="button"
                 onClick={() => setIsEditing(true)}
-                className="text-sm text-blue-600 hover:text-blue-700"
+                className="text-sm text-primary hover:text-primary"
               >
                 Edit
               </button>
@@ -66,13 +66,13 @@ export default function PinboardSettings({
                 maxLength={80}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
                 autoFocus
               />
               <div className="flex gap-3">
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700"
+                  className="px-4 py-2 bg-primary text-white text-sm rounded-lg hover:bg-primary"
                 >
                   Save
                 </button>
@@ -82,7 +82,7 @@ export default function PinboardSettings({
                     setIsEditing(false);
                     setTitle(initialTitle);
                   }}
-                  className="px-4 py-2 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200"
+                  className="px-4 py-2 bg-muted text-muted-foreground text-sm rounded-lg hover:bg-tint"
                 >
                   Cancel
                 </button>
@@ -90,7 +90,7 @@ export default function PinboardSettings({
             </form>
           ) : (
             <>
-              <p className="text-sm text-gray-900 font-medium">{title}</p>
+              <p className="text-sm text-foreground font-medium">{title}</p>
               {showSuccess && (
                 <p className="text-sm text-green-600 mt-2">Title updated successfully!</p>
               )}
@@ -100,24 +100,24 @@ export default function PinboardSettings({
 
         <div className="space-y-3 text-sm">
           <div>
-            <span className="text-gray-600">Status:</span>{" "}
+            <span className="text-muted-foreground">Status:</span>{" "}
             <span className="font-medium">{status}</span>
           </div>
           {trialEndsAt && (
             <div>
-              <span className="text-gray-600">Trial ends:</span>{" "}
+              <span className="text-muted-foreground">Trial ends:</span>{" "}
               <span>{new Date(trialEndsAt).toLocaleDateString()}</span>
             </div>
           )}
           {paidUntil && (
             <div>
-              <span className="text-gray-600">Paid until:</span>{" "}
+              <span className="text-muted-foreground">Paid until:</span>{" "}
               <span>{new Date(paidUntil).toLocaleDateString("en-GB", { timeZone: "UTC" })}</span>
             </div>
           )}
         </div>
 
-        <div className="pt-4 border-t border-gray-200">
+        <div className="pt-4 border-t border-border">
           <form action={removePinboardAction}>
             <input type="hidden" name="pinboardId" value={pinboardId} />
             <button

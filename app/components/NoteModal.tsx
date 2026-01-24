@@ -46,15 +46,15 @@ export default function NoteModal({
         className="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+        <div className="flex items-center justify-between p-6 border-b border-border">
           {note.title ? (
             <h2 className="text-2xl font-semibold">{note.title}</h2>
           ) : (
-            <h2 className="text-2xl font-semibold text-gray-400">Note</h2>
+            <h2 className="text-2xl font-semibold text-muted-foreground">Note</h2>
           )}
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-muted-foreground hover:text-muted-foreground transition-colors"
             aria-label="Close"
           >
             <svg

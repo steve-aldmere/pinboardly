@@ -28,7 +28,7 @@ export default async function EditPinboardPage({
 
   if (pinboardError) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
+      <div className="min-h-screen bg-muted flex items-center justify-center px-6">
         <p>Something went wrong loading this pinboard.</p>
       </div>
     );
@@ -36,7 +36,7 @@ export default async function EditPinboardPage({
 
   if (!pinboard) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
+      <div className="min-h-screen bg-muted flex items-center justify-center px-6">
         <p>Pinboard not found.</p>
       </div>
     );
@@ -65,19 +65,19 @@ export default async function EditPinboardPage({
 
   if (linksError || notesError || eventsError) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
+      <div className="min-h-screen bg-muted flex items-center justify-center px-6">
         <p>Something went wrong loading this pinboard.</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted">
       <div className="max-w-4xl mx-auto px-6 py-10">
         <div className="mb-6">
           <Link
             href="/app/dashboard"
-            className="text-sm text-blue-600 hover:text-blue-700"
+            className="text-sm text-primary hover:text-primary"
           >
             ← Back to dashboard
           </Link>
@@ -86,14 +86,14 @@ export default async function EditPinboardPage({
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-semibold">{pinboard.title}</h1>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-muted-foreground mt-1">
               pinboardly.com/{pinboard.slug}
             </p>
           </div>
           <Link
             href={`/${pinboard.slug}`}
             target="_blank"
-            className="text-sm text-blue-600 hover:text-blue-700"
+            className="text-sm text-primary hover:text-primary"
           >
             View public page →
           </Link>

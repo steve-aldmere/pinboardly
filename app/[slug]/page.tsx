@@ -64,13 +64,13 @@ export default async function PinboardPage({
     if (result.reason === "not_found") notFound();
 
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
+      <div className="min-h-screen bg-muted flex items-center justify-center px-6">
         <div className="max-w-md text-center">
           <h1 className="text-3xl font-bold mb-4">Pinboard Unavailable</h1>
-          <p className="text-gray-600 mb-6">
+          <p className="text-muted-foreground mb-6">
             This pinboard needs an active subscription to stay live.
           </p>
-          <Link href="/" className="text-blue-600 hover:text-blue-700">
+          <Link href="/" className="text-primary hover:text-primary">
             ← Back to home
           </Link>
         </div>
@@ -84,11 +84,11 @@ export default async function PinboardPage({
 
   if (!contentResult.ok) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-muted">
         <div className="max-w-4xl mx-auto px-6 py-10">
           <h1 className="text-4xl font-bold mb-6">{pinboard.title}</h1>
-          <div className="bg-white border border-gray-200 rounded-lg p-6">
-            <p className="text-gray-600">Could not load pinboard content.</p>
+          <div className="bg-white border border-border rounded-lg p-6">
+            <p className="text-muted-foreground">Could not load pinboard content.</p>
           </div>
         </div>
       </div>
@@ -104,11 +104,11 @@ export default async function PinboardPage({
   const isDemo = slug === "demo-board";
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted">
       <div className="max-w-4xl mx-auto px-6 py-10">
         {isDemo ? (
-          <div className="mb-8 rounded-xl border border-slate-200 bg-white p-5">
-            <p className="text-sm text-slate-700">
+          <div className="mb-8 rounded-xl border border-border bg-white p-5">
+            <p className="text-sm text-muted-foreground">
               <span className="font-semibold">Demo pinboard:</span> This is an
               example of a pinboard. Everything you can see is editable,
               including the title and the content in each Note, Link and Event.
@@ -116,7 +116,7 @@ export default async function PinboardPage({
             <div className="mt-3">
               <Link
                 href="/app/pinboards/new"
-                className="text-sm font-medium text-blue-600 hover:text-blue-700"
+                className="text-sm font-medium text-primary hover:text-primary"
               >
                 Create your own pinboard →
               </Link>
@@ -132,7 +132,7 @@ export default async function PinboardPage({
             <h2 className="text-2xl font-semibold">Notes</h2>
             <Link
               href={`/${slug}/notes`}
-              className="text-sm text-blue-600 hover:text-blue-700"
+              className="text-sm text-primary hover:text-primary"
             >
               View all →
             </Link>
@@ -141,8 +141,8 @@ export default async function PinboardPage({
           {notesPreview.length > 0 ? (
             <NotesOverviewClient notes={notesPreview} slug={slug} />
           ) : (
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <p className="text-gray-600">No notes yet.</p>
+            <div className="bg-white border border-border rounded-lg p-6">
+              <p className="text-muted-foreground">No notes yet.</p>
             </div>
           )}
         </section>
@@ -153,7 +153,7 @@ export default async function PinboardPage({
             <h2 className="text-2xl font-semibold">Links</h2>
             <Link
               href={`/${slug}/links`}
-              className="text-sm text-blue-600 hover:text-blue-700"
+              className="text-sm text-primary hover:text-primary"
             >
               View all →
             </Link>
@@ -164,25 +164,25 @@ export default async function PinboardPage({
               {linksPreview.map((l) => (
                 <div
                   key={l.id}
-                  className="bg-white border border-gray-200 rounded-lg p-4"
+                  className="bg-white border border-border rounded-lg p-4"
                 >
                   <a
                     href={l.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-700 underline font-medium"
+                    className="text-primary hover:text-primary underline font-medium"
                   >
                     {l.title}
                   </a>
                   {l.description ? (
-                    <p className="text-sm text-gray-600 mt-1">{l.description}</p>
+                    <p className="text-sm text-muted-foreground mt-1">{l.description}</p>
                   ) : null}
                 </div>
               ))}
             </div>
           ) : (
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <p className="text-gray-600">No links yet.</p>
+            <div className="bg-white border border-border rounded-lg p-6">
+              <p className="text-muted-foreground">No links yet.</p>
             </div>
           )}
         </section>
@@ -193,7 +193,7 @@ export default async function PinboardPage({
             <h2 className="text-2xl font-semibold">Events</h2>
             <Link
               href={`/${slug}/events`}
-              className="text-sm text-blue-600 hover:text-blue-700"
+              className="text-sm text-primary hover:text-primary"
             >
               View all →
             </Link>
@@ -204,14 +204,14 @@ export default async function PinboardPage({
               {eventsPreview.map((e) => (
                 <div
                   key={e.id}
-                  className="bg-white border border-gray-200 rounded-lg p-4"
+                  className="bg-white border border-border rounded-lg p-4"
                 >
-                  <div className="text-sm text-blue-600 font-medium">
+                  <div className="text-sm text-primary font-medium">
                     {formatEventDate(e.date, e.time)}
                   </div>
                   <div className="font-semibold mt-1">{e.title}</div>
                   {e.location ? (
-                    <div className="text-sm text-gray-600 mt-1">
+                    <div className="text-sm text-muted-foreground mt-1">
                       📍 {e.location}
                     </div>
                   ) : null}
@@ -219,8 +219,8 @@ export default async function PinboardPage({
               ))}
             </div>
           ) : (
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <p className="text-gray-600">No events yet.</p>
+            <div className="bg-white border border-border rounded-lg p-6">
+              <p className="text-muted-foreground">No events yet.</p>
             </div>
           )}
         </section>

@@ -1,21 +1,42 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Brand & UI tokens (Pinboardly spec) */
+  --background: #ffffff;            /* Page Background */
+  --foreground: #0f172a;            /* Primary Text */
+
+  --muted: #f8fafc;                 /* Card / Surface Background */
+  --muted-foreground: #475569;      /* Secondary Text */
+
+  --border: #e2e8f0;                /* Borders / Dividers */
+  --input: #e2e8f0;                 /* Input outlines (same as border) */
+
+  --primary: #334155;               /* Slate Blue */
+  --tint: #e0f2fe;                  /* Interaction Tint */
 }
 
 @theme inline {
+  /* Keep existing mappings */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  /* Add required token mappings */
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-primary: var(--primary);
+  --color-tint: var(--tint);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
+/* If you genuinely want dark mode later, we can define a compliant palette.
+   For now, keep this minimal and safe: do not override tokens in dark mode. */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Intentionally left blank */
   }
 }
 

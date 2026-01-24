@@ -79,17 +79,17 @@ export default async function DemoLinkPage({
         {page.title}
       </h1>
 
-      <p className="mt-4 text-base leading-relaxed text-neutral-700">
+      <p className="mt-4 text-base leading-relaxed text-muted-foreground">
         {page.summary}
       </p>
 
-      <div className="mt-8 rounded-2xl border border-neutral-200 bg-white p-4">
+      <div className="mt-8 rounded-2xl border border-border bg-white p-4">
         <Image
           src={page.imageSrc}
           alt={page.imageAlt}
           width={1400}
           height={900}
-          className="h-auto w-full rounded-xl border border-neutral-200"
+          className="h-auto w-full rounded-xl border border-border"
           priority
         />
       </div>

@@ -12,7 +12,7 @@ export default function Paywall({
     <div className="max-w-3xl mx-auto mt-10 px-6 pb-20">
       <h1 className="text-3xl font-semibold">Pinboard inactive</h1>
 
-      <p className="mt-4 text-gray-700">
+      <p className="mt-4 text-foreground">
         This Pinboard is no longer active. To keep your Pinboard and its URL, you need an active
         Pinboardly account.
       </p>

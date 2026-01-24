@@ -41,16 +41,16 @@ function MarkdownPreview({ content }: { content: string }) {
     
     // Restore code blocks (they're already escaped)
     codeBlocks.forEach((code, i) => {
-      html = html.replace(`CODE_BLOCK_${i}`, `<pre class="bg-gray-100 p-2 rounded overflow-x-auto my-2"><code>${code}</code></pre>`);
+      html = html.replace(`CODE_BLOCK_${i}`, `<pre class="bg-muted p-2 rounded overflow-x-auto my-2"><code>${code}</code></pre>`);
     });
     
     // Restore inline code
     inlineCodes.forEach((code, i) => {
-      html = html.replace(`INLINE_CODE_${i}`, `<code class="bg-gray-100 px-1 rounded">${code}</code>`);
+      html = html.replace(`INLINE_CODE_${i}`, `<code class="bg-muted px-1 rounded">${code}</code>`);
     });
     
     // Process links (after escaping to avoid issues)
-    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">$1</a>');
+    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">$1</a>');
     
     // Process headers (must be after code processing to avoid matching in code)
     const lines = html.split("\n");
@@ -155,7 +155,7 @@ function MarkdownPreview({ content }: { content: string }) {
 
   return (
     <div
-      className="text-sm text-gray-700 max-w-none"
+      className="text-sm text-foreground max-w-none"
       dangerouslySetInnerHTML={{ __html: parseMarkdown(content) }}
     />
   );
@@ -255,11 +255,11 @@ export default function NoteManager({
       <div className="flex items-center justify-between mb-4">
         <div>
           <h2 className="text-2xl font-semibold">Notes</h2>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             {notes.length} / 50 notes
           </p>
           {notes.length >= 2 && (
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Drag items to reorder
             </p>
           )}
@@ -267,7 +267,7 @@ export default function NoteManager({
         {notes.length < 50 && (
           <button
             onClick={() => setShowAddForm(true)}
-            className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700"
+            className="px-4 py-2 bg-primary text-white text-sm rounded-lg hover:bg-primary"
           >
             Add Note
           </button>
@@ -275,13 +275,13 @@ export default function NoteManager({
       </div>
 
       {showAddForm && (
-        <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+        <div className="bg-white border border-border rounded-lg p-6 mb-6">
           <h3 className="font-medium mb-4">Add New Note</h3>
           <form action={addNoteAction} className="space-y-4">
             <input type="hidden" name="pinboardId" value={pinboardId} />
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-foreground mb-1">
                 Title (optional)
               </label>
               <input
@@ -289,12 +289,12 @@ export default function NoteManager({
                 name="title"
                 maxLength={80}
                 placeholder="e.g., Meeting Notes"
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-foreground mb-1">
                 Content * (supports Markdown)
               </label>
               <textarea
@@ -303,9 +303,9 @@ export default function NoteManager({
                 maxLength={10000}
                 rows={8}
                 placeholder="Enter your note content (Markdown supported)..."
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
+                className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint font-mono"
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 Markdown is supported. Maximum 10,000 characters.
               </p>
             </div>
@@ -313,14 +313,14 @@ export default function NoteManager({
             <div className="flex gap-3">
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700"
+                className="px-4 py-2 bg-primary text-white text-sm rounded-lg hover:bg-primary"
               >
                 Add Note
               </button>
               <button
                 type="button"
                 onClick={() => setShowAddForm(false)}
-                className="px-4 py-2 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200"
+                className="px-4 py-2 bg-muted text-foreground text-sm rounded-lg hover:bg-tint"
               >
                 Cancel
               </button>
@@ -330,9 +330,9 @@ export default function NoteManager({
       )}
 
       {notes.length === 0 ? (
-        <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
-          <p className="text-gray-600">No notes yet.</p>
-          <p className="text-sm text-gray-500 mt-1">
+        <div className="bg-muted border border-border rounded-lg p-8 text-center">
+          <p className="text-muted-foreground">No notes yet.</p>
+          <p className="text-sm text-muted-foreground mt-1">
             Add your first note to get started.
           </p>
         </div>
@@ -346,10 +346,10 @@ export default function NoteManager({
               onDrop={(e) => handleDrop(e, note.id)}
               className={`bg-white border rounded-lg p-4 transition-all ${
                 draggedId === note.id
-                  ? "opacity-50 border-blue-400"
+                  ? "opacity-50 border-border"
                   : dragOverId === note.id
-                  ? "border-blue-500 shadow-md border-2"
-                  : "border-gray-200"
+                  ? "border-border shadow-md border-2"
+                  : "border-border"
               } ${isSaving ? "opacity-75" : "hover:shadow-sm"}`}
             >
               {editingId === note.id ? (
@@ -359,7 +359,7 @@ export default function NoteManager({
                     <button
                       type="button"
                       onClick={() => setEditingId(null)}
-                      className="text-sm text-gray-600 hover:text-gray-700"
+                      className="text-sm text-muted-foreground hover:text-foreground"
                     >
                       Cancel
                     </button>
@@ -368,7 +368,7 @@ export default function NoteManager({
                   <input type="hidden" name="pinboardId" value={pinboardId} />
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-foreground mb-1">
                       Title (optional)
                     </label>
                     <input
@@ -376,12 +376,12 @@ export default function NoteManager({
                       name="title"
                       maxLength={80}
                       defaultValue={note.title || ""}
-                      className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-foreground mb-1">
                       Content * (supports Markdown)
                     </label>
                     <textarea
@@ -390,9 +390,9 @@ export default function NoteManager({
                       maxLength={10000}
                       rows={8}
                       defaultValue={note.body_markdown}
-                      className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
+                      className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint font-mono"
                     />
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-muted-foreground mt-1">
                       Markdown is supported. Maximum 10,000 characters.
                     </p>
                   </div>
@@ -400,14 +400,14 @@ export default function NoteManager({
                   <div className="flex gap-3">
                     <button
                       type="submit"
-                      className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700"
+                      className="px-4 py-2 bg-primary text-white text-sm rounded-lg hover:bg-primary"
                     >
                       Save Changes
                     </button>
                     <button
                       type="button"
                       onClick={() => setEditingId(null)}
-                      className="px-4 py-2 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200"
+                      className="px-4 py-2 bg-muted text-foreground text-sm rounded-lg hover:bg-tint"
                     >
                       Cancel
                     </button>
@@ -429,11 +429,11 @@ export default function NoteManager({
                             handleDragEnd();
                           }}
                           className={`cursor-grab active:cursor-grabbing flex-shrink-0 pt-1 select-none ${
-                            isSaving ? "cursor-wait opacity-50" : "hover:text-gray-600"
+                            isSaving ? "cursor-wait opacity-50" : "hover:text-muted-foreground"
                           }`}
                           style={{ userSelect: "none" }}
                         >
-                          <span className="text-gray-400 text-xl leading-none">≡</span>
+                          <span className="text-muted-foreground text-xl leading-none">≡</span>
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
@@ -449,7 +449,7 @@ export default function NoteManager({
                       <button
                         type="button"
                         onClick={() => setEditingId(note.id)}
-                        className="text-sm text-blue-600 hover:text-blue-700"
+                        className="text-sm text-primary hover:text-primary"
                         disabled={isSaving}
                       >
                         Edit

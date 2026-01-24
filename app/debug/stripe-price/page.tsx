@@ -54,11 +54,9 @@ export default function StripePriceTestPage() {
         <div style={{ marginTop: "20px" }}>
           <h2>Response:</h2>
           <pre
+            className="bg-muted border border-border p-2.5 overflow-auto"
             style={{
-              background: "#f5f5f5",
               padding: "10px",
-              border: "1px solid #ddd",
-              overflow: "auto",
             }}
           >
             {result}

@@ -5,11 +5,12 @@ export default function BillingCancelPage() {
       <p>
         <a
           href="/billing"
-          style={{ color: "#0066cc", textDecoration: "underline", marginRight: "20px" }}
+          className="text-primary underline"
+          style={{ marginRight: "20px" }}
         >
           Return to billing
         </a>
-        <a href="/" style={{ color: "#0066cc", textDecoration: "underline" }}>
+        <a href="/" className="text-primary underline">
           Return to home
         </a>
       </p>

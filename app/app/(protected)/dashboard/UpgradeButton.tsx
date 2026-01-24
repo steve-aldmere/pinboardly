@@ -56,7 +56,7 @@ export default function UpgradeButton({
     <button
       onClick={handleUpgrade}
       disabled={loading}
-      className="text-sm text-blue-600 hover:text-blue-700 disabled:text-gray-400"
+      className="text-sm text-primary hover:text-primary disabled:text-muted-foreground"
     >
       {loading ? "Loading..." : "Upgrade"}
     </button>

@@ -60,7 +60,7 @@ if (!userData?.user) {
   return (
     <div className="max-w-xl mx-auto py-10 px-6">
       <h1 className="text-2xl font-semibold">Join org</h1>
-      <p className="mt-4 text-sm text-gray-600">{msg}</p>
+      <p className="mt-4 text-sm text-muted-foreground">{msg}</p>
       {errorMsg ? <p className="mt-4 text-sm text-red-600">{errorMsg}</p> : null}
     </div>
   );

@@ -172,9 +172,9 @@ export default function LinkManager({
       <div className="flex items-center justify-between mb-4">
         <div>
           <h2 className="text-2xl font-semibold">Links</h2>
-          <p className="text-sm text-gray-500 mt-1">{links.length} / 50 links</p>
+          <p className="text-sm text-muted-foreground mt-1">{links.length} / 50 links</p>
           {links.length >= 2 && (
-            <p className="text-xs text-gray-400 mt-1">Drag items to reorder</p>
+            <p className="text-xs text-muted-foreground mt-1">Drag items to reorder</p>
           )}
         </div>
 
@@ -185,7 +185,7 @@ export default function LinkManager({
               setEditingId(null);
               setShowAddForm(true);
             }}
-            className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700"
+            className="px-4 py-2 bg-primary text-white text-sm rounded-lg hover:bg-primary"
           >
             Add Link
           </button>
@@ -193,7 +193,7 @@ export default function LinkManager({
       </div>
 
       {showAddForm && (
-        <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+        <div className="bg-white border border-border rounded-lg p-6 mb-6">
           <h3 className="font-medium mb-4">Add New Link</h3>
 
           <form
@@ -209,14 +209,14 @@ export default function LinkManager({
             <input type="hidden" name="pinboard_id" value={pinboardId} />
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
+              <label className="block text-sm font-medium text-foreground mb-1">Title *</label>
               <input
                 type="text"
                 name="title"
                 required
                 maxLength={120}
                 placeholder="e.g., Scout Association Website"
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
               />
               {fieldErrors.title && (
                 <p className="text-xs text-red-600 mt-1">{fieldErrors.title}</p>
@@ -224,7 +224,7 @@ export default function LinkManager({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">URL *</label>
+              <label className="block text-sm font-medium text-foreground mb-1">URL *</label>
               <input
                 type="text"
                 name="url"
@@ -233,13 +233,13 @@ export default function LinkManager({
                 onBlur={(e) => {
                   e.currentTarget.value = normalizeUrlClient(e.currentTarget.value);
                 }}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
               />
               {fieldErrors.url && <p className="text-xs text-red-600 mt-1">{fieldErrors.url}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-foreground mb-1">
                 Description (optional)
               </label>
               <textarea
@@ -247,7 +247,7 @@ export default function LinkManager({
                 maxLength={500}
                 rows={2}
                 placeholder="Brief description..."
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
               />
               {fieldErrors.description && (
                 <p className="text-xs text-red-600 mt-1">{fieldErrors.description}</p>
@@ -259,7 +259,7 @@ export default function LinkManager({
 
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700"
+                className="px-4 py-2 bg-primary text-white text-sm rounded-lg hover:bg-primary"
               >
                 Add Link
               </button>
@@ -270,7 +270,7 @@ export default function LinkManager({
                   resetErrors();
                   setShowAddForm(false);
                 }}
-                className="px-4 py-2 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200"
+                className="px-4 py-2 bg-muted text-muted-foreground text-sm rounded-lg hover:bg-tint"
               >
                 Cancel
               </button>
@@ -280,9 +280,9 @@ export default function LinkManager({
       )}
 
       {links.length === 0 ? (
-        <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
-          <p className="text-gray-600">No links yet.</p>
-          <p className="text-sm text-gray-500 mt-1">Add your first link to get started.</p>
+        <div className="bg-muted border border-border rounded-lg p-8 text-center">
+          <p className="text-muted-foreground">No links yet.</p>
+          <p className="text-sm text-muted-foreground mt-1">Add your first link to get started.</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -293,10 +293,10 @@ export default function LinkManager({
               onDrop={(e) => handleDrop(e, link.id)}
               className={`bg-white border rounded-lg p-4 transition-all ${
                 draggedId === link.id
-                  ? "opacity-50 border-blue-400"
+                  ? "opacity-50 border-border"
                   : dragOverId === link.id
-                  ? "border-blue-500 shadow-md border-2"
-                  : "border-gray-200"
+                  ? "border-border shadow-md border-2"
+                  : "border-border"
               } ${isSaving ? "opacity-75" : "hover:shadow-sm"}`}
             >
               <div className="flex items-start justify-between gap-3">
@@ -313,11 +313,11 @@ export default function LinkManager({
                         setDragOverId(null);
                       }}
                       className={`cursor-grab active:cursor-grabbing flex-shrink-0 pt-1 select-none ${
-                        isSaving ? "cursor-wait opacity-50" : "hover:text-gray-600"
+                        isSaving ? "cursor-wait opacity-50" : "hover:text-muted-foreground"
                       }`}
                       style={{ userSelect: "none" }}
                     >
-                      <span className="text-gray-400 text-xl leading-none">≡</span>
+                      <span className="text-muted-foreground text-xl leading-none">≡</span>
                     </div>
                   )}
 
@@ -328,13 +328,13 @@ export default function LinkManager({
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm text-blue-600 hover:underline break-all"
+                      className="text-sm text-primary hover:underline break-all"
                     >
                       {link.url}
                     </a>
 
                     {link.description && (
-                      <p className="text-sm text-gray-600 mt-2">{link.description}</p>
+                      <p className="text-sm text-muted-foreground mt-2">{link.description}</p>
                     )}
                   </div>
                 </div>
@@ -347,7 +347,7 @@ export default function LinkManager({
                         resetErrors();
                         setEditingId(null);
                       }}
-                      className="text-sm text-gray-600 hover:text-gray-700"
+                      className="text-sm text-muted-foreground hover:text-muted-foreground"
                     >
                       Cancel
                     </button>
@@ -361,7 +361,7 @@ export default function LinkManager({
                         setShowAddForm(false);
                         setEditingId(link.id);
                       }}
-                      className="text-sm text-blue-600 hover:text-blue-700"
+                      className="text-sm text-primary hover:text-primary"
                       disabled={isSaving}
                     >
                       Edit
@@ -391,7 +391,7 @@ export default function LinkManager({
               </div>
 
               {editingId === link.id && (
-                <div className="mt-4 pt-4 border-t border-gray-200">
+                <div className="mt-4 pt-4 border-t border-border">
                   <form
                     className="space-y-4"
                     onSubmit={async (e) => {
@@ -406,14 +406,14 @@ export default function LinkManager({
                     <input type="hidden" name="id" value={link.id} />
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
+                      <label className="block text-sm font-medium text-foreground mb-1">Title *</label>
                       <input
                         type="text"
                         name="title"
                         required
                         maxLength={120}
                         defaultValue={link.title}
-                        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
                       />
                       {fieldErrors.title && (
                         <p className="text-xs text-red-600 mt-1">{fieldErrors.title}</p>
@@ -421,7 +421,7 @@ export default function LinkManager({
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">URL *</label>
+                      <label className="block text-sm font-medium text-foreground mb-1">URL *</label>
                       <input
                         type="text"
                         name="url"
@@ -430,7 +430,7 @@ export default function LinkManager({
                         onBlur={(e) => {
                           e.currentTarget.value = normalizeUrlClient(e.currentTarget.value);
                         }}
-                        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
                       />
                       {fieldErrors.url && (
                         <p className="text-xs text-red-600 mt-1">{fieldErrors.url}</p>
@@ -438,7 +438,7 @@ export default function LinkManager({
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-foreground mb-1">
                         Description (optional)
                       </label>
                       <textarea
@@ -446,7 +446,7 @@ export default function LinkManager({
                         maxLength={500}
                         rows={2}
                         defaultValue={link.description || ""}
-                        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
                       />
                       {fieldErrors.description && (
                         <p className="text-xs text-red-600 mt-1">{fieldErrors.description}</p>
@@ -458,7 +458,7 @@ export default function LinkManager({
 
                       <button
                         type="submit"
-                        className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700"
+                        className="px-4 py-2 bg-primary text-white text-sm rounded-lg hover:bg-primary"
                       >
                         Save Changes
                       </button>
@@ -469,7 +469,7 @@ export default function LinkManager({
                           resetErrors();
                           setEditingId(null);
                         }}
-                        className="px-4 py-2 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200"
+                        className="px-4 py-2 bg-muted text-muted-foreground text-sm rounded-lg hover:bg-tint"
                       >
                         Cancel
                       </button>

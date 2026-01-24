@@ -31,16 +31,16 @@ export default function MarkdownRenderer({ content }: { content: string }) {
     
     // Restore code blocks (they're already escaped)
     codeBlocks.forEach((code, i) => {
-      html = html.replace(`CODE_BLOCK_${i}`, `<pre class="bg-gray-100 p-2 rounded overflow-x-auto my-2"><code>${code}</code></pre>`);
+      html = html.replace(`CODE_BLOCK_${i}`, `<pre class="bg-muted p-2 rounded overflow-x-auto my-2"><code>${code}</code></pre>`);
     });
     
     // Restore inline code
     inlineCodes.forEach((code, i) => {
-      html = html.replace(`INLINE_CODE_${i}`, `<code class="bg-gray-100 px-1 rounded">${code}</code>`);
+      html = html.replace(`INLINE_CODE_${i}`, `<code class="bg-muted px-1 rounded">${code}</code>`);
     });
     
     // Process links (after escaping to avoid issues)
-    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">$1</a>');
+    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">$1</a>');
     
     // Process headers (must be after code processing to avoid matching in code)
     const lines = html.split("\n");
@@ -145,7 +145,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
 
   return (
     <div
-      className="text-gray-700 max-w-none"
+      className="text-foreground max-w-none"
       dangerouslySetInnerHTML={{ __html: parseMarkdown(content) }}
     />
   );

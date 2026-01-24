@@ -6,19 +6,19 @@ export default function TermsPage() {
       <div className="mx-auto max-w-3xl px-6 py-12">
         <Link
           href="/"
-          className="text-sm font-medium text-blue-600 hover:text-blue-700"
+          className="text-sm font-medium text-primary hover:text-primary"
         >
           ← Back to home
         </Link>
 
-        <h1 className="mt-6 text-3xl font-semibold tracking-tight text-gray-900">
+        <h1 className="mt-6 text-3xl font-semibold tracking-tight text-foreground">
           Terms of Service
         </h1>
-        <p className="mt-3 text-sm text-gray-600">Last updated: 17 January 2026</p>
+        <p className="mt-3 text-sm text-muted-foreground">Last updated: 17 January 2026</p>
 
-        <div className="mt-8 space-y-6 text-sm leading-relaxed text-gray-700">
+        <div className="mt-8 space-y-6 text-sm leading-relaxed text-muted-foreground">
           <section>
-            <h2 className="text-base font-semibold text-gray-900">
+            <h2 className="text-base font-semibold text-foreground">
               1. About Pinboardly
             </h2>
             <p className="mt-2">
@@ -28,7 +28,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-base font-semibold text-gray-900">2. Accounts</h2>
+            <h2 className="text-base font-semibold text-foreground">2. Accounts</h2>
             <p className="mt-2">
               You are responsible for your account credentials and for all activity under your account.
               Please keep your login details secure.
@@ -36,7 +36,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-base font-semibold text-gray-900">
+            <h2 className="text-base font-semibold text-foreground">
               3. Subscriptions and billing
             </h2>
             <p className="mt-2">
@@ -46,7 +46,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-base font-semibold text-gray-900">4. Your content</h2>
+            <h2 className="text-base font-semibold text-foreground">4. Your content</h2>
             <p className="mt-2">
               You are responsible for the content you publish to your pinboard. Please do not post anything
               unlawful, harmful, or that infringes the rights of others.
@@ -54,7 +54,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-base font-semibold text-gray-900">5. Availability</h2>
+            <h2 className="text-base font-semibold text-foreground">5. Availability</h2>
             <p className="mt-2">
               We aim to keep Pinboardly available and reliable, but we do not guarantee uninterrupted service.
               We may update or change parts of the service over time.
@@ -62,7 +62,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-base font-semibold text-gray-900">
+            <h2 className="text-base font-semibold text-foreground">
               6. Limitation of liability
             </h2>
             <p className="mt-2">
@@ -72,12 +72,12 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-base font-semibold text-gray-900">7. Contact</h2>
+            <h2 className="text-base font-semibold text-foreground">7. Contact</h2>
             <p className="mt-2">
               If you have questions about these terms, please contact us via the{" "}
               <Link
                 href="/support"
-                className="font-medium text-blue-600 hover:text-blue-700"
+                className="font-medium text-primary hover:text-primary"
               >
                 Support
               </Link>{" "}
@@ -86,8 +86,8 @@ export default function TermsPage() {
           </section>
 
           <section className="pt-2">
-            <h2 className="text-base font-semibold text-gray-900">Company details</h2>
-            <p className="mt-2 text-gray-600">
+            <h2 className="text-base font-semibold text-foreground">Company details</h2>
+            <p className="mt-2 text-muted-foreground">
               Pinboardly is a product of Aldmere Ltd. Company number: 16961004. Registered office:
               2 Deleval Crescent, Shiremoor, NE27 0FA.
             </p>

@@ -17,7 +17,7 @@ export default function VerifyEmailClient({
     <div className="text-center">
       <div className="mb-6">
         <svg
-          className="mx-auto h-16 w-16 text-blue-600"
+          className="mx-auto h-16 w-16 text-primary"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -33,12 +33,12 @@ export default function VerifyEmailClient({
 
       <h1 className="text-2xl font-semibold mb-4">Check your email</h1>
 
-      <p className="text-gray-600 mb-6">
-        We've sent a verification email to <strong className="text-gray-900">{email}</strong>. Click the link to verify your account.
+      <p className="text-muted-foreground mb-6">
+        We've sent a verification email to <strong className="text-foreground">{email}</strong>. Click the link to verify your account.
       </p>
 
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-        <p className="text-sm text-blue-800">
+      <div className="bg-tint border border-border rounded-lg p-4 mb-6">
+        <p className="text-sm text-foreground">
           <strong>Can't find it?</strong> Check your spam/junk folder.
         </p>
       </div>
@@ -61,16 +61,16 @@ export default function VerifyEmailClient({
           type="submit"
           disabled={isResending}
           onClick={() => setIsResending(true)}
-          className="w-full rounded-lg bg-blue-600 px-6 py-3 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full rounded-lg bg-primary px-6 py-3 text-sm font-medium text-white hover:bg-primary disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isResending ? "Sending..." : "Resend verification email"}
         </button>
       </form>
 
-      <div className="mt-6 pt-6 border-t border-gray-200">
+      <div className="mt-6 pt-6 border-t border-border">
         <a
           href="/app/login"
-          className="text-sm text-gray-600 hover:text-gray-900"
+          className="text-sm text-muted-foreground hover:text-foreground"
         >
           ← Back to sign in
         </a>

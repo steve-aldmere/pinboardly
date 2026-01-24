@@ -87,7 +87,7 @@ export default function BlockEditor({
         <button
           type="submit"
           disabled={saving}
-          className="mt-2 px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
+          className="mt-2 px-4 py-2 bg-primary text-white rounded disabled:opacity-50"
         >
           {saving ? "Saving…" : "Save Block"}
         </button>
@@ -111,7 +111,7 @@ export default function BlockEditor({
         ))}
 
         {blocks.length === 0 && (
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-muted-foreground">
             No blocks on this page yet. Add your first one above.
           </p>
         )}

@@ -18,7 +18,7 @@ export default async function BillingSuccessPage({
         </p>
       )}
       <p>
-        <a href="/" style={{ color: "#0066cc", textDecoration: "underline" }}>
+        <a href="/" className="text-primary underline">
           Return to home
         </a>
       </p>

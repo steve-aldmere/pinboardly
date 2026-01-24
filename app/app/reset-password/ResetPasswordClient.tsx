@@ -37,12 +37,12 @@ export default function ResetPasswordClient() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-muted px-4">
       <div className="w-full max-w-md bg-white rounded-xl shadow-sm p-8">
-        <h1 className="text-xl font-semibold text-gray-900 text-center">
+        <h1 className="text-xl font-semibold text-foreground text-center">
           Choose a new password
         </h1>
-        <p className="mt-2 text-sm text-gray-600 text-center">
+        <p className="mt-2 text-sm text-muted-foreground text-center">
           Set a new password for your account.
         </p>
 
@@ -51,11 +51,11 @@ export default function ResetPasswordClient() {
         ) : null}
 
         {status === "saved" ? (
-          <div className="mt-6 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700">
+          <div className="mt-6 rounded-lg border border-border bg-muted px-4 py-3 text-sm text-muted-foreground">
             Password updated. You can now{" "}
             <Link
               href="/app/login"
-              className="font-medium text-blue-600 hover:text-blue-700"
+              className="font-medium text-primary hover:text-primary"
             >
               sign in
             </Link>
@@ -68,26 +68,26 @@ export default function ResetPasswordClient() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="New password"
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-lg border border-border px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
             />
             <input
               type="password"
               value={confirm}
               onChange={(e) => setConfirm(e.target.value)}
               placeholder="Confirm new password"
-              className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-lg border border-border px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
             />
             <button
               type="submit"
               disabled={status === "saving"}
-              className="w-full rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-60"
+              className="w-full rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary disabled:opacity-60"
             >
               {status === "saving" ? "Saving..." : "Update password"}
             </button>
 
             <Link
               href="/app/login"
-              className="block w-full text-center text-sm font-medium text-gray-600 hover:text-gray-900"
+              className="block w-full text-center text-sm font-medium text-muted-foreground hover:text-foreground"
             >
               Back to sign in
             </Link>

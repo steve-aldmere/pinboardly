@@ -95,9 +95,9 @@ export default function NotesClient({ notes }: { notes: NotePin[] }) {
 
   if (notes.length === 0) {
     return (
-      <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
-        <p className="text-gray-600">No notes yet.</p>
-        <p className="text-sm text-gray-500 mt-1">
+      <div className="bg-muted border border-border rounded-lg p-8 text-center">
+        <p className="text-muted-foreground">No notes yet.</p>
+        <p className="text-sm text-muted-foreground mt-1">
           This pinboard doesn't have any notes.
         </p>
       </div>
@@ -116,16 +116,16 @@ export default function NotesClient({ notes }: { notes: NotePin[] }) {
               key={note.id}
               type="button"
               onClick={() => openModal(note)}
-              className="w-full text-left bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
+              className="w-full text-left bg-white border border-border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
             >
               {note.title && (
                 <h3 className="font-medium mb-2 text-lg">{note.title}</h3>
               )}
-              <p className="text-sm text-gray-700">
+              <p className="text-sm text-foreground">
                 {preview}
                 {hasMore && "..."}
               </p>
-              <p className="text-xs text-blue-600 mt-2">Click to view full note</p>
+              <p className="text-xs text-primary mt-2">Click to view full note</p>
             </button>
           );
         })}
@@ -145,10 +145,10 @@ export default function NotesClient({ notes }: { notes: NotePin[] }) {
             aria-label="Close note"
           />
 
-          <div className="relative z-10 w-full max-w-2xl rounded-xl bg-white shadow-xl border border-gray-200">
+          <div className="relative z-10 w-full max-w-2xl rounded-xl bg-white shadow-xl border border-border">
             <div className="flex items-start justify-between gap-4 px-5 py-4 border-b">
               <div className="min-w-0">
-                <div className="text-xs text-gray-500">Note</div>
+                <div className="text-xs text-muted-foreground">Note</div>
                 <h3 className="text-xl font-semibold break-words">
                   {selectedNote.title || "Untitled note"}
                 </h3>
@@ -157,19 +157,19 @@ export default function NotesClient({ notes }: { notes: NotePin[] }) {
               <button
                 type="button"
                 onClick={closeModal}
-                className="rounded-lg border border-gray-300 px-3 py-1 text-sm hover:bg-gray-50"
+                className="rounded-lg border border-border px-3 py-1 text-sm hover:bg-tint"
               >
                 Close
               </button>
             </div>
 
             <div className="px-5 py-4 max-h-[70vh] overflow-auto">
-              <pre className="whitespace-pre-wrap text-sm text-gray-800 font-sans">
+              <pre className="whitespace-pre-wrap text-sm text-foreground font-sans">
                 {selectedNote.body_markdown}
               </pre>
             </div>
 
-            <div className="px-5 py-3 border-t text-xs text-gray-500">
+            <div className="px-5 py-3 border-t text-xs text-muted-foreground">
               Shareable link:{" "}
               <span className="font-mono">{`?note=${selectedNote.id}`}</span>
             </div>

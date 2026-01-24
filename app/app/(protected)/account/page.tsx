@@ -21,10 +21,10 @@ export default async function AccountPage({
   const isEmailVerified = !!userData.user.email_confirmed_at;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted">
       <div className="max-w-2xl mx-auto px-6 py-10">
         <div className="mb-6">
-          <Link href="/app/dashboard" className="text-sm text-blue-600 hover:text-blue-700">
+          <Link href="/app/dashboard" className="text-sm text-primary hover:text-primary">
             ← Back to dashboard
           </Link>
         </div>
@@ -34,8 +34,8 @@ export default async function AccountPage({
         <div className="space-y-4 mb-6">
           <ManageSubscriptionButton />
 
-          <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
-            <p className="text-sm text-gray-700">
+          <div className="rounded-lg border border-border bg-muted p-4">
+            <p className="text-sm text-muted-foreground">
               Subscriptions are managed securely by Stripe. Each pinboard has its own subscription, so if you have more
               than one pinboard you may see multiple subscriptions in Stripe. You can manage or cancel any subscription
               at any time.

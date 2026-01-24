@@ -26,13 +26,13 @@ export default async function EventsPage({
 
     // inactive
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-6">
+      <div className="min-h-screen bg-muted flex items-center justify-center px-6">
         <div className="max-w-md text-center">
           <h1 className="text-3xl font-bold mb-4">Pinboard Unavailable</h1>
-          <p className="text-gray-600 mb-6">
+          <p className="text-muted-foreground mb-6">
             This pinboard needs an active subscription to stay live.
           </p>
-          <Link href={`/${slug}`} className="text-blue-600 hover:text-blue-700">
+          <Link href={`/${slug}`} className="text-primary hover:text-primary">
             ← Back to overview
           </Link>
         </div>
@@ -110,21 +110,21 @@ export default async function EventsPage({
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted">
       <div className="max-w-4xl mx-auto px-6 py-10">
         <div className="mb-6">
-          <Link href={`/${slug}`} className="text-sm text-blue-600 hover:text-blue-700">
+          <Link href={`/${slug}`} className="text-sm text-primary hover:text-primary">
             ← Back to overview
           </Link>
         </div>
 
         <h1 className="text-4xl font-bold mb-2">{pinboard.title}</h1>
-        <h2 className="text-2xl font-semibold text-gray-600 mb-8">Events</h2>
+        <h2 className="text-2xl font-semibold text-muted-foreground mb-8">Events</h2>
 
         {!sortedEvents || sortedEvents.length === 0 ? (
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
-            <p className="text-gray-600">No events yet.</p>
-            <p className="text-sm text-gray-500 mt-1">
+          <div className="bg-muted border border-border rounded-lg p-8 text-center">
+            <p className="text-muted-foreground">No events yet.</p>
+            <p className="text-sm text-muted-foreground mt-1">
               This pinboard doesn't have any events.
             </p>
           </div>
@@ -141,20 +141,20 @@ export default async function EventsPage({
                 <div
                   key={event.id}
                   className={`bg-white border rounded-lg p-4 ${
-                    isPast ? "border-gray-200 opacity-75" : "border-gray-200"
+                    isPast ? "border-border opacity-75" : "border-border"
                   }`}
                 >
-                  <div className={`text-sm font-medium mb-1 ${isPast ? "text-gray-500" : "text-blue-600"}`}>
+                  <div className={`text-sm font-medium mb-1 ${isPast ? "text-muted-foreground" : "text-primary"}`}>
                     {formatEventDate(event.date, event.time)}
                   </div>
                   <h3 className="font-medium text-lg">{event.title}</h3>
                   {event.location && (
-                    <p className="text-sm text-gray-600 mt-1">
+                    <p className="text-sm text-muted-foreground mt-1">
                       📍 {event.location}
                     </p>
                   )}
                   {event.description && (
-                  <p className="text-sm text-gray-600 mt-2 whitespace-pre-wrap break-words">
+                  <p className="text-sm text-muted-foreground mt-2 whitespace-pre-wrap break-words">
                       {event.description}
                     </p>
                   )}

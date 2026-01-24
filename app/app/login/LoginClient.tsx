@@ -15,7 +15,7 @@ export default function LoginClient({
   const [mode, setMode] = useState<"signin" | "reset">("signin");
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-muted px-4">
       <div className="w-full max-w-md bg-white rounded-xl shadow-sm p-8">
         <div className="flex flex-col items-center mb-6">
           <img
@@ -25,7 +25,7 @@ export default function LoginClient({
             height={216}
             className="mb-3 h-[216px] w-[216px]"
           />
-          <p className="mt-3 text-sm text-gray-600 text-center">
+          <p className="mt-3 text-sm text-muted-foreground text-center">
             Sign in to manage your pinboards
           </p>
         </div>
@@ -33,7 +33,7 @@ export default function LoginClient({
         {mode === "signin" ? (
           <>
             {message ? (
-              <div className="mb-4 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700 text-center">
+              <div className="mb-4 rounded-lg border border-border bg-muted px-4 py-3 text-sm text-muted-foreground text-center">
                 {message}
               </div>
             ) : null}
@@ -49,18 +49,18 @@ export default function LoginClient({
                 name="email"
                 required
                 placeholder="Email address"
-                className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg border border-border px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
               />
               <input
                 type="password"
                 name="password"
                 required
                 placeholder="Password"
-                className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg border border-border px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
               />
               <button
                 type="submit"
-                className="w-full rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                className="w-full rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary"
               >
                 Sign in
               </button>
@@ -68,7 +68,7 @@ export default function LoginClient({
               <button
                 type="button"
                 onClick={() => setMode("reset")}
-                className="w-full text-center text-sm font-medium text-gray-600 hover:text-gray-900"
+                className="w-full text-center text-sm font-medium text-muted-foreground hover:text-foreground"
               >
                 Forgot your password?
               </button>
@@ -82,22 +82,22 @@ export default function LoginClient({
                   name="email"
                   required
                   placeholder="New email address"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full rounded-lg border border-border px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
                 />
                 <input
                   type="password"
                   name="password"
                   required
                   placeholder="New password"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full rounded-lg border border-border px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
                 />
                 <button
                   type="submit"
-                  className="w-full rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-black"
+                  className="w-full rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary"
                 >
                   Create account
                 </button>
-                <p className="text-xs text-gray-500 text-center">
+                <p className="text-xs text-muted-foreground text-center">
                   You'll need to verify your email before creating a pinboard.
                 </p>
               </form>
@@ -105,10 +105,10 @@ export default function LoginClient({
           </>
         ) : (
           <>
-            <h2 className="text-lg font-semibold text-gray-900 text-center">
+            <h2 className="text-lg font-semibold text-foreground text-center">
               Reset your password
             </h2>
-            <p className="mt-2 text-sm text-gray-600 text-center">
+            <p className="mt-2 text-sm text-muted-foreground text-center">
               Enter your email and we’ll send you a reset link.
             </p>
 
@@ -119,11 +119,11 @@ export default function LoginClient({
                 name="email"
                 required
                 placeholder="Email address"
-                className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg border border-border px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
               />
               <button
                 type="submit"
-                className="w-full rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                className="w-full rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary"
               >
                 Send reset link
               </button>
@@ -131,7 +131,7 @@ export default function LoginClient({
               <button
                 type="button"
                 onClick={() => setMode("signin")}
-                className="w-full text-center text-sm font-medium text-gray-600 hover:text-gray-900"
+                className="w-full text-center text-sm font-medium text-muted-foreground hover:text-foreground"
               >
                 Back to sign in
               </button>

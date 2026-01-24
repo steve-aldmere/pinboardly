@@ -109,12 +109,12 @@ export default function EventManager({
       <div className="flex items-center justify-between mb-4">
         <div>
           <h2 className="text-2xl font-semibold">Events</h2>
-          <p className="text-sm text-gray-500 mt-1">{events.length} / 100 events</p>
+          <p className="text-sm text-muted-foreground mt-1">{events.length} / 100 events</p>
         </div>
         {events.length < 100 && (
           <button
             onClick={() => setShowAddForm(true)}
-            className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700"
+            className="px-4 py-2 bg-primary text-white text-sm rounded-lg hover:bg-primary"
           >
             Add Event
           </button>
@@ -122,7 +122,7 @@ export default function EventManager({
       </div>
 
       {showAddForm && (
-        <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+        <div className="bg-white border border-border rounded-lg p-6 mb-6">
           <h3 className="font-medium mb-4">Add New Event</h3>
 
           <form
@@ -149,31 +149,31 @@ export default function EventManager({
             <input type="hidden" name="pinboardId" value={pinboardId} />
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
+              <label className="block text-sm font-medium text-foreground mb-1">Title *</label>
               <input
                 type="text"
                 name="title"
                 required
                 maxLength={80}
                 placeholder="e.g., Monthly Meeting"
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Date *</label>
+                <label className="block text-sm font-medium text-foreground mb-1">Date *</label>
                 <input
                   type="date"
                   name="date"
                   required
                   defaultValue={localDateYYYYMMDD()}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-foreground mb-1">
                   Time (optional)
                 </label>
 
@@ -202,26 +202,26 @@ export default function EventManager({
                       e.currentTarget.setCustomValidity("");
                     }
                   }}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
                 />
 
-                <p className="text-xs text-gray-500 mt-1">Use 24-hour format, e.g. 20:30</p>
+                <p className="text-xs text-muted-foreground mt-1">Use 24-hour format, e.g. 20:30</p>
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Location (optional)</label>
+              <label className="block text-sm font-medium text-foreground mb-1">Location (optional)</label>
               <input
                 type="text"
                 name="location"
                 maxLength={120}
                 placeholder="e.g., Scout Hall, Main Street"
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-foreground mb-1">
                 Description (optional)
               </label>
               <textarea
@@ -229,22 +229,22 @@ export default function EventManager({
                 maxLength={2000}
                 rows={4}
                 placeholder="Event details..."
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
               />
-              <p className="text-xs text-gray-500 mt-1">Maximum 2,000 characters.</p>
+              <p className="text-xs text-muted-foreground mt-1">Maximum 2,000 characters.</p>
             </div>
 
             <div className="flex gap-3">
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700"
+                className="px-4 py-2 bg-primary text-white text-sm rounded-lg hover:bg-primary"
               >
                 Add Event
               </button>
               <button
                 type="button"
                 onClick={() => setShowAddForm(false)}
-                className="px-4 py-2 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200"
+                className="px-4 py-2 bg-muted text-foreground text-sm rounded-lg hover:bg-tint"
               >
                 Cancel
               </button>
@@ -254,9 +254,9 @@ export default function EventManager({
       )}
 
       {events.length === 0 ? (
-        <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
-          <p className="text-gray-600">No events yet.</p>
-          <p className="text-sm text-gray-500 mt-1">Add your first event to get started.</p>
+        <div className="bg-muted border border-border rounded-lg p-8 text-center">
+          <p className="text-muted-foreground">No events yet.</p>
+          <p className="text-sm text-muted-foreground mt-1">Add your first event to get started.</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -271,22 +271,22 @@ export default function EventManager({
               <div
                 key={event.id}
                 className={`bg-white border rounded-lg p-4 ${
-                  isPast ? "border-gray-200 opacity-75" : "border-gray-200"
+                  isPast ? "border-border opacity-75" : "border-border"
                 }`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-start gap-3">
-                      <div className={`text-sm font-medium ${isPast ? "text-gray-500" : "text-blue-600"}`}>
+                      <div className={`text-sm font-medium ${isPast ? "text-muted-foreground" : "text-primary"}`}>
                         {formatDate(event.date, event.time)}
                       </div>
                     </div>
                     <h3 className="font-medium mt-1">{event.title}</h3>
                     {event.location && (
-                      <p className="text-sm text-gray-600 mt-1">📍 {event.location}</p>
+                      <p className="text-sm text-muted-foreground mt-1">📍 {event.location}</p>
                     )}
                     {event.description && (
-                      <p className="text-sm text-gray-600 mt-2 whitespace-pre-wrap break-words">
+                      <p className="text-sm text-muted-foreground mt-2 whitespace-pre-wrap break-words">
                         {event.description}
                       </p>
                     )}
@@ -297,7 +297,7 @@ export default function EventManager({
                       <button
                         type="button"
                         onClick={() => setEditingId(null)}
-                        className="text-sm text-gray-600 hover:text-gray-700"
+                        className="text-sm text-muted-foreground hover:text-foreground"
                       >
                         Cancel
                       </button>
@@ -307,7 +307,7 @@ export default function EventManager({
                       <button
                         type="button"
                         onClick={() => setEditingId(event.id)}
-                        className="text-sm text-blue-600 hover:text-blue-700"
+                        className="text-sm text-primary hover:text-primary"
                       >
                         Edit
                       </button>
@@ -330,7 +330,7 @@ export default function EventManager({
                 </div>
 
                 {editingId === event.id && (
-                  <div className="mt-4 pt-4 border-t border-gray-200">
+                  <div className="mt-4 pt-4 border-t border-border">
                     <form
                       action={updateEventAction}
                       className="space-y-4"
@@ -355,31 +355,31 @@ export default function EventManager({
                       <input type="hidden" name="pinboardId" value={pinboardId} />
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
+                        <label className="block text-sm font-medium text-foreground mb-1">Title *</label>
                         <input
                           type="text"
                           name="title"
                           required
                           maxLength={80}
                           defaultValue={event.title}
-                          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
                         />
                       </div>
 
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">Date *</label>
+                          <label className="block text-sm font-medium text-foreground mb-1">Date *</label>
                           <input
                             type="date"
                             name="date"
                             required
                             defaultValue={event.date}
-                            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
                           />
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                          <label className="block text-sm font-medium text-foreground mb-1">
                             Time (optional)
                           </label>
 
@@ -408,13 +408,13 @@ export default function EventManager({
                                 e.currentTarget.setCustomValidity("");
                               }
                             }}
-                            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
                           />
                         </div>
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-foreground mb-1">
                           Location (optional)
                         </label>
                         <input
@@ -422,12 +422,12 @@ export default function EventManager({
                           name="location"
                           maxLength={120}
                           defaultValue={event.location || ""}
-                          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-foreground mb-1">
                           Description (optional)
                         </label>
                         <textarea
@@ -435,22 +435,22 @@ export default function EventManager({
                           maxLength={2000}
                           rows={4}
                           defaultValue={event.description || ""}
-                          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-tint"
                         />
-                        <p className="text-xs text-gray-500 mt-1">Maximum 2,000 characters.</p>
+                        <p className="text-xs text-muted-foreground mt-1">Maximum 2,000 characters.</p>
                       </div>
 
                       <div className="flex gap-3">
                         <button
                           type="submit"
-                          className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700"
+                          className="px-4 py-2 bg-primary text-white text-sm rounded-lg hover:bg-primary"
                         >
                           Save Changes
                         </button>
                         <button
                           type="button"
                           onClick={() => setEditingId(null)}
-                          className="px-4 py-2 bg-gray-100 text-gray-700 text-sm rounded-lg hover:bg-gray-200"
+                          className="px-4 py-2 bg-muted text-foreground text-sm rounded-lg hover:bg-tint"
                         >
                           Cancel
                         </button>

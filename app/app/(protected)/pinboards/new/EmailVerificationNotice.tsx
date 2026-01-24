@@ -11,11 +11,11 @@ export default function EmailVerificationNotice({
   message?: string;
 }) {
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-8">
+    <div className="bg-white rounded-lg border border-border p-8">
       <div className="text-center">
         <div className="mb-4">
           <svg
-            className="mx-auto h-12 w-12 text-gray-400"
+            className="mx-auto h-12 w-12 text-muted-foreground"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -31,7 +31,7 @@ export default function EmailVerificationNotice({
         
         <h2 className="text-xl font-semibold mb-2">Email Verification Required</h2>
         
-        <p className="text-gray-600 mb-6">
+        <p className="text-muted-foreground mb-6">
           Please verify your email address before creating a pinboard.
         </p>
 
@@ -48,7 +48,7 @@ export default function EmailVerificationNotice({
         )}
 
         <div className="space-y-4">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-muted-foreground">
             We sent a verification email to <strong>{email}</strong>
           </p>
           
@@ -56,7 +56,7 @@ export default function EmailVerificationNotice({
             <input type="hidden" name="email" value={email} />
             <button
               type="submit"
-              className="inline-block rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white hover:bg-blue-700"
+              className="inline-block rounded-lg bg-primary px-6 py-2 text-sm font-medium text-white hover:bg-primary"
             >
               Resend Verification Email
             </button>

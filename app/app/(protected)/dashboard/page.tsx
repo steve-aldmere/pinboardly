@@ -39,7 +39,7 @@ export default async function DashboardPage() {
   const userPinboards = pinboards ?? [];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted">
       <div className="max-w-4xl mx-auto px-6 py-10">
         {/* Header */}
         <div className="mb-8">
@@ -52,7 +52,7 @@ export default async function DashboardPage() {
         <div className="mb-6">
           <Link
             href="/app/pinboards/new"
-            className="inline-block rounded-lg bg-blue-600 px-6 py-3 text-sm font-medium text-white hover:bg-blue-700"
+            className="inline-block rounded-lg bg-primary px-6 py-3 text-sm font-medium text-white hover:bg-primary"
           >
             Create New Pinboard
           </Link>
@@ -60,9 +60,9 @@ export default async function DashboardPage() {
 
         {/* Pinboards List */}
         {userPinboards.length === 0 ? (
-          <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
-            <p className="text-gray-600">You haven't created any pinboards yet.</p>
-            <p className="mt-2 text-sm text-gray-500">
+          <div className="bg-white rounded-lg border border-border p-8 text-center">
+            <p className="text-muted-foreground">You haven't created any pinboards yet.</p>
+            <p className="mt-2 text-sm text-muted-foreground">
               Create your first pinboard to get started.
             </p>
           </div>
@@ -75,49 +75,49 @@ export default async function DashboardPage() {
                 board.status === "active"
                   ? "text-green-600"
                   : board.status === "trial"
-                  ? "text-blue-600"
+                  ? "text-primary"
                   : board.status === "expired"
                   ? "text-orange-600"
                   : board.status === "removed"
-                  ? "text-gray-500"
-                  : "text-gray-600";
+                  ? "text-muted-foreground"
+                  : "text-muted-foreground";
 
               return (
                 <div
                   key={board.id}
                   className={`rounded-lg border p-6 ${
-                    isRemoved ? "bg-gray-50 border-gray-300 opacity-75" : "bg-white border-gray-200"
+                    isRemoved ? "bg-muted border-border opacity-75" : "bg-white border-border"
                   }`}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-3">
-                        <h2 className={`text-lg font-medium ${isRemoved ? "text-gray-600" : ""}`}>
+                        <h2 className={`text-lg font-medium ${isRemoved ? "text-muted-foreground" : ""}`}>
                           {board.title}
                         </h2>
                         {isRemoved ? (
-                          <span className="text-xs font-medium px-2 py-1 bg-gray-200 text-gray-600 rounded">
+                          <span className="text-xs font-medium px-2 py-1 bg-muted text-muted-foreground rounded">
                             Removed
                           </span>
                         ) : (
                           <span className={`text-xs font-medium ${statusColor}`}>{board.status}</span>
                         )}
                       </div>
-                      <p className={`mt-1 text-sm ${isRemoved ? "text-gray-400" : "text-gray-500"}`}>
+                      <p className={`mt-1 text-sm ${isRemoved ? "text-muted-foreground" : "text-muted-foreground"}`}>
                         pinboardly.com/{board.slug}
                       </p>
                       {board.status === "trial" && board.trial_ends_at && (
-                        <p className="mt-2 text-xs text-gray-500">
+                        <p className="mt-2 text-xs text-muted-foreground">
                           Trial ends {new Date(board.trial_ends_at).toLocaleDateString()}
                         </p>
                       )}
                       {board.status === "active" && board.paid_until && (
-                        <p className="mt-2 text-xs text-gray-500">
+                        <p className="mt-2 text-xs text-muted-foreground">
                           Paid until {new Date(board.paid_until).toLocaleDateString()}
                         </p>
                       )}
                       {isRemoved && board.restore_until && (
-                        <p className="mt-2 text-xs text-gray-500">
+                        <p className="mt-2 text-xs text-muted-foreground">
                           Can restore until {new Date(board.restore_until).toLocaleDateString()}
                         </p>
                       )}
@@ -135,7 +135,7 @@ export default async function DashboardPage() {
                       {isActive && !isRemoved && (
                         <Link
                           href={`/${board.slug}`}
-                          className="text-sm text-blue-600 hover:text-blue-700"
+                          className="text-sm text-primary hover:text-primary"
                           target="_blank"
                         >
                           View
@@ -144,14 +144,14 @@ export default async function DashboardPage() {
                       {isRemoved ? (
                         <form action={restorePinboardAction}>
                           <input type="hidden" name="pinboardId" value={board.id} />
-                          <button type="submit" className="text-sm text-blue-600 hover:text-blue-700">
+                          <button type="submit" className="text-sm text-primary hover:text-primary">
                             Restore
                           </button>
                         </form>
                       ) : (
                         <Link
                           href={`/app/pinboards/${board.id}/edit`}
-                          className="text-sm text-gray-600 hover:text-gray-900"
+                          className="text-sm text-muted-foreground hover:text-foreground"
                         >
                           Edit
                         </Link>

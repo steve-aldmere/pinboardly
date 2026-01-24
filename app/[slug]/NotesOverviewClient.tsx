@@ -41,14 +41,14 @@ export default function NotesOverviewClient({
           <Link
             key={note.id}
             href={`/${slug}/notes?note=${encodeURIComponent(note.id)}&from=overview`}
-            className="block bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+            className="block bg-white border border-border rounded-lg p-4 hover:shadow-md transition-shadow"
           >
             {note.title && <h3 className="font-medium mb-1">{note.title}</h3>}
-            <p className="text-sm text-gray-700">
+            <p className="text-sm text-foreground">
               {preview}
               {hasMore && "..."}
             </p>
-            <p className="text-xs text-blue-600 mt-2">Click to view full note</p>
+            <p className="text-xs text-primary mt-2">Click to view full note</p>
           </Link>
         );
       })}

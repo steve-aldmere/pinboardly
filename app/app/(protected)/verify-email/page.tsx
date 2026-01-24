@@ -21,7 +21,7 @@ export default async function VerifyEmailPage({
   const email = params.email || userData.user.email || "";
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-muted flex items-center justify-center px-4">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <a href="/" className="inline-block">
@@ -33,7 +33,7 @@ export default async function VerifyEmailPage({
           </a>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-8 shadow-sm">
+        <div className="bg-white rounded-lg border border-border p-8 shadow-sm">
           <VerifyEmailClient email={email} error={params.error} message={params.message} />
         </div>
       </div>
