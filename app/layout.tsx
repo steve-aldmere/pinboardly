@@ -16,6 +16,8 @@ export const metadata: Metadata = {
   },
 };
 
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+
 export default function RootLayout({
   children,
 }: {
@@ -23,12 +25,26 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        {GA_ID ? (
+          <>
+            <Script
+              id="gtag-src"
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="gtag-init" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GA_ID}');
+              `}
+            </Script>
+          </>
+        ) : null}
+      </head>
       <body className="min-h-screen bg-muted text-foreground">
-        <Script
-          defer
-          data-domain="pinboardly.com"
-          src="https://plausible.io/js/script.js"
-        />
         <TopNav />
         <main className="mx-auto max-w-5xl px-6 py-8">{children}</main>
       </body>
